@@ -1,7 +1,7 @@
 {
   "name": "blip",
   "version": "1.0.0",
-  "description": "Test business websites for speed, mobile-friendliness and security in an area or by URL.",
+  "description": "Find businesses around a location and test their websites en masse for speed, mobile-friendliness and security.",
   "author": "benmccallum",
   "private": true,
   "scripts": {

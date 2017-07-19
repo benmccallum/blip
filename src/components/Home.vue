@@ -38,7 +38,8 @@
 <style type="scss" scoped>
   #options {
     a {
-      background-color: #cccccc;
+      background-color: #ccc;
+      border: 5px solid red;
     }
   }
   #credits {
