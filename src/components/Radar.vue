@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <router-link to="/">&lt; Back</router-link>
-    <h1 class="display-3 mt-2">Radar</h1>
-    <p class="lead">Find businesses near you that "need help" with their website.</p>
-    <hr class="my-4">
-    <div>
+  <div class="container">
+    <div class="col-12 col-md-8">
+      <div class="mt-1 mb-3">
+        <router-link to="/">&lt; Back</router-link>
+      </div>
       <form v-show="!hasResults">
         <button type="button" class="btn btn-primary btn-block" v-on:click="searchNearby">
           <i class="fa fa-location-arrow" aria-hidden="true"></i> Search nearby

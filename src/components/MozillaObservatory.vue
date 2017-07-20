@@ -5,12 +5,10 @@
 </template>
 
 <script>
-  // TODO: https://validator.nu/?doc=https://grazia.com.au&out=json
-  // Or just 'is html5 yet?' shown as a badge which would be a good test for how recent it was built
-  // i.e. doctype test 
+  // TODO: 
 
   export default {
-    name: 'html5',
+    name: 'MozillaObservatory',
     props: {
       website: String
     },
@@ -37,11 +35,14 @@
       }
     },
     mounted: function () {
-      // Call async to get details on html5 compat, etc.
-      this.getHtml5Result();
+      // Call async to init test their end
+      this.initTest();
+
+      // Setup polling or something to get the results once they're in
+
     },
     methods: {
-      getHtml5Result: function () {
+      initTest: function () {
         // TODO: 
         // var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url='
         //   + encodeURIComponent(this.website) + '&strategy=' + this.strategy;
