@@ -1,11 +1,26 @@
 <template>
-  <div>
-    <!-- TODO -->
+  <div class="score-container d-flex flex-column justify-content-center text-center">
+    <transition name="fade" mode="out-in">
+      <div v-if="state === 'loading'" :key="state" class="pt-sm-1">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto text-muted"></i>
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div v-else :key="state">
+        <span class="score">
+          <span class="val">{{ score }}</span>
+          <span class="max text-muted sr-only">/100</span>
+        </span>
+      </div>
+    </transition>
+    <a class="d-block text-muted" :href="detailsUrl" target="_blank">
+      {{ label }}
+      <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a>
   </div>
 </template>
 
 <script>
-  // TODO: 
+  // TODO: https://github.com/mozilla/http-observatory/blob/master/httpobs/docs/api.md
 
   export default {
     name: 'MozillaObservatory',
@@ -20,30 +35,27 @@
     computed: {
       state: function () {
         if (this.score === null) {
-          return "loading";
+          return 'loading';
         } else if (this.score === -1) {
-          return "na";
+          return 'na';
         }
-        return "scored";
+        return 'scored';
       },
       detailsUrl: function () {
-        return 'https://developers.google.com/speed/pagespeed/insights/?url='
-          + encodeURIComponent(this.website) + '&tab=' + this.strategy;
+        return 'https://observatory.mozilla.org/analyze.html?host=' +
+          encodeURIComponent(this.website);
       },
       label: function () {
         return this.strategy[0].toUpperCase() + this.strategy.slice(1);
       }
     },
     mounted: function () {
-      // Call async to init test their end
-      this.initTest();
-
-      // Setup polling or something to get the results once they're in
-
+      // Call async to init test their end and start polling for the results
+      this.initTestAndPolling();
     },
     methods: {
-      initTest: function () {
-        // TODO: 
+      initTestAndPolling: function () {
+        // TODO:
         // var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url='
         //   + encodeURIComponent(this.website) + '&strategy=' + this.strategy;
 

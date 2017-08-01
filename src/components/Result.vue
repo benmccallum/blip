@@ -19,10 +19,16 @@
       </div>
     </div>
     <template v-if="result.website">
-      <div class="col-6 col-sm-2 desktop-score">
+      <div class="col-2 col-sm-1">
+        <html5 :website="result.website"></html5>
+      </div> 
+      <div class="col-4 col-sm-1">
+        <mozilla-observatory :website="result.website" />
+      </div>
+      <div class="col-4 col-sm-1">
         <google-page-speed :strategy="'desktop'" :website="result.website" />
       </div>
-      <div class="col-6 col-sm-2">
+      <div class="col-4 col-sm-1">
         <google-page-speed :strategy="'mobile'" :website="result.website" />
       </div>
     </template>
@@ -38,11 +44,15 @@
 
 <script>
 import GooglePageSpeed from './GooglePageSpeed.vue';
+import Html5 from './Html5.vue';
+import MozillaObservatory from './MozillaObservatory.vue';
 
 export default {
   name: 'Result',
   components: {
-    'google-page-speed': GooglePageSpeed
+    'google-page-speed': GooglePageSpeed,
+    'html5': Html5,
+    'mozilla-observatory': MozillaObservatory
   },
   props: {
     result: Object

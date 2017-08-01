@@ -7,7 +7,8 @@
       </div>
       <div v-else :key="state">
         <span class="score">
-          <span>{{ score }}</span>/100
+          <span class="val">{{ score }}</span>
+          <span class="max text-muted sr-only">/100</span>
         </span>
       </div>
     </transition>
@@ -72,3 +73,39 @@
     }
   };
 </script>
+
+<style lang="scss" scoped>  
+  .score-container {
+    height: 75px;
+  }
+
+  .score {
+    .val {
+      display: block;
+      font-size: 2rem;
+    }
+    .max {
+      display: block;
+      margin-top: -.5rem;
+      padding-top: 0;
+      font-size: .7rem;
+    }
+  }
+
+  .score-na {
+    font-size: 1.25rem;
+  }
+  .score-container a {
+    font-size: .8rem;
+  }
+
+  .fade-enter-active {
+    transition: opacity .5s;
+  } 
+  .fade-leave-active {
+    transition: opacity 1s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+</style>
