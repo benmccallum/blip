@@ -12,9 +12,8 @@
         </span>
       </div>
     </transition>
-    <a class="d-block text-muted" :href="detailsUrl" target="_blank">
-      {{ label }}
-      <i class="fa fa-external-link" aria-hidden="true"></i>
+    <a class="d-block text-muted text-center" :href="detailsUrl" target="_blank">
+      <i class="fa" :class="classObject" aria-hidden="true"></i>
     </a>
   </div>
 </template>
@@ -44,8 +43,8 @@
         return 'https://developers.google.com/speed/pagespeed/insights/?url=' +
           encodeURIComponent(this.website) + '&tab=' + this.strategy;
       },
-      label: function () {
-        return this.strategy[0].toUpperCase() + this.strategy.slice(1);
+      classObject: function () {
+        return 'fa-' + this.strategy;
       }
     },
     mounted: function () {
@@ -54,6 +53,11 @@
     },
     methods: {
       getGooglePageSpeedResult: function () {
+        if (window.offline) {
+          setTimeout(function () { this.score = 100; }, 1000);
+          return;
+        }
+
         var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=' +
           encodeURIComponent(this.website) + '&strategy=' + this.strategy;
 
@@ -75,37 +79,5 @@
 </script>
 
 <style lang="scss" scoped>  
-  .score-container {
-    height: 75px;
-  }
 
-  .score {
-    .val {
-      display: block;
-      font-size: 2rem;
-    }
-    .max {
-      display: block;
-      margin-top: -.5rem;
-      padding-top: 0;
-      font-size: .7rem;
-    }
-  }
-
-  .score-na {
-    font-size: 1.25rem;
-  }
-  .score-container a {
-    font-size: .8rem;
-  }
-
-  .fade-enter-active {
-    transition: opacity .5s;
-  } 
-  .fade-leave-active {
-    transition: opacity 1s;
-  }
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
 </style>

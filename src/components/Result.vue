@@ -19,17 +19,21 @@
       </div>
     </div>
     <template v-if="result.website">
-      <div class="col-2 col-sm-1">
-        <html5 :website="result.website"></html5>
-      </div> 
-      <div class="col-4 col-sm-1">
-        <mozilla-observatory :website="result.website" />
-      </div>
-      <div class="col-4 col-sm-1">
-        <google-page-speed :strategy="'desktop'" :website="result.website" />
-      </div>
-      <div class="col-4 col-sm-1">
-        <google-page-speed :strategy="'mobile'" :website="result.website" />
+      <div class="col-12 col-sm">
+        <div class="row">
+          <div class="col-2 col-sm-1">
+            <html5 :website="result.website"></html5>
+          </div> 
+          <div class="col-3 col-sm-1">
+            <mozilla-observatory :website="result.website" />
+          </div>
+          <div class="col-3 col-sm-1">
+            <google-page-speed :strategy="'desktop'" :website="result.website" />
+          </div>
+          <div class="col-3 col-sm-1">
+            <google-page-speed :strategy="'mobile'" :website="result.website" />
+          </div>
+        </div>
       </div>
     </template>
     <template v-else>
@@ -74,6 +78,38 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+  .score-container {
+    height: 75px;
+  }
 
+  .score {
+    .val {
+      display: block;
+      font-size: 2rem;
+    }
+    .max {
+      display: block;
+      margin-top: -.5rem;
+      padding-top: 0;
+      font-size: .7rem;
+    }
+  }
+
+  .score-na {
+    font-size: 1.25rem;
+  }
+  .score-container a {
+    font-size: .8rem;
+  }
+
+  .fade-enter-active {
+    transition: opacity .5s;
+  } 
+  .fade-leave-active {
+    transition: opacity 1s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
 </style>

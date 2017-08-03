@@ -90,6 +90,11 @@ export default {
   },
   methods: {
     searchNearby: function () {
+      if (window.offline) {
+        this.useOfflineData();
+        return;
+      }
+
       if (navigator.geolocation) {
         var that = this;
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -121,6 +126,25 @@ export default {
       var label = place.formatted_address;
 
       this.search(coord, label);
+    },
+    useOfflineData: function () {
+      setTimeout(function () {
+        var result = {
+          id: 123,
+          website: 'https://google.com',
+          name: 'Test name',
+          url: 'https://google.com',
+          vicinity: '14 Random St, New York, 4012',
+          ph: '+61 444 333 222'
+        };
+        this.results = [
+          result,
+          result,
+          result,
+          result,
+          result
+        ];
+      }, 1000);
     },
     search: function (coord, label) {
       // Setup label

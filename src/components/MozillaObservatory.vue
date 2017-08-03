@@ -13,8 +13,7 @@
       </div>
     </transition>
     <a class="d-block text-muted" :href="detailsUrl" target="_blank">
-      {{ label }}
-      <i class="fa fa-external-link" aria-hidden="true"></i>
+      <i class="fa fa-lock" aria-hidden="true"></i>
     </a>
   </div>
 </template>
@@ -55,6 +54,10 @@
     },
     methods: {
       initTestAndPolling: function () {
+        if (window.offline) {
+          setTimeout(function () { this.score = 100; }, 1000);
+          return;
+        }
         // TODO:
         // var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url='
         //   + encodeURIComponent(this.website) + '&strategy=' + this.strategy;
