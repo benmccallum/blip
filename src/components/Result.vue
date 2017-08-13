@@ -1,5 +1,5 @@
 <template>
-  <div class="row mb-3" :data-id="result.id">
+  <div class="result-row row mb-3 pb-2 pb-sm-3" :data-id="result.id">
     <div class="col-12 col-sm mb-2 mb-sm-0">
       <h3 class="card-title">
         <a :href="result.website">{{result.name}}</a>
@@ -21,16 +21,16 @@
     <template v-if="result.website">
       <div class="col-12 col-sm">
         <div class="row">
-          <div class="col-2 col-sm-1">
-            <html5 :website="result.website"></html5>
+          <div class="col">
+            <is-html5 :website="result.website"></is-html5>
           </div> 
-          <div class="col-3 col-sm-1">
+          <div class="col">
             <mozilla-observatory :website="result.website" />
           </div>
-          <div class="col-3 col-sm-1">
+          <div class="col">
             <google-page-speed :strategy="'desktop'" :website="result.website" />
           </div>
-          <div class="col-3 col-sm-1">
+          <div class="col">
             <google-page-speed :strategy="'mobile'" :website="result.website" />
           </div>
         </div>
@@ -39,7 +39,7 @@
     <template v-else>
       <div class="col-12 col-sm-4">
         <div class="score-container d-flex flex-column justify-content-center text-center">
-          <span class="score score-na" :key="state">No site</span>
+          <span class="score score-na">No site</span>
         </div>
       </div>
     </template>
@@ -48,68 +48,22 @@
 
 <script>
 import GooglePageSpeed from './GooglePageSpeed.vue';
-import Html5 from './Html5.vue';
+import IsHtml5 from './IsHtml5.vue';
 import MozillaObservatory from './MozillaObservatory.vue';
 
 export default {
   name: 'Result',
   components: {
     'google-page-speed': GooglePageSpeed,
-    'html5': Html5,
+    'is-html5': IsHtml5,
     'mozilla-observatory': MozillaObservatory
   },
   props: {
     result: Object
-  },
-  computed: {
-    state: function () {
-      if (this.result.pageSpeedScore === null) {
-        return 'loading';
-      } else if (this.result.pageSpeedScore === -1) {
-        return 'na';
-      }
-      return 'scored';
-    },
-    testSummaryUrl: function () {
-      return 'https://developers.google.com/speed/pagespeed/insights/?url=' +
-        encodeURIComponent(this.result.website);
-    }
   }
 };
 </script>
 
-<style lang="scss">
-  .score-container {
-    height: 75px;
-  }
+<style lang="scss" scoped>
 
-  .score {
-    .val {
-      display: block;
-      font-size: 2rem;
-    }
-    .max {
-      display: block;
-      margin-top: -.5rem;
-      padding-top: 0;
-      font-size: .7rem;
-    }
-  }
-
-  .score-na {
-    font-size: 1.25rem;
-  }
-  .score-container a {
-    font-size: .8rem;
-  }
-
-  .fade-enter-active {
-    transition: opacity .5s;
-  } 
-  .fade-leave-active {
-    transition: opacity 1s;
-  }
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
 </style>

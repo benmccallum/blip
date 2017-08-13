@@ -1,18 +1,18 @@
 <template>
-  <div class="score-container d-flex flex-column justify-content-center text-center">
-    <transition name="fade" mode="out-in">
-      <div v-if="state === 'loading'" :key="state" class="pt-sm-1">
-        <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto text-muted"></i>
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div v-else :key="state">
-        <span class="score">
-          <span class="val">{{ score }}</span>
-          <span class="max text-muted sr-only">/100</span>
-        </span>
-      </div>
-    </transition>
-    <a class="d-block text-muted" :href="detailsUrl" target="_blank">
+  <div class="test-container d-flex flex-column justify-content-center text-center">
+    <a :href="detailsUrl" target="_blank" title="Click to learn more...">
+      <transition name="fade" mode="out-in">
+        <div v-if="state === 'loading'" :key="state">
+          <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
+          <span class="sr-only">Loading...</span>
+        </div>
+        <div v-else :key="state" class="score-container">
+          <span class="score">
+            <span class="val">{{ score }}</span>
+            <span class="max text-muted sr-only">/100</span>
+          </span>
+        </div>
+      </transition>
       <i class="fa fa-lock" aria-hidden="true"></i>
     </a>
   </div>
@@ -54,15 +54,17 @@
     },
     methods: {
       initTestAndPolling: function () {
+        var that = this;
+
         if (window.offline) {
-          setTimeout(function () { this.score = 100; }, 1000);
+          setTimeout(function () {
+            that.score = Math.random() >= 0.8 ? null : Math.floor(Math.random() * 100);
+          }, 1000);
           return;
         }
         // TODO:
         // var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url='
         //   + encodeURIComponent(this.website) + '&strategy=' + this.strategy;
-
-        // var that = this;
 
         // fetch(url).then(function (response) {
         //   if (response.ok) {

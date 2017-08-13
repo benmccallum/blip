@@ -1,8 +1,9 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
+    <my-header subtitle="Pick a location. We'll find businesses nearby and test their website."></my-header>
     <div class="row justify-content-md-center">
-      <div class="col-12 col-md-8">
-        <my-header subtitle="Pick a location. We'll find businesses nearby and test their website."></my-header>
+      <div class="col-12 col-md-8 col-xl-7">
+        
         <form v-show="!hasResults">
           <button type="button" class="btn btn-primary btn-block" v-on:click="searchNearby">
             <i class="fa fa-location-arrow" aria-hidden="true"></i> Search nearby
@@ -10,16 +11,32 @@
           <p class="text-center mt-1 mb-2 ">or</p>
           <input type="text" class="form-control text-center mb-3" id="address" placeholder="Search elsewhere..." aria-label="Address">
         </form>
-        <p v-show="hasResults">
-          <strong>Searching around... </strong>
-          <span>{{query.label}}</span>
-          <button type="button" class="close" aria-label="Search again..." v-on:click="reset">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </p>
+
+        <div id="query" v-show="hasResults" class="row pt-2 pb-1 mb-3">
+          <div class="col">
+            <p id="label" class="mb-2">
+              <strong>Searching around... </strong>
+              <span>{{query.label}}</span>
+              <button type="button" class="close float-right" aria-label="Search again..." v-on:click="reset">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </p>
+          </div>
+        </div>
   
         <div id="results" v-show="hasResults">
-          <ul class="nav nav-tabs justify-content-end mb-2" role="tablist">
+
+          <aside id="legend" class="txext-muted">
+            <h5>Legend</h5>
+            Scores out of 100, higher is better.
+            <hr>
+            <i class="fa fa-html5"></i> Is HTML5?<br>
+            <i class="fa fa-lock"></i> Security score by <a href="">Mozilla Observatory</a><br>
+            <i class="fa fa-desktop"></i> Desktop score by <a href="">Google Page Speed</a><br>
+            <i class="fa fa-mobile"></i> Mobile score by <a href="">Google Page Speed</a>
+          </aside>
+
+          <!-- <ul class="nav nav-tabs justify-content-end mb-2" role="tablist">
             <li class="nav-item">
               <a class="nav-link active" data-toggle="tab" href="#listview" role="tab">
                 List view
@@ -30,7 +47,7 @@
                 Map view
               </a>
             </li>
-          </ul>
+          </ul> -->
           <div class="tab-content">
             <div id="listview" class="tab-pane active" role="tabpanel">
               <result v-for="result in results" :key="result.place_id" :result="result"></result>
@@ -74,12 +91,6 @@ export default {
       results: null
     };
   },
-  // watch: {
-  //   results: {
-  //     handler: function() { console.log('result changed!!!'); },
-  //     deep: true
-  //   }
-  // },
   computed: {
     hasResults: function () {
       return this.results && this.results.length > 0;
@@ -128,6 +139,7 @@ export default {
       this.search(coord, label);
     },
     useOfflineData: function () {
+      var that = this;
       setTimeout(function () {
         var result = {
           id: 123,
@@ -137,7 +149,7 @@ export default {
           vicinity: '14 Random St, New York, 4012',
           ph: '+61 444 333 222'
         };
-        this.results = [
+        that.results = [
           result,
           result,
           result,
@@ -145,6 +157,7 @@ export default {
           result
         ];
       }, 1000);
+      that.query.label = 'your location.';
     },
     search: function (coord, label) {
       // Setup label
@@ -193,6 +206,11 @@ export default {
       this.results = null;
     },
     initAutocomplete: function () {
+      if (!window.google) {
+        console.warn('Google Maps API wasn\'t loaded. Initing Autocomplate will be skipped.');
+        return;
+      }
+
       var eleAddress = document.getElementById('address');
 
       // Clear any existing value and listener
@@ -222,5 +240,25 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+  #legend {
+    position: absolute;
+    right: -250px;
+    width: 230px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: .7rem;
+    line-height: 1.7;
 
+    hr {
+      margin-top: .7rem;
+      margin-bottom: .7rem;
+    }
+
+    i {
+      width: 17px;
+      text-align: center;
+    }
+  }
 </style>

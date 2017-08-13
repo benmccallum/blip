@@ -1,20 +1,18 @@
 <template>
-  <header>
-    <nav class="p-2" v-if="showNav">
-      <router-link to="/">
-        <i class="fa fa-home"></i>
-      </router-link>
-    </nav>
-    <div class="row justify-content-md-center">  
-      <div class="col-12 col-md-8">
-        <router-link to="/" class="d-block p-2 my-3 mx-auto">
-          <h1 class="text-center m-3 sr-only">blip</h1>
-          <img class="d-block mx-auto" src="../assets/blip-logo.png" alt="blip logo">
+  <header class="row justify-content-md-center">
+    <div class="col-12 col-md-8 col-xl-7">
+      <nav class="p-2" v-if="showNav">
+        <router-link to="/">
+          <i class="fa fa-home"></i>
         </router-link>
-        <p class="lead text-center mb-3">
-          {{subtitle}}
-        </p>
-      </div>
+      </nav>
+      <router-link to="/" class="d-block p-2 my-3 mx-auto">
+        <h1 class="text-center m-3 sr-only">blip</h1>
+        <img class="d-block mx-auto" src="../assets/images/blip-logo.png" alt="blip logo">
+      </router-link>
+      <p class="lead text-center mb-3">
+        {{subtitle}}
+      </p>
     </div>
   </header>
 </template>
