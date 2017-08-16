@@ -13,7 +13,7 @@
     components: {
       'bootstrap-breakpoint': BootstrapBreakpoint
     }
-  }
+  };
 </script>
 
 <style lang="scss">

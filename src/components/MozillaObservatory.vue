@@ -1,6 +1,6 @@
 <template>
   <div class="test-container d-flex flex-column justify-content-center text-center">
-    <a :href="detailsUrl" target="_blank" title="Click to learn more...">
+    <a :href="detailsUrl" target="_blank" rel="noopener" title="Click to learn more...">
       <transition name="fade" mode="out-in">
         <div v-if="state === 'loading'" :key="state">
           <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
@@ -20,6 +20,8 @@
 
 <script>
   // TODO: https://github.com/mozilla/http-observatory/blob/master/httpobs/docs/api.md
+
+  import { EventBus } from '../event-bus';
 
   export default {
     name: 'MozillaObservatory',
@@ -43,9 +45,6 @@
       detailsUrl: function () {
         return 'https://observatory.mozilla.org/analyze.html?host=' +
           encodeURIComponent(this.website);
-      },
-      label: function () {
-        return this.strategy[0].toUpperCase() + this.strategy.slice(1);
       }
     },
     mounted: function () {
@@ -59,6 +58,7 @@
         if (window.offline) {
           setTimeout(function () {
             that.score = Math.random() >= 0.8 ? null : Math.floor(Math.random() * 100);
+            EventBus.$emit('mozilla-observatory-result', { });
           }, 1000);
           return;
         }

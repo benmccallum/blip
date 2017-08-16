@@ -21,7 +21,7 @@
           </div>
         </div>
 
-        <div id="result" v-show="hasQuery">
+        <div id="result" v-if="hasQuery">
           <nav class="row">
             <div class="col nav-item active" data-toggle="tab" href="#html5" role="tab">
               <is-html5 :website="query"></is-html5>
@@ -38,27 +38,44 @@
           </nav>
           <div class="row tab-content">
             <div class="col tab-pane active" id="html5" role="tabpanel">
-              <h2>HTML5 test</h2>
+              <h2>
+                HTML5
+                <span>{{isHtml5 === null ? '...' : (isHtml5 ? 'Yes' : 'No')}}</span>
+              </h2>
+              <i>Provided by blip</i>
               <p>
-                This test checks whether a website uses the HTML5 doctype, the latest implementation of 
-                HTML introduced in 20xx. If a website isn't using HTML it's a very strong indication it 
-                hasn't been updated or rebuilt post-20xx.
+                HTML5 is the latest markup language used for structuring and presenting content on the web. 
+                A website written in HTML5 renders more consistently across browsers/devices  
+                and can offer richer, modern experiences.
+                If a website isn't using HTML5 it's a very strong indication it hasn't been updated, built or rebuilt since 2015.
               </p>
             </div>
             <div class="col tab-pane" id="security" role="tabpanel">
-              <h2>Security</h2>
+              <h2>
+                Security
+                <span>Poor</span>
+              </h2>
+              <i>Provided by <a href="#">Mozilla Observatory</a></i>
               <p>
                 blah blah
               </p>
             </div>
             <div class="col tab-pane" id="desktop" role="tabpanel">
-              <h2>Desktop</h2>
+              <h2>
+                Desktop experience
+                <span>Poor</span>
+              </h2>
+              <i>Provided by <a href="https://developers.google.com/speed/docs/insights/about">Google PageSpeed Insights</a></i>
               <p>
                 blah blah
               </p>
             </div>
             <div class="col tab-pane" id="mobile" role="tabpanel">
-              <h2>Mobile</h2>
+              <h2>
+                Mobile experience
+                <span>Poor</span>
+              </h2>
+              <i>Provided by <a href="https://developers.google.com/speed/docs/insights/about">Google PageSpeed Insights</a></i>
               <p>
                 blah blah
               </p>
@@ -75,6 +92,7 @@
   import GooglePageSpeed from './GooglePageSpeed.vue';
   import IsHtml5 from './IsHtml5.vue';
   import MozillaObservatory from './MozillaObservatory.vue';
+  import { EventBus } from '../event-bus';
 
   export default {
     name: 'laser',
@@ -86,13 +104,35 @@
     },
     data: function () {
       return {
-        query: null
+        query: null,
+        isHtml5: null,
+        googlePageSpeed: {
+          mobile: null,
+          desktop: null
+        },
+        mozillaObservatory: null
       };
     },
     computed: {
       hasQuery: function () {
         return this.query != null;
       }
+    },
+    created: function () {
+      var that = this;
+      EventBus.$on('is-html5-result', function (result) {
+        console.log('is-html5-result fired with: ', result)
+        that.isHtml5 = result;
+      });
+      EventBus.$on('google-page-speed-mobile-result', function (result) {
+        that.googlePageSpeed.mobile = result;
+      });
+      EventBus.$on('google-page-speed-desktop-result', function (result) {
+        that.googlePageSpeed.desktop = result;
+      });
+      EventBus.$on('mozilla-observatory-result', function (result) {
+        that.mozillaObservatory = result;
+      });
     },
     methods: {
       getInput: function () {
@@ -113,8 +153,9 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   h2 {
-    i {
-      font-size: .75rem;
+    span {
+      color: green;
+      font-size: 1.5rem;
     }
   }
   .nav-item {

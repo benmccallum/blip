@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '@/components/Home'
-import Laser from '@/components/Laser'
-import Radar from '@/components/Radar'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '@/components/Home';
+import Laser from '@/components/Laser';
+import Radar from '@/components/Radar';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -24,4 +24,4 @@ export default new Router({
       component: Radar
     }
   ]
-})
+});

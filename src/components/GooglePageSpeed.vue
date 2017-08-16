@@ -1,6 +1,6 @@
 <template>
   <div class="test-container d-flex flex-column justify-content-center text-center">
-    <a :href="detailsUrl" target="_blank" title="Click to learn more...">
+    <a :href="detailsUrl" target="_blank" rel="noopener" title="Click to learn more...">
       <transition name="fade" mode="out-in">
         <div v-if="state === 'loading'" :key="state">
           <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+  import { EventBus } from '../event-bus';
+
   export default {
     name: 'GooglePageSpeed',
     props: {
@@ -58,6 +60,7 @@
         if (window.offline) {
           setTimeout(function () {
             that.score = Math.random() >= 0.8 ? null : Math.floor(Math.random() * 100);
+            EventBus.$emit('google-page-speed-' + this.strategy + '-result', { });
           }, 1000);
           return;
         }
@@ -72,6 +75,7 @@
           throw new Error('Network response was not ok.');
         }).then(function (json) {
           that.score = json.ruleGroups.SPEED.score;
+          EventBus.$emit('google-page-speed-' + this.strategy + '-result', json);
         }).catch(function (error) {
           console.log('There has been a problem with your fetch operation: ' + error.message);
         });
