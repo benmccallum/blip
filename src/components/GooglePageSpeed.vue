@@ -20,6 +20,7 @@
 
 <script>
   import { EventBus } from '../event-bus';
+  import { googlePageSpeedResult } from '../offline-data/google-page-speed-result';
 
   export default {
     name: 'GooglePageSpeed',
@@ -58,10 +59,7 @@
         var that = this;
 
         if (window.offline) {
-          setTimeout(function () {
-            that.score = Math.random() >= 0.8 ? null : Math.floor(Math.random() * 100);
-            EventBus.$emit('google-page-speed-' + this.strategy + '-result', { });
-          }, 1000);
+          this.getOfflineData();
           return;
         }
 
@@ -75,10 +73,17 @@
           throw new Error('Network response was not ok.');
         }).then(function (json) {
           that.score = json.ruleGroups.SPEED.score;
-          EventBus.$emit('google-page-speed-' + this.strategy + '-result', json);
+          EventBus.$emit('google-page-speed-' + that.strategy + '-result', json);
         }).catch(function (error) {
           console.log('There has been a problem with your fetch operation: ' + error.message);
         });
+      },
+      getOfflineData: function () {
+        var that = this;
+        setTimeout(function () {
+          that.score = Math.random() >= 0.8 ? null : Math.floor(Math.random() * 100);
+          EventBus.$emit('google-page-speed-' + that.strategy + '-result', googlePageSpeedResult);
+        }, 1000);
       }
     }
   };

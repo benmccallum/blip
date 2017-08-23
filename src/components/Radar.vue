@@ -26,9 +26,10 @@
   
         <div id="results" v-show="hasResults">
 
-          <aside id="legend" class="txext-muted">
+          <aside id="legend">
             <h5>Legend</h5>
             Scores out of 100, higher is better.
+            Click on a score to see the full explanation of that result.
             <hr>
             <i class="fa fa-html5"></i> Is HTML5?<br>
             <i class="fa fa-lock"></i> Security score by <a href="">Mozilla Observatory</a><br>

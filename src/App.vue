@@ -48,6 +48,10 @@
         color: #000;
         text-decoration: none;
       }
+
+      // .nav-item.active & {
+      //   color: #067BC2;
+      // } 
     }
     
     i {

@@ -52,7 +52,7 @@
       getHtml5Result: function () {
         var that = this;
 
-        if (window.offline) {
+        if (1 || window.offline) {
           setTimeout(function () {
             that.isHtml5 = Math.random() >= 0.9 ? null : Math.random() >= 0.5;
             EventBus.$emit('is-html5-result', that.isHtml5);

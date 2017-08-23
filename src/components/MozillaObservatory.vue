@@ -62,21 +62,59 @@
           }, 1000);
           return;
         }
-        // TODO:
-        // var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url='
-        //   + encodeURIComponent(this.website) + '&strategy=' + this.strategy;
 
-        // fetch(url).then(function (response) {
-        //   if (response.ok) {
-        //     return response.json();
-        //   }
-        //   throw new Error('Network response was not ok.');
-        // }).then(function (json) {
-        //   that.score = json.ruleGroups.SPEED.score;
-        // }).catch(function (error) {
-        //   //$scoreContainer.html('error');
-        //   console.log('There has been a problem with your fetch operation: ' + error.message);
-        // });
+        var parser = document.createElement('a');
+        parser.href = this.website;
+        var hostname = parser.hostname;
+        var url = 'https://http-observatory.security.mozilla.org/api/v1/analyze?host=' +
+          encodeURIComponent(hostname);
+
+        var params = {
+          hidden: true,
+          rescan: false
+        };
+
+        fetch(url, {
+          method: 'POST',
+          body: JSON.stringify(params)
+        }).then(function (response) {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Network response was not ok.');
+        }).then(function (json) {
+          that.processScanObject(json);
+        }).catch(function (error) {
+          console.log('There has been a problem with your fetch operation: ' + error.message);
+        });
+      },
+      processScanObject: function (scan) {
+        console.log(scan);
+        switch (scan.state) {
+          case 'ABORTED':
+            break;
+          case 'FAILED':
+            break;
+          case 'FINISHED':
+            this.score = scan.score;
+            EventBus.$emit('mozilla-observatory-result', scan);
+            break;
+          case 'PENDING':
+            this.poll(scan.scan_id, 5000);
+            break;
+          case 'STARTING':
+            this.poll(scan.scan_id, 2500);
+            break;
+          case 'RUNNING':
+            this.poll(scan.scan_id, 1000);
+            break;
+        }
+      },
+      poll: function (scanId, when) {
+        // var that = this;
+        setTimeout(function () {
+          console.log('polling again...');
+        }, when);
       }
     }
   };
