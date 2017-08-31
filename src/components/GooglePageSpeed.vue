@@ -7,7 +7,7 @@
           <span class="sr-only">Loading...</span>
         </div>
         <div v-else :key="state" class="score-container">
-          <span class="score">
+          <span class="score" :class="grade.class">
             <span class="val">{{ score }}</span>
             <span class="max text-muted sr-only">/100</span>
           </span>
@@ -21,11 +21,12 @@
 <script>
   import { EventBus } from '../event-bus';
   import { googlePageSpeedResult } from '../offline-data/google-page-speed-result';
+  import { GooglePageSpeedMixin } from './mixins/GooglePageSpeedMixin';
 
   export default {
     name: 'GooglePageSpeed',
+    extends: GooglePageSpeedMixin,
     props: {
-      strategy: String, // todo: add validator for "mobile" or "desktop" only
       website: String
     },
     data: function () {
@@ -64,7 +65,8 @@
         }
 
         var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=' +
-          encodeURIComponent(this.website) + '&strategy=' + this.strategy;
+          encodeURIComponent(this.website) + '&strategy=' + this.strategy +
+          '&filter_third_party_resources=true';
 
         fetch(url).then(function (response) {
           if (response.ok) {
@@ -81,8 +83,9 @@
       getOfflineData: function () {
         var that = this;
         setTimeout(function () {
-          that.score = Math.random() >= 0.8 ? null : Math.floor(Math.random() * 100);
-          EventBus.$emit('google-page-speed-' + that.strategy + '-result', googlePageSpeedResult);
+          var result = googlePageSpeedResult[that.strategy.toLowerCase()];
+          that.score = result.ruleGroups.SPEED.score;
+          EventBus.$emit('google-page-speed-' + that.strategy + '-result', result);
         }, 1000);
       }
     }

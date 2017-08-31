@@ -117,4 +117,28 @@
   .fade-enter, .fade-leave-to {
     opacity: 0;
   }
+
+  .grade-a, .green {
+    color: #2d882d;
+  }
+
+  .grade-b {
+    color: #aaaa39;
+  }
+
+  .grade-c {
+    color: #aa7039;
+  }
+
+  .grade-d, .grade-e {
+    color: #652770;
+  }
+
+  .grade-f, .red {
+    color: #aa3939;
+  }
+
+  .grade-i {  /* intermediate is a weird font that needs to be bigger */
+    // font-size: 102px;
+  }
 </style>

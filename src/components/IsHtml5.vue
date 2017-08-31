@@ -7,7 +7,7 @@
         </div>
         <div v-else :key="state" class="score-container">
           <span class="score">
-            <span class="val">
+            <span class="val" :class="isHtml5 ? 'green' : 'red'">
               <template v-if="isHtml5">&#x2714;</template>
               <template v-else>&#10006;</template>
             </span>

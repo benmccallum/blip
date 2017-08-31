@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div id="radar" class="container-fluid">
     <my-header subtitle="Pick a location. We'll find businesses nearby and test their website."></my-header>
     <div class="row justify-content-md-center">
       <div class="col-12 col-md-8 col-xl-7">
@@ -28,8 +28,8 @@
 
           <aside id="legend">
             <h5>Legend</h5>
-            Scores out of 100, higher is better.
-            Click on a score to see the full explanation of that result.
+            Scores are out of 100.<br>
+            Click a score for complete details.
             <hr>
             <i class="fa fa-html5"></i> Is HTML5?<br>
             <i class="fa fa-lock"></i> Security score by <a href="">Mozilla Observatory</a><br>

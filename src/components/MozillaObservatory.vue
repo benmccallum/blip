@@ -7,7 +7,7 @@
           <span class="sr-only">Loading...</span>
         </div>
         <div v-else :key="state" class="score-container">
-          <span class="score">
+          <span class="score" :class="'grade-' + grade.toLowerCase()">
             <span class="val">{{ score }}</span>
             <span class="max text-muted sr-only">/100</span>
           </span>
@@ -19,9 +19,8 @@
 </template>
 
 <script>
-  // TODO: https://github.com/mozilla/http-observatory/blob/master/httpobs/docs/api.md
-
   import { EventBus } from '../event-bus';
+  import { mozillaObservatoryResult } from '../offline-data/mozilla-observatory-result';
 
   export default {
     name: 'MozillaObservatory',
@@ -30,7 +29,8 @@
     },
     data: function () {
       return {
-        score: null
+        score: null,
+        grade: null
       };
     },
     computed: {
@@ -42,9 +42,14 @@
         }
         return 'scored';
       },
+      hostname: function () {
+        var parser = document.createElement('a');
+        parser.href = this.website;
+        return parser.hostname;
+      },
       detailsUrl: function () {
         return 'https://observatory.mozilla.org/analyze.html?host=' +
-          encodeURIComponent(this.website);
+          encodeURIComponent(this.hostname);
       }
     },
     mounted: function () {
@@ -56,18 +61,12 @@
         var that = this;
 
         if (window.offline) {
-          setTimeout(function () {
-            that.score = Math.random() >= 0.8 ? null : Math.floor(Math.random() * 100);
-            EventBus.$emit('mozilla-observatory-result', { });
-          }, 1000);
+          this.getOfflineData();
           return;
         }
 
-        var parser = document.createElement('a');
-        parser.href = this.website;
-        var hostname = parser.hostname;
         var url = 'https://http-observatory.security.mozilla.org/api/v1/analyze?host=' +
-          encodeURIComponent(hostname);
+          encodeURIComponent(this.hostname);
 
         var params = {
           hidden: true,
@@ -97,6 +96,7 @@
             break;
           case 'FINISHED':
             this.score = scan.score;
+            this.grade = scan.grade;
             EventBus.$emit('mozilla-observatory-result', scan);
             break;
           case 'PENDING':
@@ -115,6 +115,14 @@
         setTimeout(function () {
           console.log('polling again...');
         }, when);
+      },
+      getOfflineData: function () {
+        var that = this;
+        setTimeout(function () {
+          that.score = mozillaObservatoryResult.score;
+          that.grade = mozillaObservatoryResult.grade;
+          EventBus.$emit('mozilla-observatory-result', mozillaObservatoryResult);
+        }, 1000);
       }
     }
   };
