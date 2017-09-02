@@ -16,7 +16,21 @@
           <div class="col">
             <p id="label" class="mb-2">
               <strong>Searching around... </strong>
-              <span>{{query.label}}</span>
+              <span>{{query.label}}</span><br />
+              <label for="sortBy" class="">sorting by</label>
+              <select id="sortBy" class="custom-select">
+                <option selected value="avg'">average score</option>
+                <option value="isHtml">is HTML5?</option>
+                <option value="security">security score</option>
+                <option value="desktopSpeed">desktop speed score</option>
+                <option value="mobileSpeed">mobile speed score</option>
+                <option value="mobileUsability">mobile usability score</option>
+              </select>
+              <label for="sortDirection" class="" aria-label="sort direction">with</label>
+              <select id="sortDirection" class="custom-select">
+                <option value="0">worst first</option>
+                <option value="1">best first</option>
+              </select>
               <button type="button" class="close float-right" aria-label="Search again..." v-on:click="reset">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -26,36 +40,32 @@
   
         <div id="results" v-show="hasResults">
 
-          <aside id="legend">
+          <aside id="legend" class="hidden-md-down">
+            <!-- TODO: Legend for mobile views -->
             <h5>Legend</h5>
             Scores are out of 100.<br>
             Click a score for complete details.
             <hr>
-            <i class="fa fa-html5"></i> Is HTML5?<br>
-            <i class="fa fa-lock"></i> Security score by <a href="">Mozilla Observatory</a><br>
-            <i class="fa fa-desktop"></i> Desktop score by <a href="">Google Page Speed</a><br>
-            <i class="fa fa-mobile"></i> Mobile score by <a href="">Google Page Speed</a>
+            <div class="d-flex flex-row">
+              <div class="pr-1"><i class="fa fa-html5"></i></div>
+              <div>Is HTML5?</div>
+            </div>
+            <div class="d-flex flex-row">
+              <div class="pr-1"><i class="fa fa-lock"></i></div>
+              <div>Security by <a href="">Mozilla Observatory</a></div>
+            </div>
+            <div class="d-flex flex-row">
+              <div class="pr-1"><i class="fa fa-desktop"></i></div>
+              <div>Desktop speed score by <a href="">Google PageSpeed Insights</a></div>
+            </div>
+            <div class="d-flex flex-row">
+              <div class="pr-1"><i class="fa fa-mobile"></i></div>
+              <div>Mobile speed score by <a href="">Google PageSpeed Insights</a></div>
+            </div>
           </aside>
 
-          <!-- <ul class="nav nav-tabs justify-content-end mb-2" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#listview" role="tab">
-                List view
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#mapview" role="tab">
-                Map view
-              </a>
-            </li>
-          </ul> -->
-          <div class="tab-content">
-            <div id="listview" class="tab-pane active" role="tabpanel">
-              <result v-for="result in results" :key="result.place_id" :result="result"></result>
-            </div>
-            <div id="mapview" class="tab-pane" role="tabpanel">
-              <div id="map">TODO map</div>
-            </div>
+          <div>
+            <result v-for="result in results" :key="result.place_id" :result="result"></result>
           </div>
         </div>
   
@@ -70,6 +80,7 @@
 <script>
 import Result from './Result.vue';
 import Header from './Header.vue';
+import { googleMapsResult } from '../offline-data/google-maps-result';
 
 // TODO: Scope in component
 var map = null;
@@ -87,7 +98,9 @@ export default {
     return {
       query: {
         coord: null,
-        label: null
+        label: null,
+        sortBy: 'avg',
+        sortDirection: 'asc'
       },
       results: null
     };
@@ -98,6 +111,9 @@ export default {
     },
     hasNoResults: function () {
       return this.results && this.results.length < 1
+    },
+    sortedResults: function () {
+
     }
   },
   methods: {
@@ -142,23 +158,9 @@ export default {
     useOfflineData: function () {
       var that = this;
       setTimeout(function () {
-        var result = {
-          id: 123,
-          website: 'https://google.com',
-          name: 'Test name',
-          url: 'https://google.com',
-          vicinity: '14 Random St, New York, 4012',
-          ph: '+61 444 333 222'
-        };
-        that.results = [
-          result,
-          result,
-          result,
-          result,
-          result
-        ];
+        that.results = googleMapsResult;
       }, 1000);
-      that.query.label = 'your location.';
+      that.query.label = 'your location';
     },
     search: function (coord, label) {
       // Setup label
@@ -229,18 +231,15 @@ export default {
     }
   }
 };
-
-// function createMarker(place) {
-//   var placeLoc = place.geometry.location;
-//   var marker = new window.google.maps.Marker({
-//     map: map,
-//     position: place.geometry.location
-//   });
-// }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+  #results {
+    form {
+      font-size: .9rem;
+    }
+  }
+
   #legend {
     position: absolute;
     right: -250px;
@@ -257,9 +256,25 @@ export default {
       margin-bottom: .7rem;
     }
 
+        
     i {
-      width: 17px;
+      width: .8rem;
       text-align: center;
+
+      &.fa-html5 {
+        font-size: .85rem;
+      }
+      &.fa-lock {
+        font-size: .95rem;
+        padding-top: 2px;
+      }
+      &.fa-desktop {
+        font-size: .7rem;
+        padding-top: 3px;
+      }
+      &.fa-mobile {
+        font-size: 1.1rem;
+      }
     }
   }
 </style>
