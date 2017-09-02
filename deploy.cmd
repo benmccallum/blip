@@ -61,12 +61,12 @@ echo Handling Vue webpack deployment.
 
 :: 2. Install npm dependencies for app and build
 echo 2. Installing npm packages for app and build in %~dp0% 
-call :ExecuteCmd !NPM_CMD! install
+call :ExecuteCmd npm install
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. Build
 echo 3. Building app 
-call :ExecuteCmd !NPM_CMD! run build
+call :ExecuteCmd npm run build
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 4. KuduSync dist directory files
