@@ -29,5 +29,6 @@ npm test
 ```
 
 ## Potential Roadmap
+- Purge Azure CDN on kudu deploy in deploy.cmd (see [REST API](https://docs.microsoft.com/en-us/rest/api/cdn/Endpoints/PurgeContent)). May require swapping over to Verizon CDN as Akamai CDN doesn't support wildcard purge (see [user request](https://feedback.azure.com/forums/169397-cdn/suggestions/16800949-make-full-purge-and-wildcard-purge-for-akamai-cdn))
 - Scrape business' email from website?
 - Export results to CSV.
