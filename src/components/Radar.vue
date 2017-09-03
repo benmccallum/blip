@@ -18,6 +18,14 @@
               <strong>Searching around... </strong>
               <span>{{query.label}}</span><br />
               <label for="sortBy" class="">sorting by</label>
+
+<select class="custom-select">
+  <option selected>Open this select menu</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+
               <select id="sortBy" class="custom-select">
                 <option selected value="avg'">average score</option>
                 <option value="isHtml">is HTML5?</option>
@@ -74,6 +82,7 @@
         </div>
       </div>
     </div>
+    <div id="map" style="display:none!important;" hidden></div>
   </div>
 </template>
 

@@ -56,7 +56,6 @@
     
     i {
       line-height: 1.5rem;
-      vertical-align: middle;
 
       &.fa-spinner {
         line-height: 3rem;
