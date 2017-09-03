@@ -1,10 +1,10 @@
 <template>
   <div id="bootstrap-breakpoint">
-    <span class="hidden-sm-up">XS</span>
-    <span class="hidden-md-up hidden-xs-down">SM</span>
-    <span class="hidden-lg-up hidden-sm-down">MD</span>
-    <span class="hidden-xl-up hidden-md-down">LG</span>
-    <span class="hidden-lg-down">XL</span>
+    <span class="d-inline-block d-sm-none">XS</span>
+    <span class="d-none d-sm-inline-block d-md-none">SM</span>
+    <span class="d-none d-md-inline-block d-lg-none">MD</span>
+    <span class="d-none d-lg-inline-block d-xl-none">LG</span>
+    <span class="d-none d-xl-inline-block">XL</span>
   </div>
 </template>
 

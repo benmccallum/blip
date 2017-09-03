@@ -33,10 +33,9 @@ module.exports = merge(baseWebpackConfig, {
     new FriendlyErrorsPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
-      jquery: 'jquery',
-      'window.jQuery': 'jquery',
       jQuery: 'jquery',
-      'Tether': 'tether'
+      'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default']
     })
   ]
 })

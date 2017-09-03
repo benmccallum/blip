@@ -10,7 +10,7 @@ import './assets/styles/app.scss';
 Vue.config.productionTip = false;
 
 // Use to 'go offline' and switch to offline mock data when needed
-window.offline = true;
+window.offline = false;
 
 /* eslint-disable no-new */
 new Vue({

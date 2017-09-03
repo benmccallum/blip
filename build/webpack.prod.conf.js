@@ -97,10 +97,9 @@ var webpackConfig = merge(baseWebpackConfig, {
     ]),
     new webpack.ProvidePlugin({
       $: 'jquery',
-      jquery: 'jquery',
-      'window.jQuery': 'jquery',
       jQuery: 'jquery',
-      'Tether': 'tether'
+      'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default']
     })
   ]
 })
