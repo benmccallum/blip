@@ -27,10 +27,8 @@
     border-top: $queryBorder;
   }
   .close {
-    float: none;
-    vertical-align: middle;
-    font-size: 1.4rem;
-    line-height: 1.5;
+    float: right;
+    margin-top: -.1rem;
   }
   .result-row {
     border-bottom: 1px solid rgba(0,0,0,.1);

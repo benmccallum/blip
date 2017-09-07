@@ -11,7 +11,7 @@ import './assets/styles/app.scss';
 Vue.config.productionTip = false;
 
 // Use to 'go offline' and switch to offline mock data when needed
-window.offline = false;
+window.offline = true;
 
 // Setup GA analytics with vue-analytics plugin (https://github.com/MatteoGabriele/vue-analytics)
 Vue.use(VueAnalytics, {

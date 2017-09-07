@@ -16,17 +16,14 @@
           <div class="col">
             <p id="label" class="mb-2">
               <strong>Searching around... </strong>
-              <span>{{query.label}}</span><br />
-              <label for="sortBy" class="">sorting by</label>
-
-<select class="custom-select">
-  <option selected>Open this select menu</option>
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
-</select>
-
-              <select id="sortBy" class="custom-select">
+              <span>{{query.label}}</span>
+              <button type="button" class="close" aria-label="Search again..." v-on:click="reset">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </p>
+            <form id="filters" class="mb-2">
+              <label for="sortBy" class="mr-sm-1">sorting by</label>
+              <select id="sortBy" v-model="query.sortBy" class="custom-select mb-2 mr-sm-2 mb-sm-0">
                 <option selected value="avg'">average score</option>
                 <option value="isHtml">is HTML5?</option>
                 <option value="security">security score</option>
@@ -34,15 +31,12 @@
                 <option value="mobileSpeed">mobile speed score</option>
                 <option value="mobileUsability">mobile usability score</option>
               </select>
-              <label for="sortDirection" class="" aria-label="sort direction">with</label>
-              <select id="sortDirection" class="custom-select">
+              <label for="sortDirection" class="mr-sm-1" aria-label="sort direction">with</label>
+              <select id="sortDirection" v-model="query.sortDirection" class="custom-select">
                 <option value="0">worst first</option>
                 <option value="1">best first</option>
               </select>
-              <button type="button" class="close float-right" aria-label="Search again..." v-on:click="reset">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </p>
+            </form>
           </div>
         </div>
   
@@ -122,7 +116,11 @@ export default {
       return this.results && this.results.length < 1
     },
     sortedResults: function () {
-
+      this.results.sortBy(function (a, b) {
+        return this.sortDirection === 'asc'
+          ? a.name > b.name
+          : a.name < b.name;
+      });
     }
   },
   methods: {
@@ -243,10 +241,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #results {
-    form {
-      font-size: .9rem;
-    }
+  #filters {
+    font-size: .9rem;
+    opacity: .75;
   }
 
   #legend {
