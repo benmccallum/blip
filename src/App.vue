@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <bootstrap-breakpoint></bootstrap-breakpoint>
-    <router-view></router-view>
+    <vue-bootstrap-breakpoint-indicator></vue-bootstrap-breakpoint-indicator>
+    <router-view></router-view>    
   </div>
 </template>
 
 <script>
-  import BootstrapBreakpoint from './components/BootstrapBreakpoint.vue';
+  import VueBootstrapBreakpointIndicator from 'vue-bootstrap-breakpoint-indicator';
 
   export default {
     name: 'app',
     components: {
-      'bootstrap-breakpoint': BootstrapBreakpoint
+      'vue-bootstrap-breakpoint-indicator': VueBootstrapBreakpointIndicator
     }
   };
 </script>
