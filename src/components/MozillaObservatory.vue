@@ -120,7 +120,7 @@
         var that = this;
         setTimeout(function () {
           that.processData(mozillaObservatoryResult());
-        }, 1000);
+        }, Math.floor(Math.random() * 1000));
       },
       processData: function (data) {
         this.$store.commit('setSecurityScore', { result: this.result, score: data.score, grade: data.grade });

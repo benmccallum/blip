@@ -31,11 +31,11 @@ export const mutations = {
   clearResults (state) {
     state.results = null;
   },
-  initResults (state) {
+  emptyResults (state) {
     state.results = [];
   },
   addResult (state, result) {
-    state.results.push(result);
+    state.results ? state.results.push(result) : (state.results = [result]);
   },
   setIsHtml5 (state, payload) {
     payload.result.isHtml5 = payload.isHtml5;

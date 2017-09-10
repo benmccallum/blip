@@ -18,7 +18,7 @@
         </template>
 
         <!-- For debugging -->
-        <p>{{result.avg}}</p>
+        <p style="position:absolute;top:5px;right:5px;color:#ccc;opacity:.8;">{{Math.floor(result.avg)}}</p>
       </div>
     </div>
     <template v-if="result.website">

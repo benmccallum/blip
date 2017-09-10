@@ -3,13 +3,15 @@
     <my-header subtitle="Pick a location. We'll find businesses nearby and test their website."></my-header>
     <div class="row justify-content-md-center">
       <div class="col-12 col-md-8 col-xl-7">
-        
         <form v-show="!hasResults">
           <button type="button" class="btn btn-primary btn-block" v-on:click="searchNearby">
             <i class="fa fa-location-arrow" aria-hidden="true"></i> Search nearby
           </button>
           <p class="text-center mt-1 mb-2 ">or</p>
-          <input type="text" class="form-control text-center mb-3" id="address" placeholder="Search elsewhere..." aria-label="Address">
+          <input type="text" class="form-control text-center mb-sm-1" id="address" placeholder="Search elsewhere..." aria-label="Address">
+          <p class="text-right mr-1">
+            <img class="google-logo" src="../assets/images/powered_by_google.png" alt="Powered by Google">
+          </p>
         </form>
 
         <div id="query" v-show="hasResults" class="row pt-2 pb-1 mb-3">
@@ -66,9 +68,9 @@
             </div>
           </aside>
 
-          <div>
+          <transition-group name="results-list" tag="div">
             <result v-for="result in sortedResults" :key="result.id" :result="result"></result>
-          </div>
+          </transition-group>
         </div>
   
         <div id="no-result" v-show="hasNoResults">
@@ -178,7 +180,6 @@ export default {
     useOfflineData: function () {
       var that = this;
       setTimeout(function () {
-        that.$store.commit('initResults');
         googleMapsResult.forEach(function (place) {
           that.$store.commit('addResult', that.parsePlace(place));
         });
@@ -201,18 +202,23 @@ export default {
       }, this.nearbySearchCallback);
     },
     nearbySearchCallback: function (results, status) {
-      this.$store.commit('initResults');
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          service.getDetails({ placeId: results[i].place_id }, this.getDetailsCallback);
+        if (results.length) {
+          for (var i = 0; i < results.length; i++) {
+            service.getDetails({ placeId: results[i].place_id }, this.getDetailsCallback);
+          }
+        } else {
+          this.$store.commit('emptyResults');
         }
+      } else {
+        this.$store.commit('emptyResults'); // todo: error view?
       }
     },
     getDetailsCallback: function (place, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         this.$store.commit('addResult', this.parsePlace(place));
       } else {
-        console.error('Error getting details for place', place);
+        console.error('Error getting details for place', place, status);
       }
     },
     reset: function () {
@@ -250,6 +256,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  //@import '../../node_modules/bootstrap/scss/_variables.scss';
+  //@import '../../node_modules/bootstrap/scss/mixins/_breakpoints.scss';
+
   #filters {
     font-size: .75rem;
     opacity: .75;
@@ -291,5 +300,19 @@ export default {
         font-size: 1.1rem;
       }
     }
+  }
+
+  .results-list-move {
+    transition: transform 1s;
+  }
+  .results-list-leave-active {
+    background-color: red;
+  }
+
+  .google-logo {
+    max-width: 100px;
+    // @include media-breakpoint-up(sm) {
+    //   max-width: 150px;  
+    // }
   }
 </style>

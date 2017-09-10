@@ -65,9 +65,8 @@
           return;
         }
 
-        var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=' +
-          encodeURIComponent(this.result.website) + '&strategy=' + this.strategy +
-          '&filter_third_party_resources=true';
+        var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?key=AIzaSyCsV60UGTAkbdBHrE_jjZU_VYHSp8ioJJQ&filter_third_party_resources=true' +
+          '&url=' + encodeURIComponent(this.result.website) + '&strategy=' + this.strategy;
 
         fetch(url).then(function (response) {
           if (response.ok) {
@@ -84,7 +83,7 @@
         var that = this;
         setTimeout(function () {
           that.processData(googlePageSpeedResult()[that.strategy.toLowerCase()]);
-        }, 1000);
+        }, Math.floor(Math.random() * 1000));
       },
       processData: function (data) {
         // Speed
