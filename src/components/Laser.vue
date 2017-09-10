@@ -24,16 +24,16 @@
         <div id="result" v-if="hasQuery">
           <nav class="row">
             <div class="col nav-item active" data-toggle="tab" href="#html5" role="tab">
-              <is-html5 :website="query"></is-html5>
+              <is-html5 :result="result"></is-html5>
             </div>
             <div class="col nav-item" data-toggle="tab" href="#security" role="tab">
-              <mozilla-observatory :website="query"></mozilla-observatory>
+              <mozilla-observatory :result="result"></mozilla-observatory>
             </div>
             <div class="col nav-item" data-toggle="tab" href="#desktop" role="tab">
-              <google-page-speed :website="query" :strategy="'desktop'"></google-page-speed>
+              <google-page-speed :result="result" :strategy="'Desktop'"></google-page-speed>
             </div>
             <div class="col nav-item" data-toggle="tab" href="#mobile" role="tab">
-              <google-page-speed :website="query" :strategy="'mobile'"></google-page-speed>
+              <google-page-speed :result="result" :strategy="'Mobile'"></google-page-speed>
             </div>
           </nav>
           <div class="row tab-content">
@@ -65,9 +65,11 @@
   import MozillaObservatory from './MozillaObservatory.vue';
   import MozillaObservatoryDetails from './MozillaObservatoryDetails.vue';
   import { EventBus } from '../event-bus';
+  import { PlaceParserMixin } from './mixins/PlaceParserMixin';
 
   export default {
     name: 'laser',
+    mixins: [ PlaceParserMixin ],
     components: {
       'my-header': Header,
       'google-page-speed': GooglePageSpeed,
@@ -91,6 +93,9 @@
     computed: {
       hasQuery: function () {
         return this.query != null;
+      },
+      result: function () {
+        return this.parsePlace({ website: this.query });
       }
     },
     created: function () {

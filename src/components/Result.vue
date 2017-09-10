@@ -16,22 +16,25 @@
             {{result.ph}}
           </a>
         </template>
+
+        <!-- For debugging -->
+        <p>{{result.avg}}</p>
       </div>
     </div>
     <template v-if="result.website">
       <div class="col-12 col-sm">
         <div class="row">
           <div class="col">
-            <is-html5 :website="result.website"></is-html5>
+            <is-html5 :result="result"></is-html5>
           </div> 
           <div class="col">
-            <mozilla-observatory :website="result.website" />
+            <mozilla-observatory :result="result" />
           </div>
           <div class="col">
-            <google-page-speed :strategy="'desktop'" :website="result.website" />
+            <google-page-speed :strategy="'Desktop'" :result="result" />
           </div>
           <div class="col">
-            <google-page-speed :strategy="'mobile'" :website="result.website" />
+            <google-page-speed :strategy="'Mobile'" :result="result" />
           </div>
         </div>
       </div>

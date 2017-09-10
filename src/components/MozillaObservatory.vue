@@ -25,13 +25,7 @@
   export default {
     name: 'MozillaObservatory',
     props: {
-      website: String
-    },
-    data: function () {
-      return {
-        score: null,
-        grade: null
-      };
+      result: Object
     },
     computed: {
       state: function () {
@@ -41,6 +35,12 @@
           return 'na';
         }
         return 'scored';
+      },
+      score: function () {
+        return this.result.security;
+      },
+      grade: function () {
+        return this.result.securityGrade;
       },
       hostname: function () {
         var parser = document.createElement('a');
@@ -119,10 +119,12 @@
       getOfflineData: function () {
         var that = this;
         setTimeout(function () {
-          that.score = mozillaObservatoryResult.score;
-          that.grade = mozillaObservatoryResult.grade;
-          EventBus.$emit('mozilla-observatory-result', mozillaObservatoryResult);
+          that.processData(mozillaObservatoryResult());
         }, 1000);
+      },
+      processData: function (data) {
+        this.$store.commit('setSecurityScore', { result: this.result, score: data.score, grade: data.grade });
+        EventBus.$emit('mozilla-observatory-result', data);
       }
     }
   };

@@ -4,6 +4,7 @@ require('bootstrap');
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import VueAnalytics from 'vue-analytics';
+import store from './store';
 import router from './router';
 import App from './App';
 import './assets/styles/app.scss';
@@ -23,6 +24,6 @@ Vue.use(VueAnalytics, {
 new Vue({
   el: '#app',
   router,
-  template: '<App/>',
-  components: { App }
+  store,
+  render: h => h(App)
 });

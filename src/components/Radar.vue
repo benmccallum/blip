@@ -17,24 +17,24 @@
             <p id="label" class="mb-2">
               <strong>Searching around... </strong>
               <span>{{query.label}}</span>
-              <button type="button" class="close" aria-label="Search again..." v-on:click="reset">
+              <button type="button" class="close mr-1 mr-sm-0" aria-label="Search again..." v-on:click="reset">
                 <span aria-hidden="true">&times;</span>
               </button>
             </p>
             <form id="filters" class="mb-2">
-              <label for="sortBy" class="mr-sm-1">sorting by</label>
-              <select id="sortBy" v-model="query.sortBy" class="custom-select mb-2 mr-sm-2 mb-sm-0">
-                <option selected value="avg'">average score</option>
-                <option value="isHtml">is HTML5?</option>
+              <label for="sortBy">sorting by</label>
+              <select id="sortBy" v-model="query.sortBy" class="custom-select">
+                <option selected value="avg">average score</option>
+                <option value="isHtml5">is HTML5?</option>
                 <option value="security">security score</option>
                 <option value="desktopSpeed">desktop speed score</option>
                 <option value="mobileSpeed">mobile speed score</option>
                 <option value="mobileUsability">mobile usability score</option>
               </select>
-              <label for="sortDirection" class="mr-sm-1" aria-label="sort direction">with</label>
+              <label for="sortDirection"aria-label="sort direction">with</label>
               <select id="sortDirection" v-model="query.sortDirection" class="custom-select">
-                <option value="0">worst first</option>
-                <option value="1">best first</option>
+                <option value="asc" selected>worst first</option>
+                <option value="desc">best first</option>
               </select>
             </form>
           </div>
@@ -67,7 +67,7 @@
           </aside>
 
           <div>
-            <result v-for="result in results" :key="result.place_id" :result="result"></result>
+            <result v-for="result in sortedResults" :key="result.id" :result="result"></result>
           </div>
         </div>
   
@@ -84,6 +84,7 @@
 import Result from './Result.vue';
 import Header from './Header.vue';
 import { googleMapsResult } from '../offline-data/google-maps-result';
+import { PlaceParserMixin } from './mixins/PlaceParserMixin';
 
 // TODO: Scope in component
 var map = null;
@@ -93,6 +94,7 @@ var service = null;
 
 export default {
   name: 'radar',
+  mixins: [ PlaceParserMixin ],
   components: {
     'result': Result,
     'my-header': Header
@@ -104,11 +106,13 @@ export default {
         label: null,
         sortBy: 'avg',
         sortDirection: 'asc'
-      },
-      results: null
+      }
     };
   },
   computed: {
+    results: function () {
+      return this.$store.state.results;
+    },
     hasResults: function () {
       return this.results && this.results.length > 0;
     },
@@ -116,10 +120,19 @@ export default {
       return this.results && this.results.length < 1
     },
     sortedResults: function () {
-      this.results.sortBy(function (a, b) {
-        return this.sortDirection === 'asc'
-          ? a.name > b.name
-          : a.name < b.name;
+      if (this.results == null) {
+        return null;
+      }
+
+      var that = this;
+
+      return this.results.sort(function (a, b) {
+        if (a.hasOwnProperty(that.query.sortBy) && b.hasOwnProperty(that.query.sortBy)) {
+          return that.query.sortDirection === 'asc'
+            ? a[that.query.sortBy] > b[that.query.sortBy]
+            : a[that.query.sortBy] < b[that.query.sortBy]
+        }
+        return true;
       });
     }
   },
@@ -165,7 +178,10 @@ export default {
     useOfflineData: function () {
       var that = this;
       setTimeout(function () {
-        that.results = googleMapsResult;
+        that.$store.commit('initResults');
+        googleMapsResult.forEach(function (place) {
+          that.$store.commit('addResult', that.parsePlace(place));
+        });
       }, 1000);
       that.query.label = 'your location';
     },
@@ -185,7 +201,7 @@ export default {
       }, this.nearbySearchCallback);
     },
     nearbySearchCallback: function (results, status) {
-      this.results = [];
+      this.$store.commit('initResults');
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         for (var i = 0; i < results.length; i++) {
           service.getDetails({ placeId: results[i].place_id }, this.getDetailsCallback);
@@ -194,14 +210,7 @@ export default {
     },
     getDetailsCallback: function (place, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        this.results.push({
-          id: place.place_id,
-          website: place.website,
-          name: place.name,
-          url: place.url,
-          vicinity: place.vicinity,
-          ph: place.formatted_phone_number
-        });
+        this.$store.commit('addResult', this.parsePlace(place));
       } else {
         console.error('Error getting details for place', place);
       }
@@ -212,8 +221,8 @@ export default {
 
       // Clear/reset UI
       this.initAutocomplete();
-      this.search = {};
-      this.results = null;
+      this.search = { };
+      this.$store.commit('clearResults');
     },
     initAutocomplete: function () {
       if (!window.google) {
@@ -242,7 +251,7 @@ export default {
 
 <style lang="scss" scoped>
   #filters {
-    font-size: .9rem;
+    font-size: .75rem;
     opacity: .75;
   }
 

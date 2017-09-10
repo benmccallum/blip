@@ -25,12 +25,7 @@
   export default {
     name: 'IsHtml5',
     props: {
-      website: String
-    },
-    data: function () {
-      return {
-        isHtml5: null
-      };
+      result: Object
     },
     computed: {
       state: function () {
@@ -38,6 +33,9 @@
           return 'loading';
         }
         return 'scored';
+      },
+      isHtml5: function () {
+        return this.result.isHtml5;
       },
       detailsUrl: function () {
         return 'https://google.com?q=doctype';
@@ -54,7 +52,7 @@
 
         if (1 || window.offline) {
           setTimeout(function () {
-            that.isHtml5 = Math.random() >= 0.9 ? null : Math.random() >= 0.5;
+            that.$store.commit('setIsHtml5', { result: that.result, isHtml5: (Math.random() >= 0.9 ? null : Math.random() >= 0.5) });
             EventBus.$emit('is-html5-result', that.isHtml5);
           }, 1500);
           return;
@@ -66,7 +64,7 @@
           }
           throw new Error('Network response was not ok.');
         }).then(function (text) {
-          that.isHtml5 = true;
+          that.$store.commit('setIsHtml5', { result: that.result, isHtml5: (Math.random() >= 0.9 ? null : Math.random() >= 0.5) });
           EventBus.$emit('is-html5-result', that.isHtml5);
         }).catch(function (error) {
           console.log('There has been a problem with your fetch operation: ' + error.message);

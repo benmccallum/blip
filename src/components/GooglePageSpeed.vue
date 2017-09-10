@@ -7,8 +7,8 @@
           <span class="sr-only">Loading...</span>
         </div>
         <div v-else :key="state" class="score-container">
-          <span class="score" :class="grade.class">
-            <span class="val">{{ score }}</span>
+          <span class="score" :class="speedGrade.class">
+            <span class="val">{{ speedScore }}</span>
             <span class="max text-muted sr-only">/100</span>
           </span>
         </div>
@@ -27,28 +27,29 @@
     name: 'GooglePageSpeed',
     extends: GooglePageSpeedMixin,
     props: {
-      website: String
-    },
-    data: function () {
-      return {
-        score: null
-      };
+      result: Object
     },
     computed: {
       state: function () {
-        if (this.score === null) {
+        if (this.speedScore === null) {
           return 'loading';
-        } else if (this.score === -1) {
+        } else if (this.speedScore === -1) {
           return 'na';
         }
         return 'scored';
       },
+      speedScore: function () {
+        return this.result[this.strategy.toLowerCase() + 'Speed'];
+      },
+      usabilityScore: function () {
+        return this.result[this.strategy.toLowerCase() + 'Usability'];
+      },
       detailsUrl: function () {
         return 'https://developers.google.com/speed/pagespeed/insights/?url=' +
-          encodeURIComponent(this.website) + '&tab=' + this.strategy;
+          encodeURIComponent(this.result.website) + '&tab=' + this.strategy;
       },
       classObject: function () {
-        return 'fa-' + this.strategy;
+        return 'fa-' + this.strategy.toLowerCase();
       }
     },
     mounted: function () {
@@ -65,7 +66,7 @@
         }
 
         var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=' +
-          encodeURIComponent(this.website) + '&strategy=' + this.strategy +
+          encodeURIComponent(this.result.website) + '&strategy=' + this.strategy +
           '&filter_third_party_resources=true';
 
         fetch(url).then(function (response) {
@@ -74,8 +75,7 @@
           }
           throw new Error('Network response was not ok.');
         }).then(function (json) {
-          that.score = json.ruleGroups.SPEED.score;
-          EventBus.$emit('google-page-speed-' + that.strategy + '-result', json);
+          that.processData(json);
         }).catch(function (error) {
           console.log('There has been a problem with your fetch operation: ' + error.message);
         });
@@ -83,10 +83,18 @@
       getOfflineData: function () {
         var that = this;
         setTimeout(function () {
-          var result = googlePageSpeedResult[that.strategy.toLowerCase()];
-          that.score = result.ruleGroups.SPEED.score;
-          EventBus.$emit('google-page-speed-' + that.strategy + '-result', result);
+          that.processData(googlePageSpeedResult()[that.strategy.toLowerCase()]);
         }, 1000);
+      },
+      processData: function (data) {
+        // Speed
+        this.$store.commit('set' + this.strategy + 'SpeedScore', { result: this.result, score: data.ruleGroups.SPEED.score });
+        // Usability
+        if (data.ruleGroups.USABILITY && data.ruleGroups.USABILITY.score) {
+          this.$store.commit('set' + this.strategy + 'UsabilityScore', { result: this.result, score: data.ruleGroups.USABILITY.score });
+        }
+        // Everything
+        EventBus.$emit('google-page-speed-' + this.strategy.toLowerCase() + '-result', data);
       }
     }
   };
