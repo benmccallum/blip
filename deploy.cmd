@@ -56,25 +56,53 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 echo Handling Vue webpack deployment.
 
 :: 1. Install npm dependencies for app and build
-:: echo 1. Select node version 
-:: call :SelectNodeVersion
-
-:: 2. Install npm dependencies for app and build
-echo 2. Installing npm packages for app and build in %~dp0% 
+echo 1. Installing npm packages for app and build in %~dp0% 
 call :ExecuteCmd npm install
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 3. Build
-echo 3. Building app 
+:: 2. Build
+echo 2. Building app 
 call :ExecuteCmd npm run build
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 4. KuduSync dist directory files
+:: 3. KuduSync dist directory files
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  echo 4. Kudu syncing built app from dist folder to deployment target
+  echo 3. Kudu syncing built app from dist folder to deployment target
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\dist" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
+
+:: 4. Purge CDN cache of all caches files
+:: Requires an application to be setup in the Azure Active Directory on the same tenant, 
+:: with a client id and key/secret, and permissions to the Azure CDN Endpoint (CDN Endpoint Contributor)
+IF NOT DEFINED CLIENT_ID ( 
+  echo 4. Skipping Azure CDN cache purge. App Setting "CLIENT_ID" was not found. Potentially this is a local test deployment run.
+  goto end 
+)
+IF NOT DEFINED CLIENT_SECRET ( 
+  echo 4. Skipping Azure CDN cache purge. App Setting "CLIENT_SECRET" was not found. Potentially this is a local test deployment run.
+  goto end 
+)
+
+echo 4. Purging CDN of all cached files
+SET ARM_CLIENT_CMD="%DEPLOYMENT_SOURCE%\build\armclient\ARMClient.exe"
+
+SET TENANT_ID="979c7556-2382-40a9-a730-7af1e4233b55"
+::SET CLIENT_ID="comes-from-app-settings"
+::SET CLIENT_SECRET="comes-from-app-settings"
+
+call :ExecuteCmd "%ARM_CLIENT_CMD%" spn %TENANT_ID% %CLIENT_ID% %CLIENT_SECRET%
+IF !ERRORLEVEL! NEQ 0 goto error
+
+SET SUBSCRIPTION_ID="68667b16-e134-4e46-a29b-6f8ae4d90f50"
+SET RESOURCE_GROUP="blip"
+SET CDN_PROFILE="blip"
+SET CDN_ENDPOINT="blip"
+
+call :ExecuteCmd "%ARM_CLIENT_CMD%" post https://management.azure.com/subscriptions/%SUBSCRIPTION_ID%/resourceGroups/%RESOURCE_GROUP%/providers/Microsoft.Cdn/profiles/%CDN_PROFILE%/endpoints/%CDN_ENDPOINT%/purge?api-version=2016-10-02 "{ 'contentPaths': ['/*'] }"
+IF !ERRORLEVEL! NEQ 0 goto error
+
+call :ExecuteCmd "%ARM_CLIENT_CMD%" clearcache
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
