@@ -55,22 +55,22 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 :Deployment
 echo Handling Vue webpack deployment.
 
-REM :: 1. Install npm dependencies for app and build
-REM echo 1. Installing npm packages for app and build in %~dp0% 
-REM call :ExecuteCmd npm install
-REM IF !ERRORLEVEL! NEQ 0 goto error
+:: 1. Install npm dependencies for app and build
+echo 1. Installing npm packages for app and build in %~dp0% 
+call :ExecuteCmd npm install
+IF !ERRORLEVEL! NEQ 0 goto error
 
-REM :: 2. Build
-REM echo 2. Building app 
-REM call :ExecuteCmd npm run build
-REM IF !ERRORLEVEL! NEQ 0 goto error
+:: 2. Build
+echo 2. Building app 
+call :ExecuteCmd npm run build
+IF !ERRORLEVEL! NEQ 0 goto error
 
-REM :: 3. KuduSync dist directory files
-REM IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-REM   echo 3. Kudu syncing built app from dist folder to deployment target
-REM   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\dist" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
-REM   IF !ERRORLEVEL! NEQ 0 goto error
-REM )
+:: 3. KuduSync dist directory files
+IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  echo 3. Kudu syncing built app from dist folder to deployment target
+  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\dist" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+  IF !ERRORLEVEL! NEQ 0 goto error
+)
 
 :: 4. Purge CDN cache of all caches files
 :: Requires an application to be setup in the Azure Active Directory on the same tenant, 
