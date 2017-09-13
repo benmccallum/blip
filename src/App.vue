@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>Testing cache busting</h1>
     <vue-bootstrap-breakpoint-indicator></vue-bootstrap-breakpoint-indicator>
     <router-view></router-view>    
   </div>
