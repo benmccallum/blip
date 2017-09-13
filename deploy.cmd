@@ -55,26 +55,28 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 :Deployment
 echo Handling Vue webpack deployment.
 
-:: 1. Install npm dependencies for app and build
-echo 1. Installing npm packages for app and build in %~dp0% 
-call :ExecuteCmd npm install
-IF !ERRORLEVEL! NEQ 0 goto error
+REM :: 1. Install npm dependencies for app and build
+REM echo 1. Installing npm packages for app and build in %~dp0% 
+REM call :ExecuteCmd npm install
+REM IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 2. Build
-echo 2. Building app 
-call :ExecuteCmd npm run build
-IF !ERRORLEVEL! NEQ 0 goto error
+REM :: 2. Build
+REM echo 2. Building app 
+REM call :ExecuteCmd npm run build
+REM IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 3. KuduSync dist directory files
-IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  echo 3. Kudu syncing built app from dist folder to deployment target
-  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\dist" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
+REM :: 3. KuduSync dist directory files
+REM IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
+REM   echo 3. Kudu syncing built app from dist folder to deployment target
+REM   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\dist" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+REM   IF !ERRORLEVEL! NEQ 0 goto error
+REM )
 
 :: 4. Purge CDN cache of all caches files
 :: Requires an application to be setup in the Azure Active Directory on the same tenant, 
 :: with a client id and key/secret, and permissions to the Azure CDN Endpoint (CDN Endpoint Contributor)
+::SET CLIENT_ID="from-app-settings"
+::SET CLIENT_SECRET="from-app-settings"
 IF NOT DEFINED CLIENT_ID ( 
   echo 4. Skipping Azure CDN cache purge. App Setting "CLIENT_ID" was not found. Potentially this is a local test deployment run.
   goto end 
@@ -85,24 +87,37 @@ IF NOT DEFINED CLIENT_SECRET (
 )
 
 echo 4. Purging CDN of all cached files
-SET ARM_CLIENT_CMD="%DEPLOYMENT_SOURCE%\build\armclient\ARMClient.exe"
+SET CURL_CMD="%DEPLOYMENT_SOURCE%\build\curl-7.55.1-win64-mingw\bin\curl.exe"
+SET JQ_CMD="%DEPLOYMENT_SOURCE%\build\jq\jq-win64.exe" -r
+SET ACCESS_TOKEN_TMP_FILE=access_token.tmp
 
-SET TENANT_ID="979c7556-2382-40a9-a730-7af1e4233b55"
-::SET CLIENT_ID="comes-from-app-settings"
-::SET CLIENT_SECRET="comes-from-app-settings"
+SET TENANT_ID=979c7556-2382-40a9-a730-7af1e4233b55
 
-call :ExecuteCmd "%ARM_CLIENT_CMD%" spn %TENANT_ID% %CLIENT_ID% %CLIENT_SECRET%
+:: Request access token, then grab it out of the response JSON with jq.exe and store it in a tmp file
+%CURL_CMD% -X POST ^
+  -F "grant_type=client_credentials" ^
+  -F "client_id=%CLIENT_ID%" ^
+  -F "client_secret=%CLIENT_SECRET%" ^
+  -F "resource=https://management.core.windows.net/" ^
+  https://login.windows.net/%TENANT_ID%/oauth2/token | %JQ_CMD% .access_token > %ACCESS_TOKEN_TMP_FILE%
+
+:: Set access token in a variable
+for /f "tokens=*" %%a in (%ACCESS_TOKEN_TMP_FILE%) do (
+  SET ACCESS_TOKEN=%%a
+)
+
+SET SUBSCRIPTION_ID=68667b16-e134-4e46-a29b-6f8ae4d90f50
+SET RESOURCE_GROUP=blip
+SET CDN_PROFILE=blip
+SET CDN_ENDPOINT=blip
+
+call :ExecuteCmd %CURL_CMD% -X POST ^
+  -H "Authorization: Bearer %ACCESS_TOKEN%" ^
+  -H "Content-Type: application/json" ^
+  -H "Accept: application/json" ^
+  -d "{ \"contentPaths\": [ \"/*\" ] }" ^
+  https://management.azure.com/subscriptions/%SUBSCRIPTION_ID%/resourceGroups/%RESOURCE_GROUP%/providers/Microsoft.Cdn/profiles/%CDN_PROFILE%/endpoints/%CDN_ENDPOINT%/purge?api-version=2016-10-02
 IF !ERRORLEVEL! NEQ 0 goto error
-
-SET SUBSCRIPTION_ID="68667b16-e134-4e46-a29b-6f8ae4d90f50"
-SET RESOURCE_GROUP="blip"
-SET CDN_PROFILE="blip"
-SET CDN_ENDPOINT="blip"
-
-call :ExecuteCmd "%ARM_CLIENT_CMD%" post https://management.azure.com/subscriptions/%SUBSCRIPTION_ID%/resourceGroups/%RESOURCE_GROUP%/providers/Microsoft.Cdn/profiles/%CDN_PROFILE%/endpoints/%CDN_ENDPOINT%/purge?api-version=2016-10-02 "{ 'contentPaths': ['/*'] }"
-IF !ERRORLEVEL! NEQ 0 goto error
-
-call :ExecuteCmd "%ARM_CLIENT_CMD%" clearcache
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
