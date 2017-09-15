@@ -98,6 +98,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     ]),
     new webpack.ProvidePlugin({
       $: 'jquery',
+      '_': 'lodash',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
       Popper: ['popper.js', 'default']

@@ -1,3 +1,4 @@
 export const state = {
-  results: null
+  places: null,
+  place: null
 };

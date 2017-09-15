@@ -7,7 +7,7 @@
           <span class="sr-only">Loading...</span>
         </div>
         <div v-else :key="state" class="score-container">
-          <span class="score" :class="'grade-' + grade.toLowerCase()">
+          <span class="score" :class="'grade-' + (grade || '').toLowerCase()">
             <span class="val">{{ score }}</span>
             <span class="max text-muted sr-only">/100</span>
           </span>
@@ -19,32 +19,24 @@
 </template>
 
 <script>
-  import { EventBus } from '../event-bus';
+  import { MozillaObservatoryMixin } from './mixins/MozillaObservatoryMixin';
   import { mozillaObservatoryResult } from '../offline-data/mozilla-observatory-result';
 
   export default {
     name: 'MozillaObservatory',
+    mixins: [ MozillaObservatoryMixin ],
     props: {
-      result: Object
+      place: Object
+    },
+    data: function () {
+      return {
+        state: 'loading'
+      };
     },
     computed: {
-      state: function () {
-        if (this.score === null) {
-          return 'loading';
-        } else if (this.score === -1) {
-          return 'na';
-        }
-        return 'scored';
-      },
-      score: function () {
-        return this.result.security;
-      },
-      grade: function () {
-        return this.result.securityGrade;
-      },
       hostname: function () {
         var parser = document.createElement('a');
-        parser.href = this.website;
+        parser.href = this.place.website;
         return parser.hostname;
       },
       detailsUrl: function () {
@@ -88,16 +80,13 @@
         });
       },
       processScanObject: function (scan) {
-        console.log(scan);
         switch (scan.state) {
           case 'ABORTED':
             break;
           case 'FAILED':
             break;
           case 'FINISHED':
-            this.score = scan.score;
-            this.grade = scan.grade;
-            EventBus.$emit('mozilla-observatory-result', scan);
+            this.processResult(scan);
             break;
           case 'PENDING':
             this.poll(scan.scan_id, 5000);
@@ -116,15 +105,16 @@
           console.log('polling again...');
         }, when);
       },
-      getOfflineData: function () {
+      getOfflineResult: function () {
         var that = this;
         setTimeout(function () {
-          that.processData(mozillaObservatoryResult());
+          that.processResult(mozillaObservatoryResult());
         }, Math.floor(Math.random() * 1000));
       },
-      processData: function (data) {
-        this.$store.commit('setSecurityScore', { result: this.result, score: data.score, grade: data.grade });
-        EventBus.$emit('mozilla-observatory-result', data);
+      processResult: function (result) {
+        this.state = 'scored';
+        var data = { scanId: result.scan_id, score: result.score, grade: result.grade };
+        this.$store.commit('setSecurityResult', { place: this.place, result: data });
       }
     }
   };

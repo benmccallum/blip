@@ -4,9 +4,9 @@
     <div class="row justify-content-md-center">      
       <div class="col-12 col-md-8 col-xl-7">     
 
-        <form v-show="!hasQuery">
-          <input type="url" class="form-control text-center mb-3" id="url" placeholder="https://example.com" aria-label="Website URL">
-          <button type="button" class="btn btn-primary btn-block" v-on:click="testWebsite">Test now</button>
+        <form id="form" novalidate v-show="!hasQuery" v-on:submit.stop="submit">
+          <input type="url" class="form-control text-center mb-3" id="url" required pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&amp;//=]*)" placeholder="https://example.com" aria-label="Website URL">
+          <button type="submit" class="btn btn-primary btn-block">Test now</button>
         </form>
 
         <div id="query" v-show="hasQuery" class="row pt-2 pb-1 mb-3">
@@ -21,33 +21,33 @@
           </div>
         </div>
 
-        <div id="result" v-if="hasQuery">
-          <nav class="row">
+        <div id="place" v-if="hasQuery">
+          <nav class="row nav" role="tablist">
             <div class="col nav-item active" data-toggle="tab" href="#html5" role="tab">
-              <is-html5 :result="result"></is-html5>
+              <is-html5 :place="place"></is-html5>
             </div>
             <div class="col nav-item" data-toggle="tab" href="#security" role="tab">
-              <mozilla-observatory :result="result"></mozilla-observatory>
+              <mozilla-observatory :place="place"></mozilla-observatory>
             </div>
             <div class="col nav-item" data-toggle="tab" href="#desktop" role="tab">
-              <google-page-speed :result="result" :strategy="'Desktop'"></google-page-speed>
+              <google-page-speed :place="place" :strategy="'Desktop'"></google-page-speed>
             </div>
             <div class="col nav-item" data-toggle="tab" href="#mobile" role="tab">
-              <google-page-speed :result="result" :strategy="'Mobile'"></google-page-speed>
+              <google-page-speed :place="place" :strategy="'Mobile'"></google-page-speed>
             </div>
           </nav>
           <div class="row tab-content">
             <div class="col tab-pane active" id="html5" role="tabpanel">
-              <is-html5-details :isHtml5="isHtml5"></is-html5-details>
+              <is-html5-details :place="place"></is-html5-details>
             </div>
             <div class="col tab-pane" id="security" role="tabpanel">
-              <mozilla-observatory-details :scan="mozillaObservatory"></mozilla-observatory-details>             
+              <mozilla-observatory-details :place="place"></mozilla-observatory-details>             
             </div>
             <div class="col tab-pane" id="desktop" role="tabpanel">
-              <google-page-speed-details :strategy="'Desktop'" :results="googlePageSpeed.desktop"></google-page-speed-details>
+              <google-page-speed-details :strategy="'Desktop'" :place="place"></google-page-speed-details>
             </div>
             <div class="col tab-pane" id="mobile" role="tabpanel">
-              <google-page-speed-details :strategy="'Mobile'" :results="googlePageSpeed.mobile"></google-page-speed-details>
+              <google-page-speed-details :strategy="'Mobile'" :place="place"></google-page-speed-details>
             </div>
           </div>
         </div>
@@ -64,7 +64,6 @@
   import IsHtml5Details from './IsHtml5Details.vue';
   import MozillaObservatory from './MozillaObservatory.vue';
   import MozillaObservatoryDetails from './MozillaObservatoryDetails.vue';
-  import { EventBus } from '../event-bus';
   import { PlaceParserMixin } from './mixins/PlaceParserMixin';
 
   export default {
@@ -81,49 +80,38 @@
     },
     data: function () {
       return {
-        query: null,
-        isHtml5: null,
-        googlePageSpeed: {
-          mobile: null,
-          desktop: null
-        },
-        mozillaObservatory: null
+        query: null
       };
     },
     computed: {
       hasQuery: function () {
         return this.query != null;
       },
-      result: function () {
-        return this.parsePlace({ website: this.query });
+      place: function () {
+        return this.$store.state.place;
       }
-    },
-    created: function () {
-      var that = this;
-      EventBus.$on('is-html5-result', function (result) {
-        that.isHtml5 = result;
-      });
-      EventBus.$on('google-page-speed-mobile-result', function (result) {
-        that.googlePageSpeed.mobile = result;
-      });
-      EventBus.$on('google-page-speed-desktop-result', function (result) {
-        that.googlePageSpeed.desktop = result;
-      });
-      EventBus.$on('mozilla-observatory-result', function (result) {
-        that.mozillaObservatory = result;
-      });
     },
     methods: {
       getInput: function () {
         return document.getElementById('url');
       },
-      testWebsite: function () {
-        this.query = this.getInput().value;
-        console.log('testing website...' + this.query);
+      getForm: function () {
+        return document.getElementById('form');
       },
       reset: function () {
         this.getInput().value = null;
+        this.getForm().classList.remove('was-validated')
         this.query = null;
+      },
+      submit: function (event) {
+        if (event.target.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else {
+          this.query = this.getInput().value;
+          this.$store.commit('setPlace', this.parsePlace({ website: this.query }));
+        }
+        event.target.classList.add('was-validated');
       }
     }
   }

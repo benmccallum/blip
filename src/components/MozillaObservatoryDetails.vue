@@ -2,14 +2,14 @@
   <div>
     <h2>
       Security
-      <template v-if="scan && scan.grade">
-        <span :class="'grade-' + scan.grade.toLowerCase()">
-          Grade {{scan.grade}}
+      <template v-if="grade">
+        <span :class="'grade-' + grade.toLowerCase()">
+          Grade {{grade}}
         </span>
       </template>
     </h2>
     <p><i>Provided by <a href="https://observatory.mozilla.org">Mozilla Observatory</a></i></p>
-    <p v-if="!scan || !scan.score">
+    <p v-if="!score">
       Loading...
     </p>
     <template v-else>
@@ -17,8 +17,7 @@
         Mozilla Observatory is a tool used to test the security of a website. to do some more text here.
       </p>
       <p
-        <strong>Score:</strong> {{scan.score}} / 100 &nbsp;
-        <strong>Tests passed:</strong> {{scan.tests_passed}} / {{scan.tests_quantity}}
+        <strong>Score:</strong> {{score}} / 100
       </p>
       <div class="row">
         <div class="col">
@@ -45,12 +44,14 @@
 </template>
 
 <script>
+  import { MozillaObservatoryMixin } from './mixins/MozillaObservatoryMixin';
   import { mozillaObservatoryTestResults } from '../offline-data/mozilla-observatory-test-results';
 
   export default {
     name: 'MozillaObservatoryDetails',
+    mixins: [ MozillaObservatoryMixin ],
     props: {
-      scan: Object
+      place: Object
     },
     data: function () {
       return {
@@ -58,6 +59,9 @@
       };
     },
     computed: {
+      scanId: function () {
+        return this.place.security.scanId;
+      },
       filteredTests: function () {
         var filtered = { failed: [], passed: [] }
         if (this.results) {
@@ -73,7 +77,8 @@
       }
     },
     watch: {
-      scan: function (val, oldVal) {
+      scanId: function (val, oldVal) {
+        if (val === oldVal) return;
         this.getTestResults();
       }
     },

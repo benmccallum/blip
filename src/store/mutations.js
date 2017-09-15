@@ -1,60 +1,61 @@
-function recalcAvg (result) {
+export const mutations = {
+  clearPlaces (state) {
+    state.places = null;
+  },
+  emptyPlaces (state) {
+    state.places = [];
+  },
+  addPlace (state, place) {
+    state.places ? state.places.push(place) : (state.places = [place]);
+  },
+  clearPlace (state) {
+    state.place = null;
+  },
+  setPlace (state, place) {
+    state.place = place;
+  },
+  setIsHtml5 (state, payload) {
+    payload.place.isHtml5 = payload.isHtml5;
+  },
+  setSecurityResult (state, payload) {
+    payload.place.security = payload.result;
+    recalcAvg(payload.place);
+  },
+  setDesktopResult (state, payload) {
+    payload.place.desktop = payload.result;
+    recalcAvg(payload.place);
+  },
+  setMobileResult (state, payload) {
+    payload.place.mobile = payload.result;
+    recalcAvg(payload.place);
+  }
+};
+
+function recalcAvg (place) {
   var sum = 0;
   var divisor = 0;
 
-  if (result.isHtml5 != null) {
-    sum += (result.isHtml5 ? 100 : 0);
+  if (place.isHtml5 != null) {
+    sum += (place.isHtml5 ? 100 : 0);
     divisor++;
   }
-  if (result.security != null && result.security >= 0) {
-    sum += result.security;
+  if (place.security.score != null && place.security.score >= 0) {
+    sum += place.security.score;
     divisor++;
   }
-  if (result.desktopSpeed != null && result.desktopSpeed >= 0) {
-    sum += result.desktopSpeed;
+  if (place.desktop.speedScore != null && place.desktop.speedScore >= 0) {
+    sum += place.desktop.speedScore;
     divisor++;
   }
-  if (result.mobileSpeed != null && result.mobileSpeed >= 0) {
-    sum += result.mobileSpeed;
+  if (place.mobile.speedScore != null && place.mobile.speedScore >= 0) {
+    sum += place.mobile.speedScore;
     divisor++;
   }
-  if (result.mobileUsability != null && result.mobileUsability >= 0) {
-    sum += result.mobileUsability;
+  if (place.mobile.usabilityScore != null && place.mobile.usabilityScore >= 0) {
+    sum += place.mobile.usabilityScore;
     divisor++;
   }
 
   if (divisor === 0) return;
-  result.avg = sum / divisor;
+  place.avg = sum / divisor;
 }
-
-export const mutations = {
-  clearResults (state) {
-    state.results = null;
-  },
-  emptyResults (state) {
-    state.results = [];
-  },
-  addResult (state, result) {
-    state.results ? state.results.push(result) : (state.results = [result]);
-  },
-  setIsHtml5 (state, payload) {
-    payload.result.isHtml5 = payload.isHtml5;
-  },
-  setSecurityScore (state, payload) {
-    payload.result.security = payload.score;
-    payload.result.securityGrade = payload.grade;
-    recalcAvg(payload.result);
-  },
-  setDesktopSpeedScore (state, payload) {
-    payload.result.desktopSpeed = payload.score;
-    recalcAvg(payload.result);
-  },
-  setMobileSpeedScore (state, payload) {
-    payload.result.mobileSpeed = payload.score;
-    recalcAvg(payload.result);
-  },
-  setMobileUsabilityScore (state, payload) {
-    payload.result.mobileUsability = payload.score;
-    recalcAvg(payload.result);
-  }
-};

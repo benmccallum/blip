@@ -1,40 +1,40 @@
 <template>
-  <div class="result-row row mb-3 pb-2 pb-sm-3" :data-id="result.id">
+  <div class="place-row row mb-3 pb-2 pb-sm-3" :data-id="place.id">
     <div class="col-12 col-sm mb-2 mb-sm-0">
       <h3 class="card-title">
-        <a :href="result.website">{{result.name}}</a>
+        <a :href="place.website">{{place.name}}</a>
       </h3>
       <div>
-        <a class="text-muted" :href="result.url" target="_blank">
+        <a class="text-muted" :href="place.url" target="_blank">
           <i class="fa fa-map-marker" aria-hidden="true"></i>
-          {{result.vicinity}}
+          {{place.vicinity}}
         </a>
-        <template if="result.ph">
+        <template if="place.ph">
           <br />
-          <a class="text-muted" :href="'tel:' + result.ph">
+          <a class="text-muted" :href="'tel:' + place.ph">
             <i class="fa fa-phone" aria-hidden="true"></i>
-            {{result.ph}}
+            {{place.ph}}
           </a>
         </template>
 
         <!-- For debugging -->
-        <p style="position:absolute;top:5px;right:5px;color:#ccc;opacity:.8;">{{Math.floor(result.avg)}}</p>
+        <p style="position:absolute;top:5px;right:5px;color:#ccc;opacity:.8;">{{Math.floor(place.avg)}}</p>
       </div>
     </div>
-    <template v-if="result.website">
+    <template v-if="place.website">
       <div class="col-12 col-sm">
         <div class="row">
           <div class="col">
-            <is-html5 :result="result"></is-html5>
-          </div> 
-          <div class="col">
-            <mozilla-observatory :result="result" />
+            <is-html5 :place="place"></is-html5>
           </div>
           <div class="col">
-            <google-page-speed :strategy="'Desktop'" :result="result" />
+            <mozilla-observatory :place="place" />
           </div>
           <div class="col">
-            <google-page-speed :strategy="'Mobile'" :result="result" />
+            <google-page-speed :strategy="'Desktop'" :place="place" />
+          </div>
+          <div class="col">
+            <google-page-speed :strategy="'Mobile'" :place="place" />
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default {
     'mozilla-observatory': MozillaObservatory
   },
   props: {
-    result: Object
+    place: Object
   }
 };
 </script>

@@ -53,22 +53,22 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 :: ----------
 
 :Deployment
-echo Handling Vue webpack deployment.
+echo Handling deployment.
 
 :: 1. Install npm dependencies for app and build
-echo 1. Installing npm packages for app and build in %~dp0% 
-call :ExecuteCmd npm install
-IF !ERRORLEVEL! NEQ 0 goto error
+:: echo 1. Installing npm packages for app and build in %~dp0% 
+:: call :ExecuteCmd npm install
+:: IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build
-echo 2. Building app 
-call :ExecuteCmd npm run build
-IF !ERRORLEVEL! NEQ 0 goto error
+:: echo 2. Building app 
+:: call :ExecuteCmd npm run build
+:: IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 3. KuduSync dist directory files
+:: 3. KuduSync files
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  echo 3. Kudu syncing built app from dist folder to deployment target
-  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\dist" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+  echo 3. Kudu syncing files to deployment target
+  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 

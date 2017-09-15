@@ -10,11 +10,19 @@ export const PlaceParserMixin = {
         ph: place.formatted_phone_number,
         avg: null,
         isHtml5: null,
-        security: null,
-        securityGrade: null,
-        desktopSpeed: null,
-        mobileSpeed: null,
-        mobileUsability: null
+        security: {
+          score: null,
+          grade: null
+        },
+        desktop: {
+          speedScore: null,
+          filteredRules: null
+        },
+        mobile: {
+          speedScore: null,
+          usabilityScore: null,
+          filteredRules: null
+        }
       };
     }
   }

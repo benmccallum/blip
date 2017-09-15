@@ -1,8 +1,15 @@
 export const GooglePageSpeedMixin = {
   props: {
-    strategy: String // todo: add validator for "mobile" or "desktop" only
+    strategy: String, // todo: add validator for "mobile" or "desktop" only
+    place: Object
   },
   computed: {
+    speedScore: function () {
+      return this.place[this.strategy.toLowerCase()].speedScore;
+    },
+    usabilityScore: function () {
+      return this.place[this.strategy.toLowerCase()].usabilityScore;
+    },
     speedGrade: function () {
       return this.getGrade(this.speedScore);
     },

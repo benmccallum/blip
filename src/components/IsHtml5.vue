@@ -20,12 +20,10 @@
 </template>
 
 <script>
-  import { EventBus } from '../event-bus';
-
   export default {
     name: 'IsHtml5',
     props: {
-      result: Object
+      place: Object
     },
     computed: {
       state: function () {
@@ -35,7 +33,7 @@
         return 'scored';
       },
       isHtml5: function () {
-        return this.result.isHtml5;
+        return this.place.isHtml5;
       },
       detailsUrl: function () {
         return 'https://google.com?q=doctype';
@@ -52,8 +50,7 @@
 
         if (1 || window.offline) {
           setTimeout(function () {
-            that.$store.commit('setIsHtml5', { result: that.result, isHtml5: (Math.random() >= 0.9 ? null : Math.random() >= 0.5) });
-            EventBus.$emit('is-html5-result', that.isHtml5);
+            that.processResult((Math.random() >= 0.9 ? null : Math.random() >= 0.5));
           }, 1500);
           return;
         }
@@ -64,11 +61,14 @@
           }
           throw new Error('Network response was not ok.');
         }).then(function (text) {
-          that.$store.commit('setIsHtml5', { result: that.result, isHtml5: (Math.random() >= 0.9 ? null : Math.random() >= 0.5) });
-          EventBus.$emit('is-html5-result', that.isHtml5);
+          // TODO: Implement properly
+          this.processResult((Math.random() >= 0.9 ? null : Math.random() >= 0.5));
         }).catch(function (error) {
           console.log('There has been a problem with your fetch operation: ' + error.message);
         });
+      },
+      processResult: function (result) {
+        this.$store.commit('setIsHtml5', { place: this.place, isHtml5: result });
       }
     }
   };

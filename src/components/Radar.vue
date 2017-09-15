@@ -2,24 +2,21 @@
   <div id="radar" class="container-fluid">
     <my-header subtitle="Pick a location. We'll find businesses nearby and test their website."></my-header>
     <div class="row justify-content-md-center">
-      <div class="col-12 col-md-8 col-xl-7">
-        <form v-show="!hasResults">
+      <div class="col-12 col-md-10 col-lg-7 col-xl-7">
+        <form v-show="!hasPlaces">
           <button type="button" class="btn btn-primary btn-block" v-on:click="searchNearby">
             <i class="fa fa-location-arrow" aria-hidden="true"></i> Search nearby
           </button>
           <p class="text-center mt-1 mb-2 ">or</p>
           <input type="text" class="form-control text-center mb-sm-1" id="address" placeholder="Search elsewhere..." aria-label="Address">
-          <p class="text-right mr-1">
-            <img class="google-logo" src="../assets/images/powered_by_google.png" alt="Powered by Google">
-          </p>
         </form>
 
-        <div id="query" v-show="hasResults" class="row pt-2 pb-1 mb-3">
+        <div id="query" v-show="hasPlaces" class="row pt-2 pb-1 mb-3">
           <div class="col">
             <p id="label" class="mb-2">
               <strong>Searching around... </strong>
               <span>{{query.label}}</span>
-              <button type="button" class="close mr-1 mr-sm-0" aria-label="Search again..." v-on:click="reset">
+              <button type="button" class="close mr-sm-0" aria-label="Search again..." v-on:click="reset">
                 <span aria-hidden="true">&times;</span>
               </button>
             </p>
@@ -28,7 +25,7 @@
               <select id="sortBy" v-model="query.sortBy" class="custom-select">
                 <option selected value="avg">average score</option>
                 <option value="isHtml5">is HTML5?</option>
-                <option value="security">security score</option>
+                <option value="securityScore">security score</option>
                 <option value="desktopSpeed">desktop speed score</option>
                 <option value="mobileSpeed">mobile speed score</option>
                 <option value="mobileUsability">mobile usability score</option>
@@ -42,11 +39,34 @@
           </div>
         </div>
   
-        <div id="results" v-show="hasResults">
-
-          <aside id="legend" class="hidden-md-down">
-            <!-- TODO: Legend for mobile views -->
-            <h5>Legend</h5>
+        <div id="places" v-show="hasPlaces">
+          <transition-group name="places-list" tag="div">
+            <place v-for="place in sortedPlaces" :key="place.id" :place="place"></place>
+          </transition-group>
+          <p class="text-right mr-1">
+            <img class="google-logo" src="../assets/images/powered_by_google.png" alt="Powered by Google">
+          </p>
+        </div>
+  
+        <div id="no-places" v-show="hasNoPlaces">
+          No places could be found
+        </div>
+      </div>
+    </div>
+    <a id="legend-icon" href="">
+      ?<i class="fa fa-question"></i>
+    </a>
+    <div id="map" style="display:none!important;" hidden></div>
+    <div class="modal fade" id="legend" tabindex="-1" role="dialog" aria-labelledby="Legend modal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Legend</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
             Scores are out of 100.<br>
             Click a score for complete details.
             <hr>
@@ -66,24 +86,15 @@
               <div class="pr-1"><i class="fa fa-mobile"></i></div>
               <div>Mobile speed score by <a href="">Google PageSpeed Insights</a></div>
             </div>
-          </aside>
-
-          <transition-group name="results-list" tag="div">
-            <result v-for="result in sortedResults" :key="result.id" :result="result"></result>
-          </transition-group>
-        </div>
-  
-        <div id="no-result" v-show="hasNoResults">
-          No results
+          </div>
         </div>
       </div>
     </div>
-    <div id="map" style="display:none!important;" hidden></div>
   </div>
 </template>
 
 <script>
-import Result from './Result.vue';
+import Place from './Place.vue';
 import Header from './Header.vue';
 import { googleMapsResult } from '../offline-data/google-maps-result';
 import { PlaceParserMixin } from './mixins/PlaceParserMixin';
@@ -98,7 +109,7 @@ export default {
   name: 'radar',
   mixins: [ PlaceParserMixin ],
   components: {
-    'result': Result,
+    'place': Place,
     'my-header': Header
   },
   data: function () {
@@ -112,23 +123,23 @@ export default {
     };
   },
   computed: {
-    results: function () {
-      return this.$store.state.results;
+    places: function () {
+      return this.$store.state.places;
     },
-    hasResults: function () {
-      return this.results && this.results.length > 0;
+    hasPlaces: function () {
+      return this.places && this.places.length > 0;
     },
-    hasNoResults: function () {
-      return this.results && this.results.length < 1
+    hasNoPlaces: function () {
+      return this.places && this.places.length < 1
     },
-    sortedResults: function () {
-      if (this.results == null) {
+    sortedPlaces: function () {
+      if (this.places == null) {
         return null;
       }
 
       var that = this;
 
-      return this.results.sort(function (a, b) {
+      return this.places.sort(function (a, b) {
         if (a.hasOwnProperty(that.query.sortBy) && b.hasOwnProperty(that.query.sortBy)) {
           return that.query.sortDirection === 'asc'
             ? a[that.query.sortBy] > b[that.query.sortBy]
@@ -181,7 +192,7 @@ export default {
       var that = this;
       setTimeout(function () {
         googleMapsResult.forEach(function (place) {
-          that.$store.commit('addResult', that.parsePlace(place));
+          that.$store.commit('addPlace', that.parsePlace(place));
         });
       }, 1000);
       that.query.label = 'your location';
@@ -201,22 +212,22 @@ export default {
         type: ['store']
       }, this.nearbySearchCallback);
     },
-    nearbySearchCallback: function (results, status) {
+    nearbySearchCallback: function (places, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        if (results.length) {
-          for (var i = 0; i < results.length; i++) {
-            service.getDetails({ placeId: results[i].place_id }, this.getDetailsCallback);
+        if (places.length) {
+          for (var i = 0; i < places.length; i++) {
+            service.getDetails({ placeId: places[i].place_id }, this.getDetailsCallback);
           }
         } else {
-          this.$store.commit('emptyResults');
+          this.$store.commit('emptyPlaces');
         }
       } else {
-        this.$store.commit('emptyResults'); // todo: error view?
+        this.$store.commit('emptyPlaces'); // todo: error view?
       }
     },
     getDetailsCallback: function (place, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        this.$store.commit('addResult', this.parsePlace(place));
+        this.$store.commit('addPlace', this.parsePlace(place));
       } else {
         console.error('Error getting details for place', place, status);
       }
@@ -228,7 +239,7 @@ export default {
       // Clear/reset UI
       this.initAutocomplete();
       this.search = { };
-      this.$store.commit('clearResults');
+      this.$store.commit('clearPlaces');
     },
     initAutocomplete: function () {
       if (!window.google) {
@@ -263,15 +274,30 @@ export default {
     font-size: .75rem;
     opacity: .75;
   }
+  .custom-select {
+    height: auto;
+  }
+
+  #legend-icon {
+    position: sticky;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
+    bottom: 20px;
+    left: calc(100vh - 75px);
+
+    i {
+      font-size: 1.2rem;
+      margin-top: 16px;
+      margin-left: 18px;
+    }
+  }
 
   #legend {
-    position: absolute;
-    right: -250px;
-    width: 230px;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 10px;
     font-size: .7rem;
     line-height: 1.7;
 
@@ -279,7 +305,6 @@ export default {
       margin-top: .7rem;
       margin-bottom: .7rem;
     }
-
         
     i {
       width: .8rem;
@@ -302,15 +327,17 @@ export default {
     }
   }
 
-  .results-list-move {
+  .places-list-move {
     transition: transform 1s;
   }
-  .results-list-leave-active {
+
+  // todo: figure this out.
+  .places-list-leave-active {
     background-color: red;
   }
 
   .google-logo {
-    max-width: 100px;
+    max-width: 200px;
     // @include media-breakpoint-up(sm) {
     //   max-width: 150px;  
     // }

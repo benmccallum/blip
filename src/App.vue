@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <h1>Testing cache busting</h1>
     <vue-bootstrap-breakpoint-indicator></vue-bootstrap-breakpoint-indicator>
     <router-view></router-view>    
   </div>
@@ -31,7 +30,7 @@
     float: right;
     margin-top: -.1rem;
   }
-  .result-row {
+  .place-row {
     border-bottom: 1px solid rgba(0,0,0,.1);
   }
   .test-container {
@@ -79,7 +78,7 @@
     }
   }
 
-  #result {
+  #place {
     .test-container {
       a {
         background: none;

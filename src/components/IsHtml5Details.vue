@@ -19,7 +19,12 @@
   export default {
     name: 'IsHtml5Details',
     props: {
-      isHtml5: Boolean
+      place: Object
+    },
+    computed: {
+      isHtml5: function () {
+        return this.place.isHtml5;
+      }
     }
   }
 </script>
