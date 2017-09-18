@@ -2,6 +2,7 @@
 
 > An app for testing business websites for speed, mobile-friendliness and security. Find businesses around a location and test their websites en masse, or just test one website by URL.
 
+Just wanna use it? Go to [blip.azureedge.net](https://blip.azureedge.net).
 
 ## Build Setup
 
@@ -29,6 +30,7 @@ npm test
 ```
 
 ## Potential Roadmap
+- Properly use lodash or drop it.
 - Include a web accessibility test. Find a free one and use it, or host [AATT by paypal](https://github.com/paypal/AATT) somewhere and use that...
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
 - Scrape business' email from business' website?
