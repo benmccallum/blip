@@ -1,4 +1,5 @@
 export const state = {
   places: null,
-  place: null
+  place: null,
+  cancelTokenSource: null
 };

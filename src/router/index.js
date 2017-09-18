@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import store from '../store';
 import Router from 'vue-router';
 import Home from '@/components/Home';
 import Laser from '@/components/Laser';
@@ -6,7 +7,7 @@ import Radar from '@/components/Radar';
 
 Vue.use(Router);
 
-export default new Router({
+var router = new Router({
   routes: [
     {
       path: '/',
@@ -25,3 +26,11 @@ export default new Router({
     }
   ]
 });
+
+// Events subscribed to
+router.afterEach(function (to, from) {
+  // Reset global (per-page) cancel token used by a page's axios HTTP requests
+  store.commit('resetCancelToken');
+});
+
+export default router;

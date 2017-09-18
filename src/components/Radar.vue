@@ -53,8 +53,8 @@
         </div>
       </div>
     </div>
-    <a id="legend-icon" href="">
-      ?<i class="fa fa-question"></i>
+    <a id="legend-icon" href="#legend" data-toggle="modal" v-show="hasPlaces">
+      <i class="fa fa-question"></i>
     </a>
     <div id="map" style="display:none!important;" hidden></div>
     <div class="modal fade" id="legend" tabindex="-1" role="dialog" aria-labelledby="Legend modal" aria-hidden="true">
@@ -86,6 +86,10 @@
               <div class="pr-1"><i class="fa fa-mobile"></i></div>
               <div>Mobile speed score by <a href="">Google PageSpeed Insights</a></div>
             </div>
+            <div class="d-flex flex-row">
+              <div class="pr-1"><i class="fa fa-mobile"></i></div>
+              <div>Mobile usability score by <a href="">Google PageSpeed Insights</a></div>
+            </div>
           </div>
         </div>
       </div>
@@ -114,12 +118,7 @@ export default {
   },
   data: function () {
     return {
-      query: {
-        coord: null,
-        label: null,
-        sortBy: 'avg',
-        sortDirection: 'asc'
-      }
+      query: this.defaultQuery()
     };
   },
   computed: {
@@ -150,6 +149,14 @@ export default {
     }
   },
   methods: {
+    defaultQuery: function () {
+      return {
+        coord: null,
+        label: null,
+        sortBy: 'avg',
+        sortDirection: 'asc'
+      };
+    },
     searchNearby: function () {
       if (window.offline) {
         this.useOfflineData();
@@ -238,8 +245,9 @@ export default {
 
       // Clear/reset UI
       this.initAutocomplete();
-      this.search = { };
+      this.query = this.defaultQuery();
       this.$store.commit('clearPlaces');
+      this.$store.commit('resetCancelToken');
     },
     initAutocomplete: function () {
       if (!window.google) {
@@ -279,6 +287,7 @@ export default {
   }
 
   #legend-icon {
+    display: block;
     position: sticky;
     border-radius: 50%;
     width: 50px;
@@ -288,7 +297,7 @@ export default {
     border: 1px solid #ccc;
     box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
     bottom: 20px;
-    left: calc(100vh - 75px);
+    left: calc(100vw - 75px);
 
     i {
       font-size: 1.2rem;
@@ -298,7 +307,6 @@ export default {
   }
 
   #legend {
-    font-size: .7rem;
     line-height: 1.7;
 
     hr {

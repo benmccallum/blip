@@ -1,3 +1,5 @@
+import { CancelToken } from 'axios';
+
 export const mutations = {
   clearPlaces (state) {
     state.places = null;
@@ -28,6 +30,14 @@ export const mutations = {
   setMobileResult (state, payload) {
     payload.place.mobile = payload.result;
     recalcAvg(payload.place);
+  },
+  resetCancelToken (state) {
+    // Cancel any pending HTTP requests
+    if (state.cancelTokenSource != null) {
+      state.cancelTokenSource.cancel('Cancelled on user page transition / form reset.');
+    }
+    // Re-assign a new one for next time
+    state.cancelTokenSource = CancelToken.source();
   }
 };
 

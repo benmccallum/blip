@@ -33,17 +33,7 @@
         state: 'loading'
       };
     },
-    computed: {
-      hostname: function () {
-        var parser = document.createElement('a');
-        parser.href = this.place.website;
-        return parser.hostname;
-      },
-      detailsUrl: function () {
-        return 'https://observatory.mozilla.org/analyze.html?host=' +
-          encodeURIComponent(this.hostname);
-      }
-    },
+    computed: { },
     mounted: function () {
       // Call async to init test their end and start polling for the results
       this.initTestAndPolling();
@@ -53,30 +43,29 @@
         var that = this;
 
         if (window.offline) {
-          this.getOfflineData();
+          this.getOfflineResult();
           return;
         }
 
         var url = 'https://http-observatory.security.mozilla.org/api/v1/analyze?host=' +
           encodeURIComponent(this.hostname);
 
-        var params = {
-          hidden: true,
-          rescan: false
-        };
+        var params = new URLSearchParams();
+        params.append('hidden', 'true');
+        params.append('rescan', 'false');
 
-        fetch(url, {
-          method: 'POST',
-          body: JSON.stringify(params)
-        }).then(function (response) {
-          if (response.ok) {
-            return response.json();
+        this.axios.post(url, params, {
+          cancelToken: this.$store.state.cancelTokenSource.token
+        }).then((response) => {
+          // TODO: implement
+          that.processScanObject(response.data);
+        }).catch(function (thrown) {
+          if (that.axios.isCancel(thrown)) {
+            console.log('Request cancelled', thrown.message);
+          } else {
+            // TODO: handle error
+            console.error('Request failed for MozillaObservatory:analyze.', thrown.message);
           }
-          throw new Error('Network response was not ok.');
-        }).then(function (json) {
-          that.processScanObject(json);
-        }).catch(function (error) {
-          console.log('There has been a problem with your fetch operation: ' + error.message);
         });
       },
       processScanObject: function (scan) {
@@ -100,9 +89,8 @@
         }
       },
       poll: function (scanId, when) {
-        // var that = this;
         setTimeout(function () {
-          console.log('polling again...');
+          console.info('MozillaObservatory: polling again for scan with id: ' + scanId + '.');
         }, when);
       },
       getOfflineResult: function () {

@@ -6,14 +6,17 @@
           <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
           <span class="sr-only">Loading...</span>
         </div>
-        <div v-else :key="state" class="score-container">
-          <span class="score" :class="speedGrade.class">
-            <span class="val">{{ speedScore }}</span>
-            <span class="max text-muted sr-only">/100</span>
+        <div v-else-if="state === 'scored'" :key="state" class="score-container">
+          <span class="score" :class="grade.class">
+            <span class="val">{{ score }}</span>
           </span>
         </div>
+        <div v-else>
+          Oh<br>oww
+        </div>
       </transition>
-      <i class="fa" :class="classObject" aria-hidden="true"></i>
+      <i v-if="type !== 'USABILITY'" class="fa" :class="classObject" aria-hidden="true"></i>
+      <img v-else class="mobile-usability" src="../assets/images/mobile-usability-icon.svg">
     </a>
   </div>
 </template>
@@ -27,16 +30,12 @@
     extends: GooglePageSpeedMixin,
     computed: {
       state: function () {
-        if (this.speedScore === null) {
+        if (this.score === null) {
           return 'loading';
-        } else if (this.speedScore === -1) {
+        } else if (this.score === -1) {
           return 'na';
         }
         return 'scored';
-      },
-      detailsUrl: function () {
-        return 'https://developers.google.com/speed/pagespeed/insights/?url=' +
-          encodeURIComponent(this.place.website) + '&tab=' + this.strategy;
       },
       classObject: function () {
         return 'fa-' + this.strategy.toLowerCase();
@@ -45,7 +44,11 @@
     mounted: function () {
       // Call async to get score from Google PageSpeed Insights
       // TODO: Can do earlier??
-      this.getResult();
+      // Only do when it's a speed test, as the usabiliy test results can come through
+      // and be set by this process too into the vuex store for use in that :type of the component
+      if (this.type === 'SPEED') {
+        this.getResult();
+      }
     },
     methods: {
       getResult: function () {
@@ -59,15 +62,17 @@
         var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?key=AIzaSyCsV60UGTAkbdBHrE_jjZU_VYHSp8ioJJQ&filter_third_party_resources=true' +
           '&url=' + encodeURIComponent(this.place.website) + '&strategy=' + this.strategy;
 
-        fetch(url).then(function (response) {
-          if (response.ok) {
-            return response.json();
+        this.axios.get(url, {
+          cancelToken: this.$store.state.cancelTokenSource.token
+        }).then((response) => {
+          that.processResult(response.data);
+        }).catch(function (thrown) {
+          if (that.axios.isCancel(thrown)) {
+            console.log('Request cancelled', thrown.message);
+          } else {
+            // TODO: handle error
+            console.error('Request failed for GooglePageSpeed result.', thrown.message);
           }
-          throw new Error('Network response was not ok.');
-        }).then(function (result) {
-          that.processResult(result);
-        }).catch(function (error) {
-          console.log('There has been a problem with your fetch operation: ' + error.message);
         });
       },
       getOfflineResult: function () {

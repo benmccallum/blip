@@ -17,10 +17,6 @@
 </script>
 
 <style lang="scss">
-  #map {
-    height: 100%;
-  }
-  
   $queryBorder: 2px solid #ccc;
   #query {
     border-bottom: $queryBorder;
@@ -62,18 +58,16 @@
       }
 
       &.fa-html5 {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
       }
       &.fa-lock {
-        font-size: 1.2rem;
-        padding-top: 2px;
+        font-size: 1.3rem;
       }
       &.fa-desktop {
-        font-size: .9rem;
-        padding-top: 3px;
+        font-size: 1rem;
       }
       &.fa-mobile {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
       }
     }
   }
@@ -86,6 +80,10 @@
         border-radius: 0;
       }
     }
+  }
+
+  img.mobile-usability {
+    height: 1.4rem;
   }
 
   .score {

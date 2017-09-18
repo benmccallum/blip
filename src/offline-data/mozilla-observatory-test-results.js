@@ -1,22 +1,27 @@
 export const mozillaObservatoryTestResults = {
   'SomeTest': {
     name: 'SomeTest',
-    pass: false
+    pass: false,
+    score_modifier: -10
   },
   'SomeOtherTest': {
     name: 'SomeOtherTest',
-    pass: true
+    pass: true,
+    score_modifier: 10
   },
   'SomeThingTest': {
     name: 'SomeThingTest',
-    pass: false
+    pass: false,
+    score_modifier: -5
   },
   'xyz': {
     name: 'xyz',
-    pass: true
+    pass: true,
+    score_modifier: 20
   },
   'abc': {
     name: 'abc',
-    pass: false
+    pass: false,
+    score_modifier: -25
   }
 };

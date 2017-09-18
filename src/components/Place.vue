@@ -18,7 +18,7 @@
         </template>
 
         <!-- For debugging -->
-        <p style="position:absolute;top:5px;right:5px;color:#ccc;opacity:.8;">{{Math.floor(place.avg)}}</p>
+        <!-- <p style="position:absolute;top:5px;right:5px;color:#ccc;opacity:.8;">{{Math.floor(place.avg)}}</p> -->
       </div>
     </div>
     <template v-if="place.website">
@@ -31,10 +31,13 @@
             <mozilla-observatory :place="place" />
           </div>
           <div class="col">
-            <google-page-speed :strategy="'Desktop'" :place="place" />
+            <google-page-speed :strategy="'Desktop'" :type="'SPEED'" :place="place" />
           </div>
           <div class="col">
-            <google-page-speed :strategy="'Mobile'" :place="place" />
+            <google-page-speed :strategy="'Mobile'" :type="'SPEED'" :place="place" />
+          </div>
+          <div class="col">
+            <google-page-speed :strategy="'Mobile'" :type="'USABILITY'" :place="place" />
           </div>
         </div>
       </div>
@@ -68,5 +71,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .place-row .row > .col {
+    margin: 0; 
+    padding: 0 3px;
+  }
 </style>

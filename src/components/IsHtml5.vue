@@ -55,16 +55,20 @@
           return;
         }
 
-        fetch(this.website).then(function (response) {
-          if (response.ok) {
-            return response.text();
-          }
-          throw new Error('Network response was not ok.');
-        }).then(function (text) {
-          // TODO: Implement properly
+        var url = 'https://functionapp.com?q=' + this.place.website;
+
+        this.axios.get(url, {
+          cancelToken: this.$store.state.cancelTokenSource.token
+        }).then((response) => {
+          // TODO: implement
           this.processResult((Math.random() >= 0.9 ? null : Math.random() >= 0.5));
-        }).catch(function (error) {
-          console.log('There has been a problem with your fetch operation: ' + error.message);
+        }).catch(function (thrown) {
+          if (that.axios.isCancel(thrown)) {
+            console.log('Request cancelled', thrown.message);
+          } else {
+            // TODO: handle error
+            console.error('Request failed for IsHtml5 result.', thrown.message);
+          }
         });
       },
       processResult: function (result) {

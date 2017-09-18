@@ -10,6 +10,7 @@ function giveGrade (score) {
 export const mozillaObservatoryResult = function () {
   var score = Math.floor(Math.random() * 100);
   return {
+    scan_id: 123,
     score: score,
     grade: giveGrade(score),
     tests_passed: 5,
