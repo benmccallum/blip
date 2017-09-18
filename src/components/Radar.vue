@@ -71,11 +71,11 @@
             <hr>
             <div class="d-flex flex-row">
               <div class="pr-1"><i class="fa fa-html5"></i></div>
-              <div>Is HTML5?</div>
+              <div>Is page written in HTML5? by blip</div>
             </div>
             <div class="d-flex flex-row">
               <div class="pr-1"><i class="fa fa-lock"></i></div>
-              <div>Security by <a href="">Mozilla Observatory</a></div>
+              <div>Security score by <a href="">Mozilla Observatory</a></div>
             </div>
             <div class="d-flex flex-row">
               <div class="pr-1"><i class="fa fa-desktop"></i></div>
@@ -299,6 +299,10 @@ export default {
     box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);
     bottom: 20px;
     left: calc(100vw - 75px);
+
+    &:focus, &:active, &:visited {
+      outline: none;
+    }
 
     i {
       font-size: 1.2rem;
