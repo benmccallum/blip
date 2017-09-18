@@ -29,7 +29,7 @@ npm test
 ```
 
 ## Potential Roadmap
-- Purge Azure CDN on kudu deploy in deploy.cmd (see [REST API](https://docs.microsoft.com/en-us/rest/api/cdn/Endpoints/PurgeContent)). May require swapping over to Verizon CDN as Akamai CDN doesn't support wildcard purge (see [user request](https://feedback.azure.com/forums/169397-cdn/suggestions/16800949-make-full-purge-and-wildcard-purge-for-akamai-cdn))
+- Include a web accessibility test. Find a free one and use it, or host [AATT by paypal](https://github.com/paypal/AATT) somewhere and use that...
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
-- Scrape business' email from website?
+- Scrape business' email from business' website?
 - Export results to CSV.

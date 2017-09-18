@@ -67,8 +67,7 @@
             </button>
           </div>
           <div class="modal-body">
-            Scores are out of 100.<br>
-            Click a score for complete details.
+            Scores are out of 100. Click a score for complete details.
             <hr>
             <div class="d-flex flex-row">
               <div class="pr-1"><i class="fa fa-html5"></i></div>
@@ -87,7 +86,9 @@
               <div>Mobile speed score by <a href="">Google PageSpeed Insights</a></div>
             </div>
             <div class="d-flex flex-row">
-              <div class="pr-1"><i class="fa fa-mobile"></i></div>
+              <div class="pr-1">
+                <img class="mobile-usability" src="../assets/images/mobile-usability-icon.svg" alt="Mobile usability icon">
+              </div>
               <div>Mobile usability score by <a href="">Google PageSpeed Insights</a></div>
             </div>
           </div>
@@ -315,23 +316,29 @@ export default {
     }
         
     i {
-      width: .8rem;
+      width: 1rem;
       text-align: center;
 
       &.fa-html5 {
-        font-size: .85rem;
+        font-size: 1.1rem;
       }
       &.fa-lock {
-        font-size: .95rem;
+        font-size: 1.2rem;
         padding-top: 2px;
       }
       &.fa-desktop {
-        font-size: .7rem;
+        font-size: .9rem;
         padding-top: 3px;
       }
       &.fa-mobile {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
       }
+    }
+    img.mobile-usability {
+      display: inline-block;
+      height: 1.3rem;
+      margin-top: -6px;
+      margin-left: -3px;
     }
   }
 
