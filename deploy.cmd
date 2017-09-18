@@ -56,14 +56,14 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 echo Handling deployment.
 
 :: 1. Install npm dependencies for app and build
-:: echo 1. Installing npm packages for app and build in %~dp0% 
-:: call :ExecuteCmd npm install
-:: IF !ERRORLEVEL! NEQ 0 goto error
+echo 1. Installing npm packages for app and build in %~dp0% 
+call :ExecuteCmd npm install
+IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build
-:: echo 2. Building app 
-:: call :ExecuteCmd npm run build
-:: IF !ERRORLEVEL! NEQ 0 goto error
+echo 2. Building app 
+call :ExecuteCmd npm run build
+IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. KuduSync files
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
