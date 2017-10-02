@@ -105,7 +105,6 @@ import { googleMapsResult } from '../offline-data/google-maps-result';
 import { PlaceParserMixin } from './mixins/PlaceParserMixin';
 
 // TODO: Scope in component
-var map = null;
 var autocomplete = null;
 var placeChangedListener = null;
 var service = null;
@@ -172,12 +171,6 @@ export default {
             lng: position.coords.longitude
           };
 
-          // Load map
-          map = new window.google.maps.Map(document.getElementById('map'), {
-            center: that.query.coord,
-            zoom: 15
-          });
-
           // weight autocomplete
           //  var circle = new window.google.maps.Circle({
           //   center: that.query.coord,
@@ -210,8 +203,7 @@ export default {
       this.query.label = label;
 
       // Setup service
-      map = new window.google.maps.Map(document.getElementById('map'));
-      service = new window.google.maps.places.PlacesService(map);
+      service = new window.google.maps.places.PlacesService(document.getElementById('map'));
 
       // Conduct search
       service.nearbySearch({
@@ -221,10 +213,15 @@ export default {
       }, this.nearbySearchCallback);
     },
     nearbySearchCallback: function (places, status) {
+      var that = this;
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (places.length) {
           for (var i = 0; i < places.length; i++) {
-            service.getDetails({ placeId: places[i].place_id }, this.getDetailsCallback);
+            (function (i) {
+              setTimeout(function () {
+                service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
+              }, i < 10 ? 0 : 1000 * i);
+            })(i);
           }
         } else {
           this.$store.commit('emptyPlaces');
@@ -234,6 +231,9 @@ export default {
       }
     },
     getDetailsCallback: function (place, status) {
+      window.requestsMade = window.requestsMade || 0;
+      window.requestsMade++;
+      console.log('Requests made: ' + (window.requestsMade));
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         this.$store.commit('addPlace', this.parsePlace(place));
       } else {
