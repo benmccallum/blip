@@ -217,10 +217,12 @@ export default {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (places.length) {
           for (var i = 0; i < places.length; i++) {
+            // You seem to have a pool of 9 or 10 requests to exhaust,
+            // then you get another request every second therein. 
             (function (i) {
               setTimeout(function () {
                 service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
-              }, i < 10 ? 0 : 1000 * i);
+              }, i < 9 ? 0 : 1000 * i);
             })(i);
           }
         } else {
