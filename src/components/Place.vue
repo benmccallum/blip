@@ -43,9 +43,9 @@
       </div>
     </template>
     <template v-else>
-      <div class="col-12 col-sm-4">
+      <div class="col-12 col-sm">
         <div class="score-container d-flex flex-column justify-content-center text-center">
-          <span class="score score-na">No site</span>
+          <p class="score score-na mt-sm-1">No site</p>
         </div>
       </div>
     </template>
