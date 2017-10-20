@@ -91,6 +91,7 @@
       poll: function (scanId, when) {
         setTimeout(function () {
           console.info('MozillaObservatory: polling again for scan with id: ' + scanId + '.');
+          // TODO: Poll again
         }, when);
       },
       getOfflineResult: function () {

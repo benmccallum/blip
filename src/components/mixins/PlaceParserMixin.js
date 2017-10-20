@@ -23,6 +23,11 @@ export const PlaceParserMixin = {
           usabilityScore: null,
           filteredRules: null
         }
+        // ,
+        // securityScore: null,
+        // desktopSpeedScore: null,
+        // mobileSpeedScore: null,
+        // mobileUsabilityScore: null
       };
     }
   }

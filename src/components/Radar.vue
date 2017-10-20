@@ -27,7 +27,7 @@
               <select id="sortBy" v-model="query.sortBy" class="custom-select">
                 <option selected value="avg">average score</option>
                 <option value="isHtml5">is HTML5?</option>
-                <option value="securityScore">security score</option>
+                <option value="security">security score</option>
                 <option value="desktopSpeed">desktop speed score</option>
                 <option value="mobileSpeed">mobile speed score</option>
                 <option value="mobileUsability">mobile usability score</option>
@@ -50,6 +50,13 @@
         </div>
 
         <div id="places" v-show="status === 'results'">
+          <div class="row justify-content-center" v-show="sortedPlaces && sortedPlaces.length < 1">
+            <div class="col col-sm-3 text-center">
+              <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto mb-1"></i>
+              <br>
+              Completed results will appear here shortly...
+            </div>
+          </div>
           <transition-group name="places-list" tag="div">
             <place v-for="place in sortedPlaces" :key="place.id" :place="place"></place>
           </transition-group>
@@ -154,7 +161,8 @@ export default {
       query: this.defaultQuery(),
       status: 'form', // 'locating' or loading' or 'results' or 'no-results'
       lastDetailsCall: new Date(),
-      canGeolocate: navigator.geolocation
+      canGeolocate: navigator.geolocation,
+      errorCode: null
     };
   },
   computed: {
@@ -162,20 +170,7 @@ export default {
       return this.$store.state.places;
     },
     sortedPlaces: function () {
-      if (this.places == null) {
-        return null;
-      }
-
-      var that = this;
-
-      return this.places.sort(function (a, b) {
-        if (a.hasOwnProperty(that.query.sortBy) && b.hasOwnProperty(that.query.sortBy)) {
-          return that.query.sortDirection === 'asc'
-            ? a[that.query.sortBy] > b[that.query.sortBy]
-            : a[that.query.sortBy] < b[that.query.sortBy]
-        }
-        return true;
-      });
+      return this.$store.getters.getSortedPlaces(this.query.sortBy, this.query.sortDirection);
     }
   },
   methods: {
@@ -259,11 +254,9 @@ export default {
             var timeSinceLast = Date.now() - that.lastDetailsCall;
             var delay = timeSinceLast > 1000 ? 0 : 1000 - timeSinceLast;
 
-            (function (i) {
-              setTimeout(function () {
-                service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
-              }, delay);
-            })(i);
+            // (function (i) {              setTimeout(function () {
+            service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
+            //  }, delay);            })(i);
 
             that.lastDetailsCall = new Date(Date.now() + delay);
             console.log('Last call: ' + that.lastDetailsCall);
@@ -332,6 +325,16 @@ export default {
         { types: ['geocode'] } // TODO: check this!
       );
       placeChangedListener = autocomplete.addListener('place_changed', this.onPlaceChanged);
+    },
+    getPlaceScore: function (place, key) {
+      switch (key) {
+        case 'avg': return place.avg;
+        case 'isHtml5': return place.isHtml5;
+        case 'security': return place.security.score;
+        case 'desktopSpeed': return place.desktop.speedScore;
+        case 'mobileSpeed': return place.mobile.speedScore;
+        case 'mobileUsability': return place.mobile.usabilityScore;
+      }
     }
   }
 };

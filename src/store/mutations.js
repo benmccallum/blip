@@ -8,6 +8,11 @@ export const mutations = {
     state.places = [];
   },
   addPlace (state, place) {
+    var alreadyAdded = state.places ? state.places.some(p => p.id === place.id) : false;
+    if (alreadyAdded) {
+      console.error('wtf why is this repeated!!!');
+      return;
+    }
     state.places ? state.places.push(place) : (state.places = [place]);
   },
   clearPlace (state) {
@@ -21,14 +26,17 @@ export const mutations = {
   },
   setSecurityResult (state, payload) {
     payload.place.security = payload.result;
+    // payload.place.securityScore = payload.result.score;
     recalcAvg(payload.place);
   },
   setDesktopResult (state, payload) {
     payload.place.desktop = payload.result;
+    // payload.place.desktopSpeedScore = payload.result.speedScore;
     recalcAvg(payload.place);
   },
   setMobileResult (state, payload) {
     payload.place.mobile = payload.result;
+    // payload.place.mobileSpeedScore = payload.result.speedScore;
     recalcAvg(payload.place);
   },
   resetCancelToken (state) {
