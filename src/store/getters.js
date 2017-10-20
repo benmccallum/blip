@@ -17,6 +17,12 @@ export const getters = {
           .sort((a, b) => {
             var aScore = getVal(a, sortKey);
             var bScore = getVal(b, sortKey);
+
+            if (aScore === bScore) {
+              // Sort by name to try avoid results bouncing all over the place each re-sort
+              return a.name < b.name;
+            }
+
             return sortDirection === 'asc' ? aScore > bScore : aScore < bScore;
           })
       : null;

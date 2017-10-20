@@ -254,16 +254,15 @@ export default {
             var timeSinceLast = Date.now() - that.lastDetailsCall;
             var delay = timeSinceLast > 1000 ? 0 : 1000 - timeSinceLast;
 
-            // (function (i) {              setTimeout(function () {
-            service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
-            //  }, delay);            })(i);
+            (function (i) {
+              setTimeout(function () {
+                service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
+              }, delay);
+            })(i);
 
             that.lastDetailsCall = new Date(Date.now() + delay);
             console.log('Last call: ' + that.lastDetailsCall);
           }
-
-          // Increment page
-          this.nextPage++;
 
           // Configure pagination button
           this.configureLoadMoreButton(pagination);
