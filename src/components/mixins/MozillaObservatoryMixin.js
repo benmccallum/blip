@@ -17,9 +17,14 @@ export const MozillaObservatoryMixin = {
       parser.href = this.place.website;
       return parser.hostname;
     },
+    encodedHostName: function () {
+      return encodeURIComponent(this.hostname)
+    },
+    analyzeUrl: function () {
+      return 'https://http-observatory.security.mozilla.org/api/v1/analyze?host=' + this.encodedHostName;
+    },
     detailsUrl: function () {
-      return 'https://observatory.mozilla.org/analyze.html?host=' +
-        encodeURIComponent(this.hostname);
+      return 'https://observatory.mozilla.org/analyze.html?host=' + this.encodedHostName;
     }
   }
 };

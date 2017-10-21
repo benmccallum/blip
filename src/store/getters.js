@@ -1,4 +1,9 @@
 export const getters = {
+  unsortedPlaces: (state, getters) => {
+    return state.places
+      ? state.places.filter(place => !place.isTestingComplete)
+      : [];
+  },
   getSortedPlaces: (state, getters) => (sortKey, sortDirection) => {
     function getVal (place, key) {
       switch (key) {
@@ -13,7 +18,7 @@ export const getters = {
 
     return state.places
       ? state.places
-          // .filter(place => place.isTestingComplete)
+          .filter(place => place.isTestingComplete)
           .sort((a, b) => {
             var aScore = getVal(a, sortKey);
             var bScore = getVal(b, sortKey);

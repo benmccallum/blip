@@ -13,7 +13,7 @@
           <input type="text" class="form-control text-center mb-sm-1" id="address" placeholder="Search elsewhere..." aria-label="Address">
         </form>
 
-        <div id="query" class="row pt-2 pb-1 mb-3" v-show="status === 'locating' || status === 'loading' || status === 'results'">
+        <div class="row bordered-row pt-2 pb-1 mb-3" v-show="status === 'locating' || status === 'loading' || status === 'results'">
           <div class="col">
             <p id="label" class="mb-2">
               <strong>Searching around... </strong>
@@ -51,7 +51,7 @@
 
         <div id="places" v-show="status === 'results'">
           <div class="row justify-content-center" v-show="sortedPlaces && sortedPlaces.length < 1">
-            <div class="col col-sm-3 text-center">
+            <div class="col col-sm-3 text-center text-muted">
               <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto mb-1"></i>
               <br>
               Completed results will appear here shortly...
@@ -60,6 +60,12 @@
           <transition-group name="places-list" tag="div">
             <place v-for="place in sortedPlaces" :key="place.id" :place="place"></place>
           </transition-group>
+          <div class="row bordered-row pt-2 pb-1 mt-3 mb-3">
+            <div class="col">
+              <h4 class="text-center">We're still working on these...</h4>
+            </div>
+          </div>          
+          <place v-for="place in unsortedPlaces" :key="place.id" :place="place"></place>
           <div class="row">
             <div class="col">
               <button type="button" id="btn-load-more" disabled class="btn btn-lg btn-primary mb-3 w-100">
@@ -166,10 +172,10 @@ export default {
     };
   },
   computed: {
-    places: function () {
-      return this.$store.state.places;
+    unsortedPlaces () {
+      return this.$store.getters.unsortedPlaces;
     },
-    sortedPlaces: function () {
+    sortedPlaces () {
       return this.$store.getters.getSortedPlaces(this.query.sortBy, this.query.sortDirection);
     }
   },
@@ -254,11 +260,12 @@ export default {
             var timeSinceLast = Date.now() - that.lastDetailsCall;
             var delay = timeSinceLast > 1000 ? 0 : 1000 - timeSinceLast;
 
-            (function (i) {
-              setTimeout(function () {
-                service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
-              }, delay);
-            })(i);
+            // TODO: Fix the throttling somehow that doesn't break the list ordering.
+            // (function (i) {
+            //   setTimeout(function () {
+            service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
+            //   }, delay);
+            // })(i);
 
             that.lastDetailsCall = new Date(Date.now() + delay);
           }
@@ -291,12 +298,10 @@ export default {
       }
     },
     reset: function () {
-      // Cancel any in-progress async calls
-      // TODO: Once fetch supports it, https://github.com/whatwg/fetch/issues/447
-
-      // Clear/reset UI
+      // Clear/reset UI, cancelling any in-progress ajax calls
       this.initAutocomplete();
       this.query = this.defaultQuery();
+      this.status = 'form';
       this.$store.commit('clearPlaces');
       this.$store.commit('resetCancelToken');
     },

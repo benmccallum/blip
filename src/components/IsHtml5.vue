@@ -64,10 +64,7 @@
         }).then((response) => {
           this.processResult(response.data);
         }).catch(function (thrown) {
-          if (that.axios.isCancel(thrown)) {
-            console.log('Request cancelled', thrown.message);
-          } else {
-            // TODO: handle error
+          if (!that.axios.isCancel(thrown)) {
             console.error('Request failed for IsHtml5 result.', thrown.message);
           }
         });

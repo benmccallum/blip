@@ -17,16 +17,16 @@
 </script>
 
 <style lang="scss">
-  $queryBorder: 2px solid #ccc;
-  #query {
-    border-bottom: $queryBorder;
-    border-top: $queryBorder;
+  $border: 2px solid #ccc;
+  .bordered-row {
+    border-bottom: $border;
+    border-top: $border;
   }
   .close {
     float: right;
     margin-top: -.1rem;
   }
-  .place-row {
+  .place-row:not(:last-child) {
     border-bottom: 1px solid rgba(0,0,0,.1);
   }
   .test-container {

@@ -8,7 +8,8 @@ export const PlaceParserMixin = {
         url: place.url,
         vicinity: place.vicinity,
         ph: place.formatted_phone_number,
-        avg: null,
+        isTestingComplete: !place.website,
+        avg: place.website ? null : -1,
         isHtml5: null,
         security: {
           score: null,
@@ -23,11 +24,6 @@ export const PlaceParserMixin = {
           usabilityScore: null,
           filteredRules: null
         }
-        // ,
-        // securityScore: null,
-        // desktopSpeedScore: null,
-        // mobileSpeedScore: null,
-        // mobileUsabilityScore: null
       };
     }
   }

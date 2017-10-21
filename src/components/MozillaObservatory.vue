@@ -33,7 +33,6 @@
         state: 'loading'
       };
     },
-    computed: { },
     mounted: function () {
       // Call async to init test their end and start polling for the results
       this.initTestAndPolling();
@@ -47,24 +46,17 @@
           return;
         }
 
-        var url = 'https://http-observatory.security.mozilla.org/api/v1/analyze?host=' +
-          encodeURIComponent(this.hostname);
-
         var params = new URLSearchParams();
         params.append('hidden', 'true');
         params.append('rescan', 'false');
 
-        this.axios.post(url, params, {
+        this.axios.post(this.analyzeUrl, params, {
           cancelToken: this.$store.state.cancelTokenSource.token
         }).then((response) => {
-          // TODO: implement
           that.processScanObject(response.data);
         }).catch(function (thrown) {
-          if (that.axios.isCancel(thrown)) {
-            console.log('Request cancelled', thrown.message);
-          } else {
-            // TODO: handle error
-            console.error('Request failed for MozillaObservatory:analyze.', thrown.message);
+          if (!that.axios.isCancel(thrown)) {
+            console.error('Request failed for MozillaObservatory:analyze GET.', thrown.message);
           }
         });
       },
@@ -89,9 +81,18 @@
         }
       },
       poll: function (scanId, when) {
+        var that = this;
+        console.info('MozillaObservatory: polling again in ' + when + 'ms for scan with id "' + scanId + '" and host "' + this.hostname + '".');
         setTimeout(function () {
-          console.info('MozillaObservatory: polling again for scan with id: ' + scanId + '.');
-          // TODO: Poll again
+          that.axios.get(that.analyzeUrl, {
+            cancelToken: that.$store.state.cancelTokenSource.token
+          }).then((response) => {
+            that.processScanObject(response.data);
+          }).catch(function (thrown) {
+            if (!that.axios.isCancel(thrown)) {
+              console.error('Request failed for MozillaObservatory:analyze GET.', thrown.message);
+            }
+          });
         }, when);
       },
       getOfflineResult: function () {
