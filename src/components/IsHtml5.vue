@@ -48,20 +48,21 @@
       getHtml5Result: function () {
         var that = this;
 
-        if (1 || window.offline) {
+        if (window.offline) {
           setTimeout(function () {
             that.processResult((Math.random() >= 0.9 ? null : Math.random() >= 0.5));
           }, 1500);
           return;
         }
 
-        var url = 'https://functionapp.com?q=' + this.place.website;
+        var url = 'https://ishtml5.azurewebsites.net/api/testurl' +
+          '?code=LzMreSQDMm6BKT3KUU6UaEaw/5m4r2SG6LMzytPI0LPZ6uR/5xa6qA==' +
+          '&url=' + encodeURIComponent(this.place.website);
 
         this.axios.get(url, {
           cancelToken: this.$store.state.cancelTokenSource.token
         }).then((response) => {
-          // TODO: implement
-          this.processResult((Math.random() >= 0.9 ? null : Math.random() >= 0.5));
+          this.processResult(response.data);
         }).catch(function (thrown) {
           if (that.axios.isCancel(thrown)) {
             console.log('Request cancelled', thrown.message);

@@ -261,7 +261,6 @@ export default {
             })(i);
 
             that.lastDetailsCall = new Date(Date.now() + delay);
-            console.log('Last call: ' + that.lastDetailsCall);
           }
 
           // Configure pagination button
@@ -274,9 +273,6 @@ export default {
       }
     },
     getDetailsCallback: function (place, status) {
-      window.requestsMade = window.requestsMade || 0;
-      window.requestsMade++;
-      console.log('Requests made: ' + (window.requestsMade));
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         this.status = 'results';
         this.$store.commit('addPlace', this.parsePlace(place));
