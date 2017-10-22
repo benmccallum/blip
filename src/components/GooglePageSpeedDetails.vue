@@ -57,10 +57,10 @@
       place: Object
     },
     computed: {
-      result: function () {
+      result () {
         return this.place[this.strategy.toLowerCase()];
       },
-      noOptimizations: function () {
+      noOptimizations () {
         // TODO: Do a check for each group of optimizations to see if all their arrays are empty
         return false;
       }

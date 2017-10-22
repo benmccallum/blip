@@ -6,8 +6,12 @@
           <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
           <span class="sr-only">Loading...</span>
         </div>
+        <div v-else-if="state === 'errored'" :key="state">
+          <i class="fa fa-exclamation-triangle text-warning"></i>
+          <span class="sr-only">Error</span>
+        </div>
         <div v-else :key="state" class="score-container">
-          <span class="score" :class="'grade-' + (grade || '').toLowerCase()">
+          <span class="score" :class="gradeClass">
             <span class="val">{{ score }}</span>
             <span class="max text-muted sr-only">/100</span>
           </span>
@@ -20,92 +24,18 @@
 
 <script>
   import { MozillaObservatoryMixin } from './mixins/MozillaObservatoryMixin';
-  import { mozillaObservatoryResult } from '../offline-data/mozilla-observatory-result';
+  import { MozillaObservatoryHttpMixin } from './mixins/MozillaObservatoryHttpMixin';
+  import { MozillaObservatoryTlsMixin } from './mixins/MozillaObservatoryTlsMixin';
 
   export default {
     name: 'MozillaObservatory',
-    mixins: [ MozillaObservatoryMixin ],
+    mixins: [ MozillaObservatoryMixin, MozillaObservatoryHttpMixin, MozillaObservatoryTlsMixin ],
     props: {
       place: Object
     },
-    data: function () {
-      return {
-        state: 'loading'
-      };
-    },
-    mounted: function () {
-      // Call async to init test their end and start polling for the results
-      this.initTestAndPolling();
-    },
-    methods: {
-      initTestAndPolling: function () {
-        var that = this;
-
-        if (window.offline) {
-          this.getOfflineResult();
-          return;
-        }
-
-        var params = new URLSearchParams();
-        params.append('hidden', 'true');
-        params.append('rescan', 'false');
-
-        this.axios.post(this.analyzeUrl, params, {
-          cancelToken: this.$store.state.cancelTokenSource.token
-        }).then((response) => {
-          that.processScanObject(response.data);
-        }).catch(function (thrown) {
-          if (!that.axios.isCancel(thrown)) {
-            console.error('Request failed for MozillaObservatory:analyze GET.', thrown.message);
-          }
-        });
-      },
-      processScanObject: function (scan) {
-        switch (scan.state) {
-          case 'ABORTED':
-            break;
-          case 'FAILED':
-            break;
-          case 'FINISHED':
-            this.processResult(scan);
-            break;
-          case 'PENDING':
-            this.poll(scan.scan_id, 5000);
-            break;
-          case 'STARTING':
-            this.poll(scan.scan_id, 2500);
-            break;
-          case 'RUNNING':
-            this.poll(scan.scan_id, 1000);
-            break;
-        }
-      },
-      poll: function (scanId, when) {
-        var that = this;
-        console.info('MozillaObservatory: polling again in ' + when + 'ms for scan with id "' + scanId + '" and host "' + this.hostname + '".');
-        setTimeout(function () {
-          that.axios.get(that.analyzeUrl, {
-            cancelToken: that.$store.state.cancelTokenSource.token
-          }).then((response) => {
-            that.processScanObject(response.data);
-          }).catch(function (thrown) {
-            if (!that.axios.isCancel(thrown)) {
-              console.error('Request failed for MozillaObservatory:analyze GET.', thrown.message);
-            }
-          });
-        }, when);
-      },
-      getOfflineResult: function () {
-        var that = this;
-        setTimeout(function () {
-          that.processResult(mozillaObservatoryResult());
-        }, Math.floor(Math.random() * 1000));
-      },
-      processResult: function (result) {
-        this.state = 'scored';
-        var data = { scanId: result.scan_id, score: result.score, grade: result.grade };
-        this.$store.commit('setSecurityResult', { place: this.place, result: data });
-      }
+    created () {
+      this.httpInitTestAndPolling();
+      this.tlsInitTestAndPolling();
     }
   };
 </script>

@@ -113,6 +113,26 @@
     opacity: 0;
   }
 
+  .risk-unknown {
+    color: #000000;
+  }
+
+  .risk-low {
+    color: #cccccc;
+  }
+
+  .risk-medium {
+    color: #4a6785;
+  }
+
+  .risk-high {
+    color: #ffd351;
+  }
+
+  .risk-high {
+    color: #d04437;
+  }
+
   .grade-a, .green {
     color: #2d882d;
   }

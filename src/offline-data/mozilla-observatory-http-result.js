@@ -7,7 +7,7 @@ function giveGrade (score) {
   return 'A';
 }
 
-export const mozillaObservatoryResult = function () {
+export const mozillaObservatoryHttpResult = function () {
   var score = Math.floor(Math.random() * 100);
   return {
     scan_id: 123,

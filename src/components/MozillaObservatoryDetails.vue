@@ -3,7 +3,7 @@
     <h2>
       Security
       <template v-if="grade">
-        <span :class="'grade-' + grade.toLowerCase()">
+        <span :class="gradeClass">
           Grade {{grade}}
         </span>
       </template>
@@ -15,12 +15,16 @@
     <template v-else>
       <p>
         Observatory by Mozilla is a tool used to test the security of a website by identifying 
-        gaps in configuration. Scores are out of 100 and give you a grade between F and A+. 
+        gaps in configuration. Scores are out of 100, although you can receive more with bonuses, 
+        and give you a <a href="https://wiki.mozilla.org/Security/Scoring_and_other_levels#Scoring_levels">grade</a> between F and A+
+        and equivalent <a href="https://wiki.mozilla.org/Security/Standard_Levels#Standard_risk_levels_definition_and_nomenclature">risk indication</a>.
         Possible optimizations are provided in order of their score impact if implemented.
         <a href="https://observatory.mozilla.org/faq.html" target="_blank">Read more...</a>
       </p>
       <p
         <strong>Score:</strong> {{score}} / 100
+        <br>
+        <strong>Risk: <span :class="riskClass">{{risk}}</span></strong>
       </p>
       <div class="row">
         <div class="col" v-for="key in ['failed', 'passed']" :key="key">
@@ -48,7 +52,7 @@
 
 <script>
   import { MozillaObservatoryMixin } from './mixins/MozillaObservatoryMixin';
-  import { mozillaObservatoryTestResults } from '../offline-data/mozilla-observatory-test-results';
+  import { mozillaObservatoryHttpResults } from '../offline-data/mozilla-observatory-http-results';
 
   export default {
     name: 'MozillaObservatoryDetails',
@@ -56,16 +60,17 @@
     props: {
       place: Object
     },
-    data: function () {
+    data () {
       return {
         results: null
       };
     },
     computed: {
-      scanId: function () {
+      scanId () {
+        // Needs to be repeated (it's already in the mixin) as otherwise the watch doesn't fire...
         return this.place.security.scanId;
       },
-      filteredTests: function () {
+      filteredTests () {
         var filtered = { failed: [], passed: [] }
         if (this.results) {
           var key;
@@ -83,18 +88,18 @@
       }
     },
     watch: {
-      scanId: function (val, oldVal) {
+      scanId (val, oldVal) {
         if (val === oldVal) return;
         this.getTestResults();
       }
     },
     methods: {
-      getTestResults: function () {
+      getTestResults () {
         var that = this;
 
         if (window.offline) {
           setTimeout(function () {
-            that.results = mozillaObservatoryTestResults;
+            that.results = mozillaObservatoryHttpResults;
           }, 1000);
           return;
         }
@@ -102,32 +107,20 @@
         var url = 'https://http-observatory.security.mozilla.org/api/v1/getScanResults?scan=' +
           encodeURIComponent(this.scanId);
 
-        this.axios.post(url, {
+        this.axios.get(url, {
           cancelToken: this.$store.state.cancelTokenSource.token
         }).then((response) => {
-          // TODO: implement
-          that.processScanObject(response.data);
+          that.results = response.data;
         }).catch(function (thrown) {
           if (!that.axios.isCancel(thrown)) {
             console.error('Request failed for MozillaObservatory:getScanResults.', thrown.message);
           }
         });
-
-        fetch(url).then(function (response) {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok.');
-        }).then(function (json) {
-          that.results = json;
-        }).catch(function (error) {
-          console.log('There has been a problem with your fetch operation: ' + error.message);
-        });
       },
-      sortTestsByModifierDesc: function (a, b) {
+      sortTestsByModifierDesc (a, b) {
         return a.score_modifier <= b.score_modifier;
       },
-      sortTestsByModifierAsc: function (a, b) {
+      sortTestsByModifierAsc (a, b) {
         return a.score_modifier >= b.score_modifier;
       }
     }

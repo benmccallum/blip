@@ -5,6 +5,10 @@
           <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
           <span class="sr-only">Loading...</span>
         </div>
+        <div v-else-if="state === 'errored'" :key="state">
+          <i class="fa fa-exclamation-triangle text-warning"></i>
+          <span class="sr-only">Error</span>
+        </div>
         <div v-else :key="state" class="score-container">
           <span class="score">
             <span class="val" :class="isHtml5 ? 'green' : 'red'">
@@ -25,27 +29,27 @@
     props: {
       place: Object
     },
+    data () {
+      return {
+        // TODO: Move to vuex so it can be shown on the Details tabs in Laser.vue
+        state: 'loading' // or 'scored' or 'errored'
+      };
+    },
     computed: {
-      state: function () {
-        if (this.isHtml5 === null) {
-          return 'loading';
-        }
-        return 'scored';
-      },
-      isHtml5: function () {
+      isHtml5 () {
         return this.place.isHtml5;
       },
-      detailsUrl: function () {
-        return 'https://google.com?q=doctype';
+      detailsUrl () {
+        // TODO: Find something for this or do my own page.
         // https://www.w3.org/QA/2002/04/valid-dtd-list.html
+        return 'https://google.com?q=doctype';
       }
     },
-    mounted: function () {
-      // Call async to get details on html5 compat, etc.
+    created () {
       this.getHtml5Result();
     },
     methods: {
-      getHtml5Result: function () {
+      getHtml5Result () {
         var that = this;
 
         if (window.offline) {
@@ -63,14 +67,20 @@
           cancelToken: this.$store.state.cancelTokenSource.token
         }).then((response) => {
           this.processResult(response.data);
-        }).catch(function (thrown) {
+        }).catch((thrown) => {
           if (!that.axios.isCancel(thrown)) {
             console.error('Request failed for IsHtml5 result.', thrown.message);
+            this.processResult(null);
           }
         });
       },
-      processResult: function (result) {
+      processResult (result) {
+        if (result == null) {
+          this.state = 'errored';
+          return;
+        }
         this.$store.commit('setIsHtml5', { place: this.place, isHtml5: result });
+        this.state = 'scored';
       }
     }
   };

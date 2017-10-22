@@ -6,6 +6,10 @@
           <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
           <span class="sr-only">Loading...</span>
         </div>
+        <div v-else-if="state === 'errored'" :key="state">
+          <i class="fa fa-exclamation-triangle text-warning"></i>
+          <span class="sr-only">Error</span>
+        </div>
         <div v-else-if="state === 'scored'" :key="state" class="score-container">
           <span class="score" :class="grade.class">
             <span class="val">{{ score }}</span>
@@ -29,29 +33,24 @@
     name: 'GooglePageSpeed',
     extends: GooglePageSpeedMixin,
     computed: {
-      state: function () {
+      state () {
         if (this.score === null) {
           return 'loading';
-        } else if (this.score === -1) {
-          return 'na';
         }
         return 'scored';
       },
-      classObject: function () {
+      classObject () {
         return 'fa-' + this.strategy.toLowerCase();
       }
     },
-    mounted: function () {
-      // Call async to get score from Google PageSpeed Insights
-      // TODO: Can do earlier??
-      // Only do when it's a speed test, as the usabiliy test results can come through
-      // and be set by this process too into the vuex store for use in that :type of the component
+    created () {
+      // Only necessary for SPEED version as it will also bring back the USABILITY data
       if (this.type === 'SPEED') {
         this.getResult();
       }
     },
     methods: {
-      getResult: function () {
+      getResult () {
         var that = this;
 
         if (window.offline) {
@@ -72,13 +71,13 @@
           }
         });
       },
-      getOfflineResult: function () {
+      getOfflineResult () {
         var that = this;
         setTimeout(function () {
           that.processResult(googlePageSpeedResult()[that.strategy.toLowerCase()]);
         }, Math.floor(Math.random() * 1000));
       },
-      processResult: function (result) {
+      processResult (result) {
         var data = { };
         // Speed
         data.speedScore = result.ruleGroups.SPEED.score;
@@ -91,7 +90,7 @@
         // Commit to store
         this.$store.commit('set' + this.strategy + 'Result', { place: this.place, result: data });
       },
-      processRules: function (formattedResults) {
+      processRules (formattedResults) {
         var filteredRules = { };
 
         // Filter to those with impact > 0.0,
@@ -126,7 +125,7 @@
 
         return filteredRules;
       },
-      processRule: function (key, value) {
+      processRule (key, value) {
         // Type-dependant
         switch (key) {
           case 'MinifyCss':

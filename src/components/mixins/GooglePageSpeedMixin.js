@@ -5,32 +5,31 @@ export const GooglePageSpeedMixin = {
     place: Object
   },
   computed: {
-    speedScore: function () {
+    speedScore () {
       return this.place[this.strategy.toLowerCase()].speedScore;
     },
-    usabilityScore: function () {
+    usabilityScore () {
       return this.place[this.strategy.toLowerCase()].usabilityScore;
     },
-    speedGrade: function () {
+    speedGrade () {
       return this.getGrade(this.speedScore);
     },
-    usabilityGrade: function () {
+    usabilityGrade () {
       return this.getGrade(this.usabilityScore);
     },
-    score: function () {
+    score () {
       return this.type === 'SPEED' ? this.speedScore : this.usabilityScore;
     },
-    grade: function () {
+    grade () {
       return this.type === 'SPEED' ? this.speedGrade : this.usabilityGrade;
     },
-    detailsUrl: function () {
+    detailsUrl () {
       return 'https://developers.google.com/speed/pagespeed/insights/?url=' +
           encodeURIComponent(this.place.website) + '&tab=' + this.strategy;
     }
   },
   methods: {
-    getGrade: function (score) {
-      // TODO: Complete like Google does and match with CSS
+    getGrade (score) {
       if (score == null) {
         return null;
       } else if (score <= 70) {

@@ -24,7 +24,7 @@ export default {
     subtitle: String
   },
   computed: {
-    showNav: function () {
+    showNav () {
       return this.$route.fullPath !== '/';
     }
   }

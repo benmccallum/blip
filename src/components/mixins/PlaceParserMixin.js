@@ -1,6 +1,6 @@
 export const PlaceParserMixin = {
   methods: {
-    parsePlace: function (place) {
+    parsePlace (place) {
       return {
         id: place.place_id,
         website: place.website,
@@ -12,8 +12,10 @@ export const PlaceParserMixin = {
         avg: place.website ? null : -1,
         isHtml5: null,
         security: {
+          scanId: null,
           score: null,
-          grade: null
+          grade: null,
+          risk: null
         },
         desktop: {
           speedScore: null,

@@ -162,7 +162,7 @@ export default {
     'place': Place,
     'my-header': Header
   },
-  data: function () {
+  data () {
     return {
       query: this.defaultQuery(),
       status: 'form', // 'locating' or loading' or 'results' or 'no-results'
@@ -180,7 +180,7 @@ export default {
     }
   },
   methods: {
-    defaultQuery: function () {
+    defaultQuery () {
       return {
         coord: null,
         label: null,
@@ -188,7 +188,7 @@ export default {
         sortDirection: 'asc'
       };
     },
-    searchNearby: function () {
+    searchNearby () {
       if (window.offline) {
         this.useOfflineData();
         return;
@@ -198,7 +198,7 @@ export default {
       this.status = 'locating';
       navigator.geolocation.getCurrentPosition(this.onGetCurrentPositionSuccess, this.onGetCurrentPositionError);
     },
-    onGetCurrentPositionSuccess: function (position) {
+    onGetCurrentPositionSuccess (position) {
       this.query.coord = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
@@ -213,19 +213,19 @@ export default {
 
       this.search(this.query.coord, 'your current location');
     },
-    onGetCurrentPositionError: function (positionError) {
+    onGetCurrentPositionError (positionError) {
       this.status = 'no-location';
       this.errorCode = positionError.code;
       console.warn('Could not locate user', positionError.code, positionError.message);
     },
-    onPlaceChanged: function () {
+    onPlaceChanged () {
       var place = autocomplete.getPlace();
       var coord = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
       var label = place.formatted_address;
 
       this.search(coord, label);
     },
-    useOfflineData: function () {
+    useOfflineData () {
       var that = this;
       setTimeout(function () {
         googleMapsResult.forEach(function (place) {
@@ -234,7 +234,7 @@ export default {
       }, 1000);
       that.query.label = 'your location';
     },
-    search: function (coord, label) {
+    search (coord, label) {
       // Change status and set query label
       this.status = 'loading';
       this.query.label = label;
@@ -249,7 +249,7 @@ export default {
         type: ['store']
       }, this.nearbySearchCallback);
     },
-    nearbySearchCallback: function (places, status, pagination) {
+    nearbySearchCallback (places, status, pagination) {
       var that = this;
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (places.length) {
@@ -279,7 +279,7 @@ export default {
         this.$store.commit('emptyPlaces'); // todo: error view?
       }
     },
-    getDetailsCallback: function (place, status) {
+    getDetailsCallback (place, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         this.status = 'results';
         this.$store.commit('addPlace', this.parsePlace(place));
@@ -287,7 +287,7 @@ export default {
         console.error('Error getting details for place', place, status);
       }
     },
-    configureLoadMoreButton: function (pagination) {
+    configureLoadMoreButton (pagination) {
       if (pagination.hasNextPage) {
         var btn = document.getElementById('btn-load-more');
         btn.disabled = false;
@@ -297,7 +297,7 @@ export default {
         });
       }
     },
-    reset: function () {
+    reset () {
       // Clear/reset UI, cancelling any in-progress ajax calls
       this.initAutocomplete();
       this.query = this.defaultQuery();
@@ -305,7 +305,7 @@ export default {
       this.$store.commit('clearPlaces');
       this.$store.commit('resetCancelToken');
     },
-    initAutocomplete: function () {
+    initAutocomplete () {
       if (!window.google) {
         console.warn('Google Maps API wasn\'t loaded. Initing Autocomplate will be skipped.');
         return;
@@ -326,7 +326,7 @@ export default {
       );
       placeChangedListener = autocomplete.addListener('place_changed', this.onPlaceChanged);
     },
-    getPlaceScore: function (place, key) {
+    getPlaceScore (place, key) {
       switch (key) {
         case 'avg': return place.avg;
         case 'isHtml5': return place.isHtml5;
@@ -341,9 +341,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  //@import '../../node_modules/bootstrap/scss/_variables.scss';
-  //@import '../../node_modules/bootstrap/scss/mixins/_breakpoints.scss';
-
   #btn-load-more:disabled {
     // Hide entirely when disabled...
     display: none;
@@ -420,16 +417,8 @@ export default {
     transition: transform 1s;
   }
 
-  // todo: figure this out.
-  .places-list-leave-active {
-    background-color: red;
-  }
-
   .google-logo {
     max-width: 200px;
-    // @include media-breakpoint-up(sm) {
-    //   max-width: 150px;  
-    // }
   }
 
   .fa-exclamation-triangle {

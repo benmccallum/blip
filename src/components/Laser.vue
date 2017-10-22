@@ -84,33 +84,33 @@
       'mozilla-observatory': MozillaObservatory,
       'mozilla-observatory-details': MozillaObservatoryDetails
     },
-    data: function () {
+    data () {
       return {
         query: null
       };
     },
     computed: {
-      hasQuery: function () {
+      hasQuery () {
         return this.query != null;
       },
-      place: function () {
+      place () {
         return this.$store.state.place;
       }
     },
     methods: {
-      getInput: function () {
+      getInput () {
         return document.getElementById('url');
       },
-      getForm: function () {
+      getForm () {
         return document.getElementById('form');
       },
-      reset: function () {
+      reset () {
         this.$store.commit('resetCancelToken');
         this.getInput().value = null;
         this.getForm().classList.remove('was-validated')
         this.query = null;
       },
-      submit: function (event) {
+      submit (event) {
         if (event.target.checkValidity() === false) {
           event.preventDefault();
           event.stopPropagation();

@@ -1,4 +1,4 @@
-export const mozillaObservatoryTestResults = {
+export const mozillaObservatoryHttpResults = {
   'SomeTest': {
     name: 'SomeTest',
     pass: false,

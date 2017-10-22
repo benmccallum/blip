@@ -22,7 +22,7 @@
       place: Object
     },
     computed: {
-      isHtml5: function () {
+      isHtml5 () {
         return this.place.isHtml5;
       }
     }

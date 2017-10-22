@@ -3,27 +3,38 @@ export const MozillaObservatoryMixin = {
     place: Object
   },
   computed: {
-    scanId: function () {
-      return this.place.securiy.scanId;
+    scanId () {
+      return this.place.security.scanId;
     },
-    score: function () {
+    score () {
       return this.place.security.score;
     },
-    grade: function () {
+    grade () {
       return this.place.security.grade;
     },
-    hostname: function () {
+    gradeClass () {
+      if (this.grade == null) return null;
+      // Trim off + or - if it's a score like A+ or A-
+      return 'grade-' + (this.grade.length > 1 ? this.grade.slice(0, -1) : this.grade).toLowerCase();
+    },
+    risk () {
+      return this.place.security.risk;
+    },
+    riskClass () {
+      return 'risk-' + (this.risk || 'unknown').toLowerCase();
+    },
+    hostname () {
       var parser = document.createElement('a');
       parser.href = this.place.website;
       return parser.hostname;
     },
-    encodedHostName: function () {
+    encodedHostName () {
       return encodeURIComponent(this.hostname)
     },
-    analyzeUrl: function () {
+    analyzeUrl () {
       return 'https://http-observatory.security.mozilla.org/api/v1/analyze?host=' + this.encodedHostName;
     },
-    detailsUrl: function () {
+    detailsUrl () {
       return 'https://observatory.mozilla.org/analyze.html?host=' + this.encodedHostName;
     }
   }
