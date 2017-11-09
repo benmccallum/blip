@@ -68,8 +68,12 @@
           <place v-for="place in unsortedPlaces" :key="place.id" :place="place"></place>
           <div class="row">
             <div class="col">
-              <button type="button" id="btn-load-more" disabled class="btn btn-lg btn-primary mb-3 w-100">
-                Load more...
+              <button type="button" class="btn btn-lg btn-primary mb-3 w-100"
+                :hidden="pagination == null || (!queue.length && !pagination.hasNextPage)" 
+                :disabled="!canLoadMore" 
+                v-on:click="onLoadMore">
+                Load more... 
+                <span v-show="!canLoadMore">in {{canLoadMoreIn}}s</span>
               </button>
             </div>
           </div>
@@ -162,11 +166,23 @@ export default {
     'place': Place,
     'my-header': Header
   },
+  mounted () {
+    var that = this;
+
+    // Every second, restore 1 call to Google Places
+    setInterval(function () {
+      if (that.canLoadMoreIn > 0) {
+        that.canLoadMoreIn--;
+      }
+    }, 1000);
+  },
   data () {
     return {
       query: this.defaultQuery(),
       status: 'form', // 'locating' or loading' or 'results' or 'no-results'
-      lastDetailsCall: new Date(),
+      pagination: null,
+      canLoadMoreIn: 0,
+      queue: [],
       canGeolocate: navigator.geolocation,
       errorCode: null
     };
@@ -177,6 +193,9 @@ export default {
     },
     sortedPlaces () {
       return this.$store.getters.getSortedPlaces(this.query.sortBy, this.query.sortDirection);
+    },
+    canLoadMore () {
+      return this.canLoadMoreIn === 0;
     }
   },
   methods: {
@@ -250,33 +269,28 @@ export default {
       }, this.nearbySearchCallback);
     },
     nearbySearchCallback (places, status, pagination) {
-      var that = this;
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        if (places.length) {
-          // Get each place's complete details (to get their website URL)
-          for (var i = 0; i < places.length; i++) {
-            // You seem to have a pool of 9 or 10 requests to exhaust,
-            // then you get another request every second therein.
-            var timeSinceLast = Date.now() - that.lastDetailsCall;
-            var delay = timeSinceLast > 1000 ? 0 : 1000 - timeSinceLast;
-
-            // TODO: Fix the throttling somehow that doesn't break the list ordering.
-            // (function (i) {
-            //   setTimeout(function () {
-            service.getDetails({ placeId: places[i].place_id }, that.getDetailsCallback);
-            //   }, delay);
-            // })(i);
-
-            that.lastDetailsCall = new Date(Date.now() + delay);
-          }
-
-          // Configure pagination button
-          this.configureLoadMoreButton(pagination);
-        } else {
-          this.$store.commit('emptyPlaces');
+      if (status === window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+        this.$store.commit('emptyPlaces');
+      } else if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        this.pagination = pagination;
+        for (var i = 0; i < places.length; i++) {
+          this.queue.push(places[i].place_id);
         }
+        this.processQueue();
+      } else if (this.places.length) {
+        // Show error label saying we couldn't get any more results but leave original still intact.
+        // this.$store.commit('emptyPlaces');
       } else {
-        this.$store.commit('emptyPlaces'); // todo: error view?
+        // TODO: Show error with ability to try again
+        // this.$store.commit('emptyPlaces');
+      }
+    },
+    processQueue () {
+      let i = 0;
+      while (this.queue.length && i < 10) {
+        this.canLoadMoreIn++;
+        i++;
+        service.getDetails({ placeId: this.queue.shift() }, this.getDetailsCallback);
       }
     },
     getDetailsCallback (place, status) {
@@ -284,17 +298,14 @@ export default {
         this.status = 'results';
         this.$store.commit('addPlace', this.parsePlace(place));
       } else {
-        console.error('Error getting details for place', place, status);
+        console.error('Error getting details for place.', place, status);
       }
     },
-    configureLoadMoreButton (pagination) {
-      if (pagination.hasNextPage) {
-        var btn = document.getElementById('btn-load-more');
-        btn.disabled = false;
-        btn.addEventListener('click', function () {
-          btn.disabled = true;
-          pagination.nextPage();
-        });
+    onLoadMore () {
+      if (this.queue.length) {
+        this.processQueue();
+      } else {
+        this.pagination.nextPage();
       }
     },
     reset () {
@@ -325,27 +336,12 @@ export default {
         { types: ['geocode'] } // TODO: check this!
       );
       placeChangedListener = autocomplete.addListener('place_changed', this.onPlaceChanged);
-    },
-    getPlaceScore (place, key) {
-      switch (key) {
-        case 'avg': return place.avg;
-        case 'isHtml5': return place.isHtml5;
-        case 'security': return place.security.score;
-        case 'desktopSpeed': return place.desktop.speedScore;
-        case 'mobileSpeed': return place.mobile.speedScore;
-        case 'mobileUsability': return place.mobile.usabilityScore;
-      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-  #btn-load-more:disabled {
-    // Hide entirely when disabled...
-    display: none;
-  }
-
   #filters {
     font-size: .75rem;
     opacity: .75;

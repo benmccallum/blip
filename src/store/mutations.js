@@ -28,6 +28,10 @@ export const mutations = {
     payload.place.security = payload.result;
     recalcAvg(payload.place);
   },
+  setSecurityTlsResult (state, payload) {
+    payload.place.security.tlsScanId = payload.tlsScanId;
+    payload.place.security.tlsLevel = payload.tlsLevel;
+  },
   setDesktopResult (state, payload) {
     payload.place.desktop = payload.result;
     recalcAvg(payload.place);

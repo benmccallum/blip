@@ -35,7 +35,9 @@
     },
     created () {
       this.httpInitTestAndPolling();
-      this.tlsInitTestAndPolling();
+
+      // TODO: Complete this if it's worth it
+      // this.tlsInitTestAndPolling();
     }
   };
 </script>

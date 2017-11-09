@@ -1,5 +1,4 @@
-export const mozillaObservatoryTlsResult = 
-{
+export const mozillaObservatoryTlsResults = {
   'id': 23225602,
   'timestamp': '2017-10-22T23:28:12.694028Z',
   'target': 'www.circlek.com',
@@ -375,7 +374,7 @@ export const mozillaObservatoryTlsResult =
             'consider adding ciphers ECDHE-ECDSA-AES256-GCM-SHA384, ECDHE-ECDSA-CHACHA20-POLY1305, ECDHE-RSA-CHACHA20-POLY1305, ECDHE-ECDSA-AES128-GCM-SHA256, ECDHE-ECDSA-AES256-SHA384, ECDHE-ECDSA-AES128-SHA256',
             'remove protocols TLSv1, TLSv1.1',
             'consider enabling OCSP stapling',
-            'enable Perfect Forward Secrecy with a curve of at least 256bits, don't use DHE',
+            'enable Perfect Forward Secrecy with a curve of at least 256bits, don\'t use DHE',
             'use a certificate of type ecdsa, not RSA'
           ],
           'intermediate': [
@@ -1952,6 +1951,6 @@ export const mozillaObservatoryTlsResult =
   'ack': true,
   'attempts': 1,
   'analysis_params': {
-    
+
   }
-}
+};

@@ -42,16 +42,16 @@ export const MozillaObservatoryHttpMixin = {
           this.httpPoll(scan.scan_id, 5000);
           break;
         case 'STARTING':
-          this.httpPoll(scan.scan_id, 2500);
+          this.httpPoll(scan.scan_id, 4000);
           break;
         case 'RUNNING':
-          this.httpPoll(scan.scan_id, 1000);
+          this.httpPoll(scan.scan_id, 2500);
           break;
       }
     },
     httpPoll (scanId, when) {
       var that = this;
-      console.info('MozillaObservatory: polling again in ' + when + 'ms for scan with id "' + scanId + '" and host "' + this.hostname + '".');
+      // console.info('MozillaObservatory: polling again in ' + when + 'ms for scan with id "' + scanId + '" and host "' + this.hostname + '".');
       setTimeout(function () {
         that.axios.get(that.analyzeUrl, {
           cancelToken: that.$store.state.cancelTokenSource.token

@@ -1,3 +1,5 @@
+import { mozillaObservatoryTlsResults } from '../../offline-data/mozilla-observatory-tls-results';
+
 export const MozillaObservatoryTlsMixin = {
   methods: {
     tlsInitTestAndPolling () {
@@ -18,20 +20,20 @@ export const MozillaObservatoryTlsMixin = {
       this.axios.post(url, params, {
         cancelToken: this.$store.state.cancelTokenSource.token
       }).then((response) => {
-        that.tlsProcessScanObject(response.data);
+        that.tlsProcessScanId(response.data);
       }).catch(function (thrown) {
         if (!that.axios.isCancel(thrown)) {
           console.error('Request failed for Mozilla TLS Observatory: POST /analyze.', thrown.message);
         }
       });
     },
-    tlsProcessScanObject (scan) {
-      console.log(scan);
+    tlsProcessScanId (scan) {
+      // TODO: Does the result come immediately or do I need to wait/poll?
       this.tlsPoll(scan.scan_id, 0);
     },
     tlsPoll (scanId, when) {
       var that = this;
-      console.info('Mozilla TLS Observatory: polling again in ' + when + 'ms for scan with id "' + scanId + '" and host "' + this.hostname + '".');
+      // console.info('Mozilla TLS Observatory: polling again in ' + when + 'ms for scan with id "' + scanId + '" and host "' + this.hostname + '".');
       setTimeout(function () {
         var url = 'https://tls-observatory.services.mozilla.com/api/v1/results' +
           '?id=' + scanId;
@@ -39,31 +41,32 @@ export const MozillaObservatoryTlsMixin = {
         that.axios.get(url, {
           cancelToken: that.$store.state.cancelTokenSource.token
         }).then((response) => {
-          console.log(response.data);
-          // that.httpProcessScanObject(response.data);
+          that.tlsProcessResults(response.data);
         }).catch(function (thrown) {
           if (!that.axios.isCancel(thrown)) {
             console.error('Request failed for Mozilla TLS Observatory: GET /results.', thrown.message);
           }
         });
       }, when);
+    },
+    tlsGetOfflineResult () {
+      var that = this;
+      setTimeout(function () {
+        that.tlsProcessResult(mozillaObservatoryTlsResults);
+      }, Math.floor(Math.random() * 1000));
+    },
+    tlsProcessResults (results) {
+      // this.state = 'scored';
+      if (!results || !results.analysis) {
+        console.error('Mozilla Observatory TLS Analysis result was missing data.');
+        return;
+      };
+
+      var data = {
+        tlsScanId: results.id,
+        tlsLevel: results.analysis.find(a => a.analyzer === 'mozillaEvaluationWorker').result.level
+      };
+      this.$store.commit('setSecurityTlsResult', { place: this.place, result: data });
     }
-    // ,
-    // httpGetOfflineResult () {
-    //   var that = this;
-    //   setTimeout(function () {
-    //     that.httpProcessResult(mozillaObservatoryHttpResult());
-    //   }, Math.floor(Math.random() * 1000));
-    // },
-    // httpProcessResult (result) {
-    //   this.state = 'scored';
-    //   var data = {
-    //     scanId: result.scan_id,
-    //     score: result.score,
-    //     grade: result.grade,
-    //     risk: result.likelihood_indicator
-    //   };
-    //   this.$store.commit('setSecurityResult', { place: this.place, result: data });
-    // }
   }
 };
