@@ -1,7 +1,7 @@
 export const getters = {
   unsortedPlaces: (state, getters) => {
     return state.places
-      ? state.places.filter(place => !place.isTestingComplete)
+      ? state.places.filter(place => place.avg == null)
       : [];
   },
   getSortedPlaces: (state, getters) => (sortKey, sortDirection) => {
@@ -18,20 +18,20 @@ export const getters = {
       }
     }
 
+    function sort (a, b) {
+      var aScore = getVal(a, sortKey);
+      var bScore = getVal(b, sortKey);
+      let result = 0;
+      if (aScore < bScore) {
+        result = -1;
+      } else if (aScore > bScore) {
+        result = 1;
+      }
+      return sortDirection === 'asc' ? result : result * -1;
+    }
+
     return state.places
-      ? state.places
-          .filter(place => place.isTestingComplete)
-          .sort((a, b) => {
-            var aScore = getVal(a, sortKey);
-            var bScore = getVal(b, sortKey);
-
-            if (aScore === bScore) {
-              // Sort by name to try avoid results bouncing all over the place each re-sort
-              return a.name < b.name;
-            }
-
-            return sortDirection === 'asc' ? aScore > bScore : aScore < bScore;
-          })
-      : null;
+      ? state.places.filter(place => place.avg != null).sort(sort)
+      : [];
   }
 };

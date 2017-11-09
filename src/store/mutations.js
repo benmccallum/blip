@@ -23,6 +23,7 @@ export const mutations = {
   },
   setIsHtml5 (state, payload) {
     payload.place.isHtml5 = payload.isHtml5;
+    recalcAvg(payload.place);
   },
   setSecurityResult (state, payload) {
     payload.place.security = payload.result;
@@ -51,8 +52,8 @@ export const mutations = {
 };
 
 function recalcAvg (place) {
-  var sum = 0;
-  var divisor = 0;
+  let sum = 0;
+  let divisor = 0;
 
   if (place.isHtml5 != null) {
     sum += (place.isHtml5 ? 100 : 0);
@@ -75,11 +76,7 @@ function recalcAvg (place) {
     divisor++;
   }
 
-  if (divisor === 0) return;
-
-  if (divisor === 4) {
-    place.isTestingComplete = true;
+  if (divisor === 5) {
+    place.avg = sum / divisor;
   }
-
-  place.avg = sum / divisor;
 }

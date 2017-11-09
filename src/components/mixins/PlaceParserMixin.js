@@ -8,8 +8,7 @@ export const PlaceParserMixin = {
         url: place.url,
         vicinity: place.vicinity,
         ph: place.formatted_phone_number,
-        isTestingComplete: !place.website,
-        avg: null,
+        avg: place.website ? null : -1,
         isHtml5: null,
         security: {
           scanId: null,

@@ -50,7 +50,7 @@
         </div>
 
         <div id="places" v-show="status === 'results'">
-          <div class="row justify-content-center" v-show="sortedPlaces && sortedPlaces.length < 1">
+          <div class="row justify-content-center" v-show="!sortedPlaces.length">
             <div class="col col-sm-3 text-center text-muted">
               <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto mb-1"></i>
               <br>
@@ -60,7 +60,7 @@
           <transition-group name="places-list" tag="div">
             <place v-for="place in sortedPlaces" :key="place.id" :place="place"></place>
           </transition-group>
-          <div class="row bordered-row pt-2 pb-1 mt-3 mb-3">
+          <div class="row bordered-row pt-2 pb-1 mt-3 mb-3" v-show="unsortedPlaces.length">
             <div class="col">
               <h4 class="text-center">We're still working on these...</h4>
             </div>
