@@ -8,19 +8,29 @@ export const PlaceParserMixin = {
         url: place.url,
         vicinity: place.vicinity,
         ph: place.formatted_phone_number,
+        isSiteDown: false,
         avg: place.website ? null : -1,
-        isHtml5: null,
+        isHtml5: {
+          state: 'loading', // 'scored' or 'errored'
+          score: null
+        },
         security: {
+          state: 'loading',
           scanId: null,
           score: null,
           grade: null,
-          risk: null
+          risk: null,
+          tlsState: 'loading',
+          tlsScanId: null,
+          tlsLevel: null
         },
         desktop: {
+          state: 'loading',
           speedScore: null,
           filteredRules: null
         },
         mobile: {
+          state: 'loading',
           speedScore: null,
           usabilityScore: null,
           filteredRules: null

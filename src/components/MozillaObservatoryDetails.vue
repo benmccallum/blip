@@ -19,7 +19,7 @@
         and give you a <a href="https://wiki.mozilla.org/Security/Scoring_and_other_levels#Scoring_levels">grade</a> between F and A+
         and equivalent <a href="https://wiki.mozilla.org/Security/Standard_Levels#Standard_risk_levels_definition_and_nomenclature">risk indication</a>.
         Possible optimizations are provided in order of their score impact if implemented.
-        <a href="https://observatory.mozilla.org/faq.html" target="_blank">Read more...</a>
+        <a href="https://observatory.mozilla.org/faq.html" target="_blank" rel="noopener">Read more...</a>
       </p>
       <p
         <strong>Score:</strong> {{score}} / 100
@@ -44,7 +44,7 @@
       </div>
       <template v-if="results != null">
         <p>For help understanding the above you should contact your web development partner.</p>
-        <p>To see the complete and detailed results, <a :href="detailsUrl" target="_blank">go here</a>.</p>
+        <p>To see the complete and detailed results, <a :href="detailsUrl" target="_blank" rel="noopener">go here</a>.</p>
       </template>
     </template>
   </div>

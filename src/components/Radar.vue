@@ -416,12 +416,4 @@ export default {
   .google-logo {
     max-width: 200px;
   }
-
-  .fa-exclamation-triangle {
-    font-size: 2rem;
-  }
-
-  .error-code {
-    font-size: .75rem;
-  }
 </style>

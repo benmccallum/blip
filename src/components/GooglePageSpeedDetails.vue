@@ -19,7 +19,7 @@
         </template>
         Scores are out of 100 and group you into either "poor", "needs work" or "good". 
         Possible optimizations are provided in order of their impact if implemented.
-        <a href="https://developers.google.com/speed/docs/insights/about" target="_blank">Read more...</a>
+        <a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">Read more...</a>
       </p>
       <p v-if="score == null">
         <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
@@ -41,7 +41,7 @@
         <p>For help understanding the above you should contact your web development partner.</p>
       </template>
       <p v-if="score != null">
-        To see the complete and detailed results, <a :href="detailsUrl" target="_blank">go here</a>.
+        To see the complete and detailed results, <a :href="detailsUrl" target="_blank" rel="noopener">go here</a>.
       </p>     
     </div>    
   </div>

@@ -29,15 +29,12 @@
     props: {
       place: Object
     },
-    data () {
-      return {
-        // TODO: Move to vuex so it can be shown on the Details tabs in Laser.vue
-        state: 'loading' // or 'scored' or 'errored'
-      };
-    },
     computed: {
+      state () {
+        return this.place.isHtml5.state;
+      },
       isHtml5 () {
-        return this.place.isHtml5;
+        return this.place.isHtml5.score;
       },
       detailsUrl () {
         // TODO: Find something for this or do my own page.
@@ -66,21 +63,19 @@
         this.axios.get(url, {
           cancelToken: this.$store.state.cancelTokenSource.token
         }).then((response) => {
-          this.processResult(response.data);
+          that.processResult(response.data);
         }).catch((thrown) => {
           if (!that.axios.isCancel(thrown)) {
             console.error('Request failed for IsHtml5 result.', thrown.message);
-            this.processResult(null);
+            that.processError(thrown);
           }
         });
       },
       processResult (result) {
-        if (result == null) {
-          this.state = 'errored';
-          return;
-        }
         this.$store.commit('setIsHtml5', { place: this.place, isHtml5: result });
-        this.state = 'scored';
+      },
+      processError (error) {
+        this.$store.commit('setIsHtml5', { place: this.place, error: error });
       }
     }
   };

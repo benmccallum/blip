@@ -5,6 +5,9 @@ export const GooglePageSpeedMixin = {
     place: Object
   },
   computed: {
+    state () {
+      return this.place[this.strategy.toLowerCase()].state;
+    },
     speedScore () {
       return this.place[this.strategy.toLowerCase()].speedScore;
     },

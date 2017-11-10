@@ -22,24 +22,57 @@ export const mutations = {
     state.place = place;
   },
   setIsHtml5 (state, payload) {
-    payload.place.isHtml5 = payload.isHtml5;
-    recalcAvg(payload.place);
+    if (payload.place.name === 'Kelly\'s Upholstery') {
+      console.log(payload.isHtml5);
+    }
+    if (payload.error) {
+      payload.place.isHtml5.state = 'errored';
+    } else if (payload.isHtml5 == null) {
+      // Error loading and testing website... show in the UI
+      payload.place.isSiteDown = true;
+    } else {
+      payload.place.isHtml5.score = payload.isHtml5;
+      payload.place.isHtml5.state = 'scored';
+      recalcAvg(payload.place);
+    }
   },
   setSecurityResult (state, payload) {
-    payload.place.security = payload.result;
-    recalcAvg(payload.place);
+    if (payload.error) {
+      payload.place.security.state = 'errored';
+      // TODO: Should I give all errored states a 0? How do they currently sort?
+    } else {
+      payload.place.security = payload.result;
+      payload.place.security.state = 'scored';
+      recalcAvg(payload.place);
+    }
   },
   setSecurityTlsResult (state, payload) {
-    payload.place.security.tlsScanId = payload.tlsScanId;
-    payload.place.security.tlsLevel = payload.tlsLevel;
+    if (payload.error) {
+      payload.place.security.state = 'errored';
+    } else {
+      payload.place.security.tlsScanId = payload.tlsScanId;
+      payload.place.security.tlsLevel = payload.tlsLevel;
+      payload.place.security.state = 'scored';
+      // TODO: If needed then: recalcAvg(place);
+    }
   },
   setDesktopResult (state, payload) {
-    payload.place.desktop = payload.result;
-    recalcAvg(payload.place);
+    if (payload.error) {
+      payload.place.desktop.state = 'errored';
+    } else {
+      payload.place.desktop = payload.result;
+      payload.place.desktop.state = 'scored';
+      recalcAvg(payload.place);
+    }
   },
   setMobileResult (state, payload) {
-    payload.place.mobile = payload.result;
-    recalcAvg(payload.place);
+    if (payload.error) {
+      payload.place.mobile.state = 'errored';
+    } else {
+      payload.place.mobile = payload.result;
+      payload.place.mobile.state = 'scored';
+      recalcAvg(payload.place);
+    }
   },
   resetCancelToken (state) {
     // Cancel any pending HTTP requests

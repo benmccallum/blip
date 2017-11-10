@@ -51,10 +51,14 @@
     i {
       line-height: 1.5rem;
 
-      &.fa-spinner {
+      &.fa-spinner, &.fa-exclamation-triangle {
         line-height: 3rem;
         font-size: 2rem;
         color: rgba(0,0,0,.4);
+      }
+
+      &.fa-exclamation-triangle {
+        font-size: 1.6rem;
       }
 
       &.fa-html5 {
@@ -155,5 +159,14 @@
 
   .grade-i {  /* intermediate is a weird font that needs to be bigger */
     // font-size: 102px;
+  }
+
+  // Errors
+  .fa-exclamation-triangle {
+    font-size: 2rem;
+  }
+
+  .error-code {
+    font-size: .75rem;
   }
 </style>

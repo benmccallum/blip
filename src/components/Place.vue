@@ -2,10 +2,10 @@
   <div class="place-row row mb-3 pb-2 pb-sm-3" :data-id="place.id">
     <div class="col-12 col-sm mb-2 mb-sm-0">
       <h3 class="card-title">
-        <a :href="place.website">{{place.name}}</a>
+        <a :href="place.website" target="_blank" rel="noopener">{{place.name}}</a>
       </h3>
       <div>
-        <a class="text-muted" :href="place.url" target="_blank">
+        <a class="text-muted" :href="place.url" target="_blank" rel="noopener">
           <i class="fa fa-map-marker" aria-hidden="true"></i>
           {{place.vicinity}}
         </a>
@@ -39,6 +39,13 @@
           <div class="col">
             <google-page-speed :strategy="'Mobile'" :type="'USABILITY'" :place="place" />
           </div>
+        </div>
+      </div>
+    </template>
+    <template v-else-if="place.isSiteDown">
+      <div class="col-12 col-sm">
+        <div class="score-container d-flex flex-column justify-content-center text-center">
+          <p class="score score-na mt-sm-1">Site failed to load.</p>
         </div>
       </div>
     </template>

@@ -56,7 +56,6 @@ export const MozillaObservatoryTlsMixin = {
       }, Math.floor(Math.random() * 1000));
     },
     tlsProcessResults (results) {
-      // this.state = 'scored';
       if (!results || !results.analysis) {
         console.error('Mozilla Observatory TLS Analysis result was missing data.');
         return;

@@ -1,11 +1,6 @@
 import { mozillaObservatoryHttpResult } from '../../offline-data/mozilla-observatory-http-result';
 
 export const MozillaObservatoryHttpMixin = {
-  data () {
-    return {
-      state: 'loading'
-    };
-  },
   methods: {
     httpInitTestAndPolling () {
       if (window.offline) {
@@ -22,10 +17,15 @@ export const MozillaObservatoryHttpMixin = {
       this.axios.post(this.analyzeUrl, params, {
         cancelToken: this.$store.state.cancelTokenSource.token
       }).then((response) => {
+        console.log(response.data);
+        if (response.data && response.data.error === 'invalid-hostname') {
+          that.httpProcessError(response.data);
+        }
         that.httpProcessScanObject(response.data);
       }).catch(function (thrown) {
         if (!that.axios.isCancel(thrown)) {
           console.error('Request failed for Mozilla HTTP Observatory: POST /analyze.', thrown.message);
+          that.httpProcessError(thrown);
         }
       });
     },
@@ -71,7 +71,6 @@ export const MozillaObservatoryHttpMixin = {
       }, Math.floor(Math.random() * 1000));
     },
     httpProcessResult (result) {
-      this.state = 'scored';
       var data = {
         scanId: result.scan_id,
         score: result.score,
@@ -79,6 +78,9 @@ export const MozillaObservatoryHttpMixin = {
         risk: result.likelihood_indicator
       };
       this.$store.commit('setSecurityResult', { place: this.place, result: data });
+    },
+    httpProcessError (error) {
+      this.$store.commit('setSecurityResult', { place: this.place, error: error });
     }
   }
 };

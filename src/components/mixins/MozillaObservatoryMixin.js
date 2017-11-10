@@ -3,6 +3,9 @@ export const MozillaObservatoryMixin = {
     place: Object
   },
   computed: {
+    state () {
+      return this.place.security.state;
+    },
     scanId () {
       return this.place.security.scanId;
     },

@@ -33,12 +33,6 @@
     name: 'GooglePageSpeed',
     extends: GooglePageSpeedMixin,
     computed: {
-      state () {
-        if (this.score === null) {
-          return 'loading';
-        }
-        return 'scored';
-      },
       classObject () {
         return 'fa-' + this.strategy.toLowerCase();
       }
@@ -68,6 +62,7 @@
         }).catch(function (thrown) {
           if (!that.axios.isCancel(thrown)) {
             console.error('Request failed for GooglePageSpeed result.', thrown.message);
+            that.processError(thrown);
           }
         });
       },
@@ -138,6 +133,9 @@
 
         // Items
         return value;
+      },
+      processError (error) {
+        this.$store.commit('set' + this.strategy + 'Result', { place: this.place, error: error });
       }
     }
   };
