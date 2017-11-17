@@ -24,14 +24,15 @@ export const mutations = {
   setIsHtml5 (state, payload) {
     if (payload.error) {
       payload.place.isHtml5.state = 'errored';
+      return;
     } else if (payload.isHtml5 === null) {
       // Error loading and testing website... show in the UI, give negative avg
       payload.place.isSiteDown = true;
     } else {
       payload.place.isHtml5.score = payload.isHtml5;
       payload.place.isHtml5.state = 'scored';
-      recalcAvg(payload.place);
     }
+    recalcAvg(payload.place);
   },
   setSecurityResult (state, payload) {
     if (payload.error) {
@@ -86,7 +87,8 @@ function recalcAvg (place) {
   let divisor = 0;
 
   if (place.isSiteDown) {
-    return -2;
+    place.avg = -1;
+    return;
   }
 
   if (place.isHtml5 != null) {

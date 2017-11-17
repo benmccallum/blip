@@ -9,7 +9,7 @@ export const PlaceParserMixin = {
         vicinity: place.vicinity,
         ph: place.formatted_phone_number,
         isSiteDown: false,
-        avg: place.website ? null : -1,
+        avg: place.website ? null : -999,
         isHtml5: {
           state: 'loading', // 'scored' or 'errored'
           score: null

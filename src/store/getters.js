@@ -6,7 +6,8 @@ export const getters = {
   },
   getSortedPlaces: (state, getters) => (sortKey, sortDirection) => {
     function getVal (place, key) {
-      if (!place.website) return -1;
+      if (!place.website) return -999;
+      if (place.isSiteDown) return -1;
       switch (key) {
         case 'avg': return place.avg;
         case 'isHtml5': return place.isHtml5;
