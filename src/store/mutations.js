@@ -22,13 +22,10 @@ export const mutations = {
     state.place = place;
   },
   setIsHtml5 (state, payload) {
-    if (payload.place.name === 'Kelly\'s Upholstery') {
-      console.log(payload.isHtml5);
-    }
     if (payload.error) {
       payload.place.isHtml5.state = 'errored';
-    } else if (payload.isHtml5 == null) {
-      // Error loading and testing website... show in the UI
+    } else if (payload.isHtml5 === null) {
+      // Error loading and testing website... show in the UI, give negative avg
       payload.place.isSiteDown = true;
     } else {
       payload.place.isHtml5.score = payload.isHtml5;
@@ -87,6 +84,10 @@ export const mutations = {
 function recalcAvg (place) {
   let sum = 0;
   let divisor = 0;
+
+  if (place.isSiteDown) {
+    return -2;
+  }
 
   if (place.isHtml5 != null) {
     sum += (place.isHtml5 ? 100 : 0);

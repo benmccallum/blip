@@ -20,8 +20,15 @@
         <!-- For debugging -->
         <p style="position:absolute;top:5px;right:5px;color:#ccc;opacity:.8;">{{Math.floor(place.avg)}}</p>
       </div>
-    </div>
-    <template v-if="place.website">
+    </div>    
+    <template v-if="place.isSiteDown">
+      <div class="col-12 col-sm">
+        <div class="score-container d-flex flex-column justify-content-center text-center">
+          <p class="score score-na mt-sm-1">Site down</p>
+        </div>
+      </div>
+    </template>
+    <template v-else-if="place.website">
       <div class="col-12 col-sm">
         <div class="row">
           <div class="col">
@@ -39,13 +46,6 @@
           <div class="col">
             <google-page-speed :strategy="'Mobile'" :type="'USABILITY'" :place="place" />
           </div>
-        </div>
-      </div>
-    </template>
-    <template v-else-if="place.isSiteDown">
-      <div class="col-12 col-sm">
-        <div class="score-container d-flex flex-column justify-content-center text-center">
-          <p class="score score-na mt-sm-1">Site failed to load.</p>
         </div>
       </div>
     </template>

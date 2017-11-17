@@ -17,7 +17,6 @@ export const MozillaObservatoryHttpMixin = {
       this.axios.post(this.analyzeUrl, params, {
         cancelToken: this.$store.state.cancelTokenSource.token
       }).then((response) => {
-        console.log(response.data);
         if (response.data && response.data.error === 'invalid-hostname') {
           that.httpProcessError(response.data);
         }
