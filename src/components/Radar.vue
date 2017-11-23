@@ -151,7 +151,6 @@
 <script>
 import Place from './Place.vue';
 import Header from './Header.vue';
-import { googleMapsResult } from '../offline-data/google-maps-result';
 import { PlaceParserMixin } from './mixins/PlaceParserMixin';
 
 // TODO: Scope in component
@@ -208,11 +207,6 @@ export default {
       };
     },
     searchNearby () {
-      if (window.offline) {
-        this.useOfflineData();
-        return;
-      }
-
       // Set status and try locate them
       this.status = 'locating';
       navigator.geolocation.getCurrentPosition(this.onGetCurrentPositionSuccess, this.onGetCurrentPositionError);
@@ -243,15 +237,6 @@ export default {
       var label = place.formatted_address;
 
       this.search(coord, label);
-    },
-    useOfflineData () {
-      var that = this;
-      setTimeout(function () {
-        googleMapsResult.forEach(function (place) {
-          that.$store.commit('addPlace', that.parsePlace(place));
-        });
-      }, 1000);
-      that.query.label = 'your location';
     },
     search (coord, label) {
       // Change status and set query label

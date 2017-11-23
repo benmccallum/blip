@@ -52,7 +52,6 @@
 
 <script>
   import { MozillaObservatoryMixin } from './mixins/MozillaObservatoryMixin';
-  import { mozillaObservatoryHttpResults } from '../offline-data/mozilla-observatory-http-results';
 
   export default {
     name: 'MozillaObservatoryDetails',
@@ -96,13 +95,6 @@
     methods: {
       getTestResults () {
         var that = this;
-
-        if (window.offline) {
-          setTimeout(function () {
-            that.results = mozillaObservatoryHttpResults;
-          }, 1000);
-          return;
-        }
 
         var url = 'https://http-observatory.security.mozilla.org/api/v1/getScanResults?scan=' +
           encodeURIComponent(this.scanId);

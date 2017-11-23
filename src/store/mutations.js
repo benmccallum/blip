@@ -21,29 +21,6 @@ export const mutations = {
   setPlace (state, place) {
     state.place = place;
   },
-  setIsHtml5 (state, payload) {
-    if (payload.error) {
-      payload.place.isHtml5.state = 'errored';
-      return;
-    } else if (payload.isHtml5 === null) {
-      // Error loading and testing website... show in the UI, give negative avg
-      payload.place.isSiteDown = true;
-    } else {
-      payload.place.isHtml5.score = payload.isHtml5;
-      payload.place.isHtml5.state = 'scored';
-    }
-    recalcAvg(payload.place);
-  },
-  setSecurityResult (state, payload) {
-    if (payload.error) {
-      payload.place.security.state = 'errored';
-      // TODO: Should I give all errored states a 0? How do they currently sort?
-    } else {
-      payload.place.security = payload.result;
-      payload.place.security.state = 'scored';
-      recalcAvg(payload.place);
-    }
-  },
   setSecurityTlsResult (state, payload) {
     if (payload.error) {
       payload.place.security.state = 'errored';
@@ -54,24 +31,6 @@ export const mutations = {
       // TODO: If needed then: recalcAvg(place);
     }
   },
-  setDesktopResult (state, payload) {
-    if (payload.error) {
-      payload.place.desktop.state = 'errored';
-    } else {
-      payload.place.desktop = payload.result;
-      payload.place.desktop.state = 'scored';
-      recalcAvg(payload.place);
-    }
-  },
-  setMobileResult (state, payload) {
-    if (payload.error) {
-      payload.place.mobile.state = 'errored';
-    } else {
-      payload.place.mobile = payload.result;
-      payload.place.mobile.state = 'scored';
-      recalcAvg(payload.place);
-    }
-  },
   resetCancelToken (state) {
     // Cancel any pending HTTP requests
     if (state.cancelTokenSource != null) {
@@ -79,40 +38,43 @@ export const mutations = {
     }
     // Re-assign a new one for next time
     state.cancelTokenSource = CancelToken.source();
+  },
+  recalcAvg (state, place) {
+    let sum = 0;
+    let divisor = 0;
+
+    if (place.isSiteDown) {
+      place.avg = -1;
+      return;
+    }
+
+    if (place.isHtml5.score != null) {
+      sum += (place.isHtml5.score ? 100 : 0);
+      divisor++;
+    }
+
+    if (place.security.score != null && place.security.score >= 0) {
+      sum += place.security.score;
+      divisor++;
+    }
+
+    if (place.desktop.speedScore != null && place.desktop.speedScore >= 0) {
+      sum += place.desktop.speedScore;
+      divisor++;
+    }
+
+    if (place.mobile.speedScore != null && place.mobile.speedScore >= 0) {
+      sum += place.mobile.speedScore;
+      divisor++;
+    }
+
+    if (place.mobile.usabilityScore != null && place.mobile.usabilityScore >= 0) {
+      sum += place.mobile.usabilityScore;
+      divisor++;
+    }
+
+    if (divisor === 5) {
+      place.avg = sum / divisor;
+    }
   }
 };
-
-function recalcAvg (place) {
-  let sum = 0;
-  let divisor = 0;
-
-  if (place.isSiteDown) {
-    place.avg = -1;
-    return;
-  }
-
-  if (place.isHtml5 != null) {
-    sum += (place.isHtml5 ? 100 : 0);
-    divisor++;
-  }
-  if (place.security.score != null && place.security.score >= 0) {
-    sum += place.security.score;
-    divisor++;
-  }
-  if (place.desktop.speedScore != null && place.desktop.speedScore >= 0) {
-    sum += place.desktop.speedScore;
-    divisor++;
-  }
-  if (place.mobile.speedScore != null && place.mobile.speedScore >= 0) {
-    sum += place.mobile.speedScore;
-    divisor++;
-  }
-  if (place.mobile.usabilityScore != null && place.mobile.usabilityScore >= 0) {
-    sum += place.mobile.usabilityScore;
-    divisor++;
-  }
-
-  if (divisor === 5) {
-    place.avg = sum / divisor;
-  }
-}

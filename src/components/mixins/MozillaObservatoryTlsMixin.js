@@ -1,13 +1,10 @@
-import { mozillaObservatoryTlsResults } from '../../offline-data/mozilla-observatory-tls-results';
-
 export const MozillaObservatoryTlsMixin = {
+  created () {
+    // TODO: Complete this if it's worth it
+    // this.tlsInitTestAndPolling();
+  },
   methods: {
     tlsInitTestAndPolling () {
-      if (window.offline) {
-        this.tlsGetOfflineResult();
-        return;
-      }
-
       var that = this;
 
       var url = 'https://tls-observatory.services.mozilla.com/api/v1/scan' +
@@ -48,12 +45,6 @@ export const MozillaObservatoryTlsMixin = {
           }
         });
       }, when);
-    },
-    tlsGetOfflineResult () {
-      var that = this;
-      setTimeout(function () {
-        that.tlsProcessResult(mozillaObservatoryTlsResults);
-      }, Math.floor(Math.random() * 1000));
     },
     tlsProcessResults (results) {
       if (!results || !results.analysis) {

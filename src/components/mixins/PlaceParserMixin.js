@@ -11,26 +11,26 @@ export const PlaceParserMixin = {
         isSiteDown: false,
         avg: place.website ? null : -999,
         isHtml5: {
-          state: 'loading', // 'scored' or 'errored'
+          state: null, // 'loading' or 'scored' or 'errored'
           score: null
         },
         security: {
-          state: 'loading',
+          state: null,
           scanId: null,
           score: null,
           grade: null,
           risk: null,
-          tlsState: 'loading',
+          tlsState: null,
           tlsScanId: null,
           tlsLevel: null
         },
         desktop: {
-          state: 'loading',
+          state: null,
           speedScore: null,
           filteredRules: null
         },
         mobile: {
-          state: 'loading',
+          state: null,
           speedScore: null,
           usabilityScore: null,
           filteredRules: null
