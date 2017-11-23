@@ -11,11 +11,12 @@
     <p><i>Provided by <a href="https://developers.google.com/speed/docs/insights/about">Google PageSpeed Insights</a></i></p>
     <div>
       <p>
+        PageSpeed Insights measures the 
         <template v-if="type !== 'USABILITY'">
-          PageSpeed Insights measures the performance of a page based on best practices.
+          performance of a page based on best practices.
         </template>
         <template v-else>
-          PageSpeed Insights measures the usability of a mobile page based on best practices.
+          usability of a mobile page based on best practices.
         </template>
         Scores are out of 100 and group you into either "poor", "needs work" or "good". 
         Possible optimizations are provided in order of their impact if implemented.
