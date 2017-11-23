@@ -10,7 +10,7 @@
             </button>
             <p class="text-center mt-1 mb-2 ">or</p>
           </template>
-          <input type="text" class="form-control text-center mb-sm-1" id="address" placeholder="Search elsewhere..." aria-label="Address">
+          <input type="text" class="form-control text-center mb-sm-1" id="address" ref="address" placeholder="Search elsewhere..." aria-label="Address">
         </form>
 
         <div class="row bordered-row pt-2 pb-1 mb-3" v-show="status === 'locating' || status === 'loading' || status === 'results'">
@@ -125,21 +125,25 @@
             </div>
             <div class="d-flex flex-row">
               <div class="pr-1"><i class="fa fa-lock"></i></div>
-              <div>Security score by <a href="">Mozilla Observatory</a></div>
+              <div>Security score, by <a href="">Mozilla Observatory</a></div>
             </div>
             <div class="d-flex flex-row">
               <div class="pr-1"><i class="fa fa-desktop"></i></div>
-              <div>Desktop speed score by <a href="">Google PageSpeed Insights</a></div>
+              <div>Desktop speed score, by <a href="">Google PageSpeed Insights</a></div>
             </div>
             <div class="d-flex flex-row">
               <div class="pr-1"><i class="fa fa-mobile"></i></div>
-              <div>Mobile speed score by <a href="">Google PageSpeed Insights</a></div>
+              <div>Mobile speed score, by <a href="">Google PageSpeed Insights</a></div>
             </div>
             <div class="d-flex flex-row">
               <div class="pr-1">
                 <img class="mobile-usability" src="../assets/images/mobile-usability-icon.svg" alt="Mobile usability icon">
               </div>
-              <div>Mobile usability score by <a href="">Google PageSpeed Insights</a></div>
+              <div>Mobile usability score, by <a href="">Google PageSpeed Insights</a></div>
+            </div>
+            <div class="d-flex flex-row">
+              <div class="pr-1"><i class="fa fa-exclamation-triangle text-warning"></i></div>
+              <div>Test failed. Score of 0 given and included in average.</div>
             </div>
           </div>
         </div>
@@ -307,18 +311,16 @@ export default {
         return;
       }
 
-      var eleAddress = document.getElementById('address');
-
       // Clear any existing value and listener
-      eleAddress.value = '';
+      this.$refs.address.value = '';
       if (placeChangedListener) {
         window.google.maps.event.removeListener(placeChangedListener);
       }
 
       // Init and store listener for gc later
       autocomplete = new window.google.maps.places.Autocomplete(
-        eleAddress,
-        { types: ['geocode'] } // TODO: check this!
+        this.$refs.address,
+        { types: ['geocode'] }
       );
       placeChangedListener = autocomplete.addListener('place_changed', this.onPlaceChanged);
     }
@@ -370,6 +372,7 @@ export default {
     i {
       width: 1rem;
       text-align: center;
+      font-size: 1rem;
 
       &.fa-html5 {
         font-size: 1.1rem;

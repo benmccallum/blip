@@ -4,8 +4,8 @@
     <div class="row justify-content-md-center">      
       <div class="col-12 col-md-8 col-xl-7">     
 
-        <form id="form" novalidate v-show="!hasQuery" v-on:submit.stop="submit">
-          <input type="url" class="form-control text-center mb-3" id="url" required pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&amp;//=]*)" placeholder="https://example.com" aria-label="Website URL">
+        <form id="form" ref="form" novalidate v-show="!hasQuery" v-on:submit.prevent.stop="submit">
+          <input type="url" ref="url" class="form-control text-center mb-3" id="url" required pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&amp;//=]*)" placeholder="https://example.com" aria-label="Website URL">
           <button type="submit" class="btn btn-primary btn-block">Test now</button>
         </form>
 
@@ -97,17 +97,14 @@
         return this.$store.state.place;
       }
     },
+    mounted () {
+      this.$refs.url.focus();
+    },
     methods: {
-      getInput () {
-        return document.getElementById('url');
-      },
-      getForm () {
-        return document.getElementById('form');
-      },
       reset () {
         this.$store.commit('resetCancelToken');
-        this.getInput().value = null;
-        this.getForm().classList.remove('was-validated')
+        this.$refs.url.value = null;
+        this.$refs.form.classList.remove('was-validated')
         this.query = null;
       },
       submit (event) {
@@ -115,7 +112,7 @@
           event.preventDefault();
           event.stopPropagation();
         } else {
-          this.query = this.getInput().value;
+          this.query = this.$refs.url.value;
           this.$store.commit('setPlace', this.parsePlace({ website: this.query }));
         }
         event.target.classList.add('was-validated');

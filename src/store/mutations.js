@@ -48,31 +48,39 @@ export const mutations = {
       return;
     }
 
-    if (place.isHtml5.score != null) {
+    // If a test completes or errors it's considered 'completed'
+    // Error tests give a score of 0 and are included in the average so that:
+    //  - The place gets an avg and enters the completed search results rows.
+    //  - A failed test could be for a number of reasons (network, API down, etc.)
+    //    but most likely would be failure for the website to be tested so should
+    //    reflect negatively in their avg
+
+    const endStates = ['scored', 'errored'];
+
+    if (endStates.includes(place.isHtml5.state)) {
       sum += (place.isHtml5.score ? 100 : 0);
       divisor++;
     }
 
-    if (place.security.score != null && place.security.score >= 0) {
-      sum += place.security.score;
+    if (endStates.includes(place.security.state)) {
+      sum += place.security.score || 0;
       divisor++;
     }
 
-    if (place.desktop.speedScore != null && place.desktop.speedScore >= 0) {
-      sum += place.desktop.speedScore;
+    if (endStates.includes(place.desktop.state)) {
+      sum += place.desktop.speedScore || 0;
       divisor++;
     }
 
-    if (place.mobile.speedScore != null && place.mobile.speedScore >= 0) {
-      sum += place.mobile.speedScore;
+    if (endStates.includes(place.mobile.state)) {
+      sum += place.mobile.speedScore || 0;
+      divisor++;
+      sum += place.mobile.usabilityScore || 0;
       divisor++;
     }
 
-    if (place.mobile.usabilityScore != null && place.mobile.usabilityScore >= 0) {
-      sum += place.mobile.usabilityScore;
-      divisor++;
-    }
-
+    // If all tests 'ended/completed' then a place gets an avg and
+    // can move into the filtered/completed results listing.
     if (divisor === 5) {
       place.avg = sum / divisor;
     }

@@ -29,11 +29,11 @@ npm run e2e
 npm test
 ```
 
-## Potential Roadmap
-- If a test errors, what do I give it for a score and does it become a completed result?
+## Roadmap
+- Give love and error handling to the laser page
 - Fix issue with ishtml5 tester getting weird results (forbidden, etc)
 - Properly use lodash or drop it.
-- Potentially change the leaky-ness of this.place being used as a ref to the store object from a component by swapping to a placeId, and in the store using an array of placeIds and then a dictionary with placeId:place to grab them from. This would prevent accidental direct manipulation of place from this.place in the component and force changes through the store commit mutations.
+- Validate that passing place into mutation/action and editing off that is good practice.
 - Include a web accessibility test. Find a free one and use it, or host [AATT by paypal](https://github.com/paypal/AATT) somewhere and use that...
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
 - Upgrade to PWA Vue template or latest webpack template.

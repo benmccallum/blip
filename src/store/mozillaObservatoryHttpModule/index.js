@@ -6,12 +6,11 @@ const mozillaObservatoryHttpModule = {
       place.security.state = 'loading';
     },
     setSecurityResult (state, payload) {
+      payload.result.state = 'scored';
       payload.place.security = payload.result;
-      payload.place.security.state = 'scored';
     },
     setSecurityError (state, payload) {
       payload.place.security.state = 'errored';
-      // TODO: Should I give all errored states a 0? How do they currently sort?
     }
   },
   actions: {

@@ -6,8 +6,8 @@ const googlePageSpeedModule = {
       payload.place[payload.strategy.toLowerCase()].state = 'loading';
     },
     setGoogleResult (state, payload) {
+      payload.result.state = 'scored';
       payload.place[payload.strategy.toLowerCase()] = payload.result;
-      payload.place[payload.strategy.toLowerCase()].state = 'scored';
     },
     setGoogleError (state, payload) {
       payload.place[payload.strategy.toLowerCase()].state = 'errored';
