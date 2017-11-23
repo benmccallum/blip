@@ -51,8 +51,13 @@
     padding: 1.25rem;
     color: #eee;
 
-    &.card-info img {
-      padding: 0 2.5%;
+    // TODO: Resize image in its transparent square in Illustator and remove this workaround
+    &.bg-info > div {
+      text-align: center;
+
+      img {
+        max-width: 96%;
+      }
     }
   }
   #credits {
