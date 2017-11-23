@@ -172,6 +172,9 @@ export default {
   mounted () {
     var that = this;
 
+    // Init autocomplete
+    this.initAutocomplete();
+
     // Every second, restore 1 call to Google Places
     setInterval(function () {
       if (that.canLoadMoreIn > 0) {
@@ -312,6 +315,7 @@ export default {
       }
 
       // Clear any existing value and listener
+      console.log(this.$refs.address);
       this.$refs.address.value = '';
       if (placeChangedListener) {
         window.google.maps.event.removeListener(placeChangedListener);
