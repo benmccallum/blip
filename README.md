@@ -33,6 +33,7 @@ npm test
 - Give love for error handling to the laser page
 - Fix issue with ishtml5 tester getting weird results (forbidden, etc)
 - Properly use lodash or drop it.
+- Wrap bootstrap classes into my own semantic classes with `extend`
 - Validate that passing place into mutation/action and editing off that is good practice.
 - Include a web accessibility test. Find a free one and use it, or host [AATT by paypal](https://github.com/paypal/AATT) somewhere and use that...
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
