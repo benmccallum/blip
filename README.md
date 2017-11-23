@@ -1,6 +1,6 @@
 # blip
 
-> An app for testing business websites for speed, mobile-friendliness and security. Find businesses around a location and test their websites en masse, or just test one website by URL.
+> An app for testing business websites for speed, mobile-friendliness, security and HTML5 compatibility. Find businesses around a location and test their websites en masse, or just test one website by URL.
 
 Just wanna use it? Go to [blip.azureedge.net](https://blip.azureedge.net).
 
@@ -30,7 +30,7 @@ npm test
 ```
 
 ## Roadmap
-- Give love and error handling to the laser page
+- Give love for error handling to the laser page
 - Fix issue with ishtml5 tester getting weird results (forbidden, etc)
 - Properly use lodash or drop it.
 - Validate that passing place into mutation/action and editing off that is good practice.
@@ -40,4 +40,4 @@ npm test
 - Implement service worker for offline-first support with nice 'you are offline' messaging to user.
 - If IsHtml5 says the site is down, cancel axios requests for that place too (requires restructure of cancellation tokens and may not be worth it...)
 - Scrape business' email from business' website?
-- Export results to CSV.
+- Offer export of results to CSV if do-able client side.
