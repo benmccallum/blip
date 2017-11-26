@@ -5,7 +5,7 @@
       <div class="col-12 col-md-8 col-xl-7">     
 
         <form id="form" ref="form" novalidate v-show="!hasQuery" v-on:submit.prevent.stop="submit">
-          <input type="url" ref="url" class="form-control text-center mb-3" id="url" required pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&amp;//=]*)" placeholder="https://example.com" aria-label="Website URL">
+          <input type="url" ref="url" class="form-control text-center mb-3" id="url" required pattern="(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}" placeholder="https://example.com" aria-label="Website URL">
           <button type="submit" class="btn btn-primary btn-block">Test now</button>
         </form>
 
