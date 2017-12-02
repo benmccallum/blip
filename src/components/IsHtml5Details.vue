@@ -2,8 +2,11 @@
   <div>
     <h2>
       HTML5
-      <i v-if="isHtml5 === null" class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
-      <span v-else :class="[ isHtml5 ? 'green' : 'red' ]">{{isHtml5 ? 'Yes' : 'No'}}</span>
+      <i v-if="isHtml5.state === 'errored'" class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
+      <span v-if="isHtml5.state === 'scored'" :class="[ isHtml5 ? 'green' : 'red' ]">
+        {{isHtml5 ? 'Yes' : 'No'}}
+      </span>
+      <i v-else class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
     </h2>
     <p><i>Provided by blip</i></p>
     <p>

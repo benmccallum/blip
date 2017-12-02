@@ -30,7 +30,7 @@ npm test
 ```
 
 ## Roadmap
-- Give love for error handling to the laser page
+- Give love for error handling to the laser page (if 500, not all do a !, roll out states across all tabs)
 - Fix issue with ishtml5 tester getting weird results (forbidden, etc)
 - Properly use lodash or drop it.
 - Wrap bootstrap classes into my own semantic classes with `extend`
