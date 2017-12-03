@@ -30,6 +30,9 @@ npm test
 ```
 
 ## Roadmap
+
+- Ads
+- 'Did you mean?' for suggesting domain names on the laser page input. And just trim trailing / off automagically
 - Give love for error handling to the laser page (if 500, not all do a !, roll out states across all tabs)
 - Fix issue with ishtml5 tester getting weird results (forbidden, etc)
 - Properly use lodash or drop it.
