@@ -9,7 +9,7 @@
       </template>
     </h2>
     <p><i>Provided by <a href="https://observatory.mozilla.org">Mozilla Observatory</a></i></p>
-    <p v-if="!score">
+    <p v-if="score === null">
       Loading...
     </p>
     <template v-else>
