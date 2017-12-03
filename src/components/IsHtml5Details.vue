@@ -3,8 +3,8 @@
     <h2>
       HTML5
       <i v-if="isHtml5.state === 'errored'" class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
-      <span v-if="isHtml5.state === 'scored'" :class="[ isHtml5 ? 'green' : 'red' ]">
-        {{isHtml5 ? 'Yes' : 'No'}}
+      <span v-if="isHtml5.state === 'scored'" :class="[ isHtml5.score ? 'green' : 'red' ]">
+        {{isHtml5.score ? 'Yes' : 'No'}}
       </span>
       <i v-else class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
     </h2>
