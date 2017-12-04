@@ -8,6 +8,7 @@ import Radar from '@/components/Radar';
 Vue.use(Router);
 
 var router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -31,6 +32,8 @@ var router = new Router({
 router.afterEach(function (to, from) {
   // Reset global (per-page) cancel token used by a page's axios HTTP requests
   store.commit('resetCancelToken');
+  // Refresh AddThis widgets
+  window.addthis.layers.refresh();
 });
 
 export default router;

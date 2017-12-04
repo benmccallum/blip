@@ -11,7 +11,7 @@
         <router-link to="/radar" class="btn btn-light mb-1">Find now</router-link>
       </div>
     </section>
-    <section class="row justify-content-center mb-2 option bg-info">
+    <section class="row justify-content-center mb-3 option bg-info">
       <div class="col-12 col-md-3 col-lg-3 col-xl-2 mb-2 mb-sm-0 px-5 px-sm-5 px-md-1 px-lg-4 px-xl-3">
         <img class="img-fluid" src="../assets/images/chart.svg" alt="Target">
       </div>
@@ -21,6 +21,11 @@
         <router-link to="/laser" class="btn btn-light mb-1">Test now</router-link>
       </div>
     </section>
+    <!-- <section class="row justify-content-center mb-2">
+      <div class="col text-center">
+        <div class="addthis_inline_share_toolbox"></div>
+      </div>
+    </section> -->
     <footer class="row justify-content-center">
       <div class="col text-center">
         <p id="credits">
