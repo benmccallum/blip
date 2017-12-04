@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <my-header subtitle="Test websites for speed, usability and security."></my-header>
+    <my-header subtitle="Test websites for speed, usability, security and the HTML5 doctype."></my-header>
     <section class="row justify-content-center option bg-primary">
       <div class="col-12 col-md-3 col-lg-3 col-xl-2 mb-2 mb-sm-0 px-5 px-sm-5 px-md-1 px-lg-4 px-xl-3">
         <img class="img-fluid" src="../assets/images/radar-white.svg" alt="Radar">

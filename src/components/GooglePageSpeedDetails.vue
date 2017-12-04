@@ -28,7 +28,7 @@
       <div v-else-if="!result.filteredRules.hasOwnProperty(type)">
         <p><strong>Score:</strong> {{score}} / 100</p>
         <h5>Congrats!</h5>
-        <p>Your website is already implements all the recommended, best-practise optimizations.</p>
+        <p>Your website already implements all the recommended, best-practise optimizations.</p>
       </div>
       <template v-else>
         <p><strong>Score:</strong> {{score}} / 100</p>
