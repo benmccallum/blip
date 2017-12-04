@@ -5,7 +5,7 @@
       <div class="col-12 col-md-8 col-xl-7">     
 
         <form id="form" ref="form" novalidate v-show="!hasQuery" v-on:submit.prevent.stop="submit">
-          <input type="url" ref="url" class="form-control text-center mb-3" id="url" required pattern="(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}" placeholder="https://example.com" aria-label="Website URL">
+          <input type="url" ref="url" class="form-control text-center mb-3" id="url" required pattern="(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,63}" placeholder="https://example.com" aria-label="Website URL">
           <button type="submit" class="btn btn-primary btn-block">Test now</button>
         </form>
 
@@ -108,6 +108,13 @@
         this.query = null;
       },
       submit (event) {
+        // Autocorrect to just a domain if it's a full URL
+        const regex = new RegExp(this.$refs.url.getAttribute('pattern'));
+        let matches = regex.exec(this.$refs.url.value);
+        if (matches && matches.length) {
+          this.$refs.url.value = matches[0];
+        }
+
         if (event.target.checkValidity() === false) {
           event.preventDefault();
           event.stopPropagation();
