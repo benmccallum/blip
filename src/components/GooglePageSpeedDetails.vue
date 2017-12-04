@@ -2,7 +2,7 @@
   <div>
     <h2>
       {{strategy}} {{type.toLowerCase()}}
-      <template v-if="score != null">
+      <template v-if="state === 'scored'">
         <span :class="grade.class">
           {{grade.label}}
         </span>
@@ -22,8 +22,11 @@
         Possible optimizations are provided in order of their impact if implemented.
         <a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">Read more...</a>
       </p>
-      <p v-if="score == null">
+      <p v-if="state === 'loading'">
         <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
+      </p>
+      <p v-else-if="state === 'errored'" class="text-warning">
+        Error getting test results.
       </p>
       <div v-else-if="!result.filteredRules.hasOwnProperty(type)">
         <p><strong>Score:</strong> {{score}} / 100</p>

@@ -15,12 +15,17 @@ const mozillaObservatoryHttpModule = {
   },
   actions: {
     getMozillaObservatoryHttpResult ({ state, commit, rootState }, { place, analyzeUrl }) {
+      const maxPolls = 50;
+      let polls = 0;
+
       // TODO: Is there a better place for these? Separate JS file?
       function processScanObject (scan) {
         switch (scan.state) {
           case 'ABORTED':
+            processError(null);
             break;
           case 'FAILED':
+            processError(null);
             break;
           case 'FINISHED':
             processResult(scan);
@@ -38,6 +43,12 @@ const mozillaObservatoryHttpModule = {
       }
 
       function poll (scanId, when) {
+        console.log('Polled: ' + polls.toString());
+        if (polls > maxPolls) {
+          processError(null);
+          return;
+        }
+        polls++;
         setTimeout(function () {
           axios.get(analyzeUrl, {
             cancelToken: rootState.cancelTokenSource.token
@@ -46,6 +57,7 @@ const mozillaObservatoryHttpModule = {
           }).catch(function (thrown) {
             if (!axios.isCancel(thrown)) {
               console.error('Request failed for Mozilla HTTP Observatory: GET /analyze.', thrown.message);
+              processError(thrown);
             }
           });
         }, when);

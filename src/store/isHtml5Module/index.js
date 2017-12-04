@@ -9,6 +9,7 @@ const isHtml5Module = {
       if (payload.isHtml5 === null) {
         // Error loading and testing website... show in the UI, give negative avg
         payload.place.isSiteDown = true;
+        payload.place.isHtml5.state = 'errored';
       } else {
         payload.place.isHtml5.score = payload.isHtml5;
         payload.place.isHtml5.state = 'scored';

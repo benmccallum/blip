@@ -25,17 +25,15 @@
 <script>
   import { MozillaObservatoryMixin } from './mixins/MozillaObservatoryMixin';
   import { MozillaObservatoryHttpMixin } from './mixins/MozillaObservatoryHttpMixin';
-  import { MozillaObservatoryTlsMixin } from './mixins/MozillaObservatoryTlsMixin';
+  // import { MozillaObservatoryTlsMixin } from './mixins/MozillaObservatoryTlsMixin';
 
   export default {
     name: 'MozillaObservatory',
-    mixins: [ MozillaObservatoryMixin, MozillaObservatoryHttpMixin, MozillaObservatoryTlsMixin ],
+    mixins: [ MozillaObservatoryMixin, MozillaObservatoryHttpMixin
+      // , MozillaObservatoryTlsMixin
+    ],
     props: {
       place: Object
     }
-    // ,
-    // created () {
-    //   this.getMozillaObservatoryHttpResult(this.place);
-    // }
   };
 </script>

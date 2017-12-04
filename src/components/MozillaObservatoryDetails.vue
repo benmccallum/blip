@@ -9,18 +9,21 @@
       </template>
     </h2>
     <p><i>Provided by <a href="https://observatory.mozilla.org">Mozilla Observatory</a></i></p>
-    <p v-if="score === null">
-      Loading...
+    <p>
+      Observatory by Mozilla is a tool used to test the security of a website by identifying 
+      gaps in configuration. Scores are out of 100, although you can receive more with bonuses, 
+      and give you a <a href="https://wiki.mozilla.org/Security/Scoring_and_other_levels#Scoring_levels">grade</a> between F and A+
+      and equivalent <a href="https://wiki.mozilla.org/Security/Standard_Levels#Standard_risk_levels_definition_and_nomenclature">risk indication</a>.
+      Possible optimizations are provided in order of their score impact if implemented.
+      <a href="https://observatory.mozilla.org/faq.html" target="_blank" rel="noopener">Read more...</a>
+    </p>
+    <p v-if="state === 'loading'">
+      <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
+    </p>
+    <p v-else-if="state === 'errored'" class="text-warning">
+      Error getting test results.
     </p>
     <template v-else>
-      <p>
-        Observatory by Mozilla is a tool used to test the security of a website by identifying 
-        gaps in configuration. Scores are out of 100, although you can receive more with bonuses, 
-        and give you a <a href="https://wiki.mozilla.org/Security/Scoring_and_other_levels#Scoring_levels">grade</a> between F and A+
-        and equivalent <a href="https://wiki.mozilla.org/Security/Standard_Levels#Standard_risk_levels_definition_and_nomenclature">risk indication</a>.
-        Possible optimizations are provided in order of their score impact if implemented.
-        <a href="https://observatory.mozilla.org/faq.html" target="_blank" rel="noopener">Read more...</a>
-      </p>
       <p
         <strong>Score:</strong> {{score}} / 100
         <br>

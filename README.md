@@ -33,11 +33,12 @@ npm test
 
 ### Must dos
 
-- Custom domain redirects
 - Custom domain HTTPS
 - Google AdSense submission + approval
 - Ads (WIP)
-- Give love for error handling to the laser page (if 500, not all do a !, roll out states across all tabs)
+- Add ?q=mysite.com deep-linking support to laser page
+- Add share link to laser page
+- From the radar results page, give each result a "Go to details >" type link that sends it to /laser?q=mysite.com for a more detailed look.
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
 - Upgrade to PWA Vue template or latest webpack template.
 - Implement service worker for offline-first support with nice 'you are offline' messaging to user.
