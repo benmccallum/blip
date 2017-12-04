@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-bootstrap-breakpoint-indicator></vue-bootstrap-breakpoint-indicator>
+    <!-- <vue-bootstrap-breakpoint-indicator></vue-bootstrap-breakpoint-indicator> -->
     <router-view></router-view>    
   </div>
 </template>
