@@ -12,8 +12,7 @@
       </router-link>
       <p class="lead text-center mb-3">
         {{subtitle}}
-      </p>      
-      <div class="addthis_inline_share_toolbox text-center mb-5 mb-md-4"></div> 
+      </p>
     </div>
   </header>
 </template>

@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <!-- <vue-bootstrap-breakpoint-indicator></vue-bootstrap-breakpoint-indicator> -->
-    <router-view></router-view>    
+    <router-view></router-view> 
+    
+      <div class="addthis_inline_share_toolbox text-center mb-5 mb-md-4"></div>    
   </div>
 </template>
 
