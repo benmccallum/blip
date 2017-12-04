@@ -41,7 +41,7 @@
           </div>
         </div>
 
-        <div id="working" class="row justify-content-center" v-show="status === 'locating' || status === 'loading'">
+        <div id="working" class="row justify-content-center mb-4" v-show="status === 'locating' || status === 'loading'">
           <div class="col col-sm-3 text-center">
             <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto mb-1"></i>
             <br>
