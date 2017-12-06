@@ -20,7 +20,13 @@
   </head>
   <body>
     <div id="app"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCsV60UGTAkbdBHrE_jjZU_VYHSp8ioJJQ"></script>
+    <script>
+      window.isGoogleMapsLoaded = false;
+      function mapsCallback () {
+        window.isGoogleMapsLoaded = true;
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCsV60UGTAkbdBHrE_jjZU_VYHSp8ioJJQ&callback=mapsCallback"></script>
     <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a24e93df01ff3ff"></script>
     <!-- built files will be auto injected -->
   </body>

@@ -172,8 +172,13 @@ export default {
   mounted () {
     var that = this;
 
-    // Init autocomplete
-    this.initAutocomplete();
+    // while (!window.isGoogleMapsLoaded) { }
+    if (this.$route.query.lat && this.$route.query.lng) {
+      this.search({ lat: parseFloat(this.$route.query.lat), lng: parseFloat(this.$route.query.lng) }, 'that location');
+    } else {
+      // Init autocomplete
+      this.initAutocomplete();
+    }
 
     // Every second, restore 1 call to Google Places
     setInterval(function () {
@@ -246,12 +251,17 @@ export default {
       this.search(coord, label);
     },
     search (coord, label) {
-      // Change status and set query label
+      // Change status,set query label and update URL
       this.status = 'loading';
       this.query.label = label;
+      this.$router.push({ query: { ...coord } });
 
       // Setup service
-      service = new window.google.maps.places.PlacesService(document.getElementById('map'));
+      try {
+        service = new window.google.maps.places.PlacesService(document.getElementById('map'));
+      } catch (e) {
+        console.log('error making service...');
+      }
 
       // Conduct search
       service.nearbySearch({
@@ -307,6 +317,7 @@ export default {
       this.status = 'form';
       this.$store.commit('clearPlaces');
       this.$store.commit('resetCancelToken');
+      this.$router.push({ query: { } });
     },
     initAutocomplete () {
       if (!window.google) {
@@ -315,7 +326,6 @@ export default {
       }
 
       // Clear any existing value and listener
-      console.log(this.$refs.address);
       this.$refs.address.value = '';
       if (placeChangedListener) {
         window.google.maps.event.removeListener(placeChangedListener);

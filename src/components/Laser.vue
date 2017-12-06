@@ -97,8 +97,15 @@
         return this.$store.state.place;
       }
     },
+    created () {
+      if (this.$route.query.q) {
+        this.setPlace(this.$route.query.q);
+      }
+    },
     mounted () {
-      this.$refs.url.focus();
+      if (!this.$route.query.q) {
+        this.$refs.url.focus();
+      }
     },
     methods: {
       reset () {
@@ -106,6 +113,8 @@
         this.$refs.url.value = null;
         this.$refs.form.classList.remove('was-validated')
         this.query = null;
+        this.$router.push({ query: { } });
+        setTimeout(() => this.$refs.url.focus(), 100);
       },
       submit (event) {
         // Autocorrect to just a domain if it's a full URL
@@ -119,10 +128,14 @@
           event.preventDefault();
           event.stopPropagation();
         } else {
-          this.query = this.$refs.url.value;
-          this.$store.commit('setPlace', this.parsePlace({ website: this.query }));
+          this.setPlace(this.$refs.url.value);
         }
         event.target.classList.add('was-validated');
+      },
+      setPlace (query) {
+        this.query = query;
+        this.$store.commit('setPlace', this.parsePlace({ website: this.query }));
+        this.$router.push({ query: { q: this.query } });
       }
     }
   }

@@ -33,12 +33,9 @@ npm test
 
 ### Must dos
 
-- Custom domain HTTPS
 - Google AdSense submission + approval
 - Ads (WIP)
-- On Laser and Radar form submission, $router.go() to url + querystring to support deep-linking and shareability
-- Add share results widgets to pages and ensure they reload on URL changes in vue-router (AddThis)
-- From the radar results page, give each result a "Go to details >" type link that sends it to /laser?q=mysite.com for a more detailed look.
+- Each radar result add a "Go to detais >" link to laser page?
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
 - Upgrade to PWA Vue template or latest webpack template.
 - Implement service worker for offline-first support with nice 'you are offline' messaging to user.

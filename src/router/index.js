@@ -18,22 +18,28 @@ var router = new Router({
     {
       path: '/laser',
       name: 'Laser',
-      component: Laser
+      component: Laser,
+      props: (route) => ({ query: route.query.q })
     },
     {
       path: '/radar',
       name: 'Radar',
-      component: Radar
+      component: Radar,
+      props: (route) => ({ query: route.query.q })
     }
   ]
 });
 
 // Events subscribed to
-router.afterEach(function (to, from) {
+router.afterEach(function (from, to) {
   // Reset global (per-page) cancel token used by a page's axios HTTP requests
   store.commit('resetCancelToken');
   // Refresh AddThis widgets
-  window.addthis.layers.refresh();
+  if (window.addthis && window.addthis.layers && window.addthis.layers.refresh) {
+    // For some reason this needs to be delayed slightly for the URL change to be reflected in
+    // the share buttons...
+    setTimeout(() => window.addthis.layers.refresh(), 500);
+  }
 });
 
 export default router;
