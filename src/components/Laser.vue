@@ -4,7 +4,7 @@
     <div class="row justify-content-md-center">      
       <div class="col-12 col-md-8 col-xl-7">     
 
-        <form id="form" ref="form" class="mb-3" novalidate v-show="!hasQuery" v-on:submit.prevent.stop="submit">
+        <form id="form" ref="form" class="mb-5" novalidate v-show="!hasQuery" v-on:submit.prevent.stop="submit">
           <input type="url" ref="url" class="form-control text-center mb-3" id="url" required pattern="(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,63}" placeholder="https://example.com" aria-label="Website URL">
           <button type="submit" class="btn btn-primary btn-block">Test now</button>
         </form>

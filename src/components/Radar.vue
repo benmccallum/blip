@@ -3,7 +3,7 @@
     <my-header subtitle="Pick a location. We'll find businesses nearby and test their website."></my-header>
     <div class="row justify-content-md-center">
       <div class="col-12 col-md-10 col-lg-7 col-xl-7">
-        <form class="mb-3" v-show="status === 'form' || status === 'no-location'">
+        <form class="mb-5" v-show="status === 'form' || status === 'no-location'">
           <template v-if="canGeolocate">
             <button type="button" class="btn btn-primary btn-block" v-on:click="searchNearby">
               <i class="fa fa-location-arrow" aria-hidden="true"></i> Search nearby
@@ -78,7 +78,7 @@
               </button>
             </div>
           </div>
-          <p class="text-right mr-1">
+          <p class="text-center">
             <img class="google-logo" src="../assets/images/powered_by_google.png" alt="Powered by Google">
           </p>
         </div>
@@ -104,52 +104,40 @@
       <i class="fa fa-question"></i>
     </a>
     <div id="map" style="display:none!important;" hidden></div>
-    <div class="modal fade" id="legend" tabindex="-1" role="dialog" aria-labelledby="Legend modal" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Legend</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            Scores are out of 100. Click a score for complete details.
-            <hr>
-            By default, results are sorted by a computed "average", 
-            the sum of the scores divided by the number of tests. 
-            Feel free to sort as you wish with the sort controls.
-            <hr>
-            <div class="d-flex flex-row">
-              <div class="pr-1"><i class="fa fa-html5"></i></div>
-              <div>Is page written in HTML5? by blip</div>
-            </div>
-            <div class="d-flex flex-row">
-              <div class="pr-1"><i class="fa fa-lock"></i></div>
-              <div>Security score, by <a href="">Mozilla Observatory</a></div>
-            </div>
-            <div class="d-flex flex-row">
-              <div class="pr-1"><i class="fa fa-desktop"></i></div>
-              <div>Desktop speed score, by <a href="">Google PageSpeed Insights</a></div>
-            </div>
-            <div class="d-flex flex-row">
-              <div class="pr-1"><i class="fa fa-mobile"></i></div>
-              <div>Mobile speed score, by <a href="">Google PageSpeed Insights</a></div>
-            </div>
-            <div class="d-flex flex-row">
-              <div class="pr-1">
-                <img class="mobile-usability" src="../assets/images/mobile-usability-icon.svg" alt="Mobile usability icon">
-              </div>
-              <div>Mobile usability score, by <a href="">Google PageSpeed Insights</a></div>
-            </div>
-            <div class="d-flex flex-row">
-              <div class="pr-1"><i class="fa fa-exclamation-triangle text-warning"></i></div>
-              <div>Test failed. Score of 0 given and included in average.</div>
-            </div>
-          </div>
-        </div>
+    <bootstrap-modal :id="'legend'" :label="'Legend modal'" :title="'Legend'">
+      Scores are out of 100. Click a score for complete details.
+      <hr>
+      By default, results are sorted by a computed "average", 
+      the sum of the scores divided by the number of tests. 
+      Feel free to sort as you wish with the sort controls.
+      <hr>
+      <div class="d-flex flex-row">
+        <div class="pr-1"><i class="fa fa-html5"></i></div>
+        <div>Is page written in HTML5? by blip</div>
       </div>
-    </div>
+      <div class="d-flex flex-row">
+        <div class="pr-1"><i class="fa fa-lock"></i></div>
+        <div>Security score, by <a :href="mozillaObservatoryUrl">Mozilla Observatory</a></div>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="pr-1"><i class="fa fa-desktop"></i></div>
+        <div>Desktop speed score, by <a :href="googlePageSpeedInsightsUrl">Google PageSpeed Insights</a></div>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="pr-1"><i class="fa fa-mobile"></i></div>
+        <div>Mobile speed score, by <a :href="googlePageSpeedInsightsUrl">Google PageSpeed Insights</a></div>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="pr-1">
+          <img class="mobile-usability" src="../assets/images/mobile-usability-icon.svg" alt="Mobile usability icon">
+        </div>
+        <div>Mobile usability score, by <a :href="googlePageSpeedInsightsUrl">Google PageSpeed Insights</a></div>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="pr-1"><i class="fa fa-exclamation-triangle text-warning"></i></div>
+        <div>Test failed. Score of 0 given and included in average.</div>
+      </div>
+    </bootstrap-modal>
   </div>
 </template>
 
@@ -157,6 +145,7 @@
 import Place from './Place.vue';
 import Header from './Header.vue';
 import RadarExport from './RadarExport.vue';
+import BootstrapModal from './BootstrapModal.vue';
 import { PlaceParserMixin } from './mixins/PlaceParserMixin';
 
 // TODO: Scope in component
@@ -170,7 +159,8 @@ export default {
   components: {
     'place': Place,
     'my-header': Header,
-    'radar-export': RadarExport
+    'radar-export': RadarExport,
+    'bootstrap-modal': BootstrapModal
   },
   mounted () {
     var that = this;
@@ -198,7 +188,9 @@ export default {
       canLoadMoreIn: 0,
       queue: [],
       canGeolocate: navigator.geolocation,
-      errorCode: null
+      errorCode: null,
+      googlePageSpeedInsightsUrl: 'https://developers.google.com/speed/docs/insights/about',
+      mozillaObservatoryUrl: 'https://observatory.mozilla.org'
     };
   },
   computed: {
@@ -350,8 +342,13 @@ export default {
     font-size: .75rem;
     opacity: .75;
   }
+
   .custom-select {
     height: auto;
+  }
+  
+  #places {
+    margin-bottom: -3rem;
   }
 
   #legend-icon {

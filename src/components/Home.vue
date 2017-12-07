@@ -21,21 +21,6 @@
         <router-link to="/laser" class="btn btn-light mb-1">Test now</router-link>
       </div>
     </section>
-    <!-- <section class="row justify-content-center mb-2">
-      <div class="col text-center">
-        <div class="addthis_inline_share_toolbox"></div>
-      </div>
-    </section> -->
-    <footer class="row justify-content-center">
-      <div class="col text-center">
-        <p id="credits">
-          <strong>Credits</strong>
-          <ul class="list-unstyled">
-            <li><a class="text-muted" href="https://thenounproject.com/term/radar/61238/">Radar by Theo K. from the Noun Project</a></li>
-          </ul>
-        </p>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -67,6 +52,6 @@
   }
   #credits {
     font-size: .7rem;
-    opacity: .45;
+    opacity: .7;
   }
 </style>
