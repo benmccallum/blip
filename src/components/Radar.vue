@@ -37,7 +37,8 @@
                 <option value="asc" selected>worst first</option>
                 <option value="desc">best first</option>
               </select>
-            </form>
+              <radar-export :sortedPlaces="sortedPlaces"></radar-export>
+            </form>            
           </div>
         </div>
 
@@ -155,6 +156,7 @@
 <script>
 import Place from './Place.vue';
 import Header from './Header.vue';
+import RadarExport from './RadarExport.vue';
 import { PlaceParserMixin } from './mixins/PlaceParserMixin';
 
 // TODO: Scope in component
@@ -167,7 +169,8 @@ export default {
   mixins: [ PlaceParserMixin ],
   components: {
     'place': Place,
-    'my-header': Header
+    'my-header': Header,
+    'radar-export': RadarExport
   },
   mounted () {
     var that = this;

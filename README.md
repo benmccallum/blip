@@ -33,9 +33,8 @@ npm test
 
 ### Must dos
 
-- Google AdSense submission + approval
-- Ads (WIP)
-- Each radar result add a "Go to detais >" link to laser page?
+- 
+
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
 - Upgrade to PWA Vue template or latest webpack template.
 - Implement service worker for offline-first support with nice 'you are offline' messaging to user.
@@ -45,9 +44,6 @@ npm test
 
 ### Nice to haves
 
+- Each radar result add a "Go to details >" link to laser page?
 - Wrap bootstrap classes into my own semantic classes with `extend`
-- Validate that passing place into mutation/action and editing off that is good practice.
 - Include a web accessibility test. Find a free one and use it, or host [AATT by paypal](https://github.com/paypal/AATT) somewhere and use that...
-- If IsHtml5 says the site is down, cancel axios requests for that place too (requires restructure of cancellation tokens and may not be worth it...)
-- Scrape business' email from business' website?
-- Offer export of results to CSV if do-able client side.

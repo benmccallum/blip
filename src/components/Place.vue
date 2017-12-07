@@ -9,7 +9,7 @@
           <i class="fa fa-map-marker" aria-hidden="true"></i>
           {{place.vicinity}}
         </a>
-        <template if="place.ph">
+        <template v-if="place.ph">
           <br />
           <a class="text-muted" :href="'tel:' + place.ph">
             <i class="fa fa-phone" aria-hidden="true"></i>
