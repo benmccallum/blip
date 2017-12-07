@@ -4,11 +4,12 @@ import Router from 'vue-router';
 import Home from '@/components/Home';
 import Laser from '@/components/Laser';
 import Radar from '@/components/Radar';
+import NotFound from '@/components/NotFound';
 
 Vue.use(Router);
 
 var router = new Router({
-  // mode: 'history',
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -26,6 +27,10 @@ var router = new Router({
       name: 'Radar',
       component: Radar,
       props: (route) => ({ query: route.query.q })
+    },
+    {
+      path: '*',
+      component: NotFound
     }
   ]
 });
