@@ -33,6 +33,7 @@ npm test
 
 ### Must dos
 
+- Think about using `<slot>`s for each `.test-container` using component
 - Externalise BootstrapModal into vue-bootstrap-modal or something
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
 - Upgrade to PWA Vue template or latest webpack template.
