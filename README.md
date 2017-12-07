@@ -37,6 +37,8 @@ npm test
 - Externalise BootstrapModal into vue-bootstrap-modal or something
 - Externalise jQuery and bootstrap JS in webpack to save on bandwidth for users and me (see [Webpack doc](https://webpack.github.io/docs/library-and-externals.html))
 - Upgrade to PWA Vue template or latest webpack template.
+- Add all og:x tags as well.
+- Setup Google Webmaster tools and crawling
 - Implement service worker for offline-first support with nice 'you are offline' messaging to user.
 - Fix issue with ishtml5 tester getting weird results (forbidden, etc)
 - Properly use lodash or drop it.
