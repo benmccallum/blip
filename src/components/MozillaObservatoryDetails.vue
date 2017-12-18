@@ -46,8 +46,14 @@
         </div>
       </div>
       <template v-if="results != null">
-        <p>For help understanding the above you should contact your web development partner.</p>
         <p>To see the complete and detailed results, <a :href="detailsUrl" target="_blank" rel="noopener">go here</a>.</p>
+        <p>
+          For help understanding the above you should contact your web development partner 
+          or engage a talented freelancer at 
+          <a href="https://www.freelancer.com.au/affiliates/benmccallum" target="_blank" rel="noopener">
+            freelancer.com
+          </a>.
+        </p>
       </template>
     </template>
   </div>

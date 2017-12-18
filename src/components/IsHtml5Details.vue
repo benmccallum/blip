@@ -27,7 +27,13 @@
       <template v-else>
         <h5>Hmmm</h5>
         <p>Your website uses an older doctype. It could do with an update.</p>
-        <p>For help understanding the above you should contact your web development partner.</p>
+        <p>
+          For help understanding the above you should contact your web development partner 
+          or engage a talented freelancer at 
+          <a href="https://www.freelancer.com.au/affiliates/benmccallum" target="_blank" rel="noopener">
+            freelancer.com
+          </a>.
+        </p>
       </template>
     </p>
   </div>

@@ -89,6 +89,7 @@
     "vue-axios": "^2.0.2",
     "vue-bootstrap-breakpoint-indicator": "^1.0.0",
     "vue-loader": "^12.2.2",
+    "vue-media": "^1.1.1",
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.5.2",
     "vuex": "^2.5.0",

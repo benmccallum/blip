@@ -42,6 +42,7 @@ npm test
 - Implement service worker for offline-first support with nice 'you are offline' messaging to user.
 - Fix issue with ishtml5 tester getting weird results (forbidden, etc)
 - Properly use lodash or drop it.
+- Put in vue forum 'show and tell'.
 
 
 ### Nice to haves

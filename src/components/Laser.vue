@@ -56,6 +56,19 @@
               <google-page-speed-details :strategy="'Mobile'" :type="'USABILITY'" :place="place"></google-page-speed-details>
             </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <media :query="{ minWidth: 310, maxWidth: 901 }" @media-enter="reloadAds">
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='300x250'></div>
+              </media>
+              <media :query="{ minWidth: 901, maxWidth: 1280 }" @media-enter="reloadAds">
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='468x60'></div>
+              </media>
+              <media :query="{ minWidth: 1281 }" @media-enter="reloadAds">
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='728x90'></div>
+              </media>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -71,6 +84,7 @@
   import MozillaObservatory from './MozillaObservatory.vue';
   import MozillaObservatoryDetails from './MozillaObservatoryDetails.vue';
   import { PlaceParserMixin } from './mixins/PlaceParserMixin';
+  import Media from 'vue-media';
 
   export default {
     name: 'laser',
@@ -82,7 +96,8 @@
       'is-html5': IsHtml5,
       'is-html5-details': IsHtml5Details,
       'mozilla-observatory': MozillaObservatory,
-      'mozilla-observatory-details': MozillaObservatoryDetails
+      'mozilla-observatory-details': MozillaObservatoryDetails,
+      'media': Media
     },
     data () {
       return {
@@ -136,6 +151,17 @@
         this.query = query;
         this.$store.commit('setPlace', this.parsePlace({ website: this.query }));
         this.$router.push({ query: { q: this.query } });
+        this.reloadAds();
+      },
+      reloadAds () {
+        // TODO: Get rid of this hack if there is a better way to due via an SDK method
+        window.affiliate_sdk_included = false;
+        (function (d) {
+          var po = d.createElement('script');
+          po.type = 'text/javascript'; po.async = true; po.src = '//static.flnaffiliate.com/build/js/affiliate-sdk.js';
+          var s = d.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(po, s);
+        })(document);
       }
     }
   }
@@ -152,6 +178,10 @@
 </style>
 
 <style lang="scss" scoped> 
+  .fln-affiliate {
+    margin: 0 auto;
+  }
+
   .nav-item {
     border-bottom: 5px solid transparent;
     &.active, &:focus {
