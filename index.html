@@ -1,14 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="/static/img/icons/favicon.ico">
+    
     <title>blip</title>
     <meta name="description" content="Test websites for speed, mobile-friendliness, security and the HTML5 doctype. Find businesses around a location and test their websites en masse, or just test one by URL.">
     <meta name="author" content="Ben McCallum">
-    <meta name="copyright" content="Ben McCallum">    
-    <meta property="og:image" content="https://blip.website/static/img/icons/blip-logo.png">
+    <meta name="copyright" content="Ben McCallum">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="blip">
+    <meta property="og:description" content="Test websites for speed, mobile-friendliness, security and the HTML5 doctype. Find businesses around a location and test their websites en masse, or just test one by URL.">
+    <meta property="og:image" content="https://blip.website/static/img/icons/facebook-og-image-1220x630.png">    
+
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-16x16.png">
+    <!--[if IE]><link rel="shortcut icon" href="/static/img/icons/favicon.ico"><![endif]-->
+    
+    <!-- Add to home screen for Android and modern mobile browsers -->
+    <link rel="manifest" href="<%= htmlWebpackPlugin.files.publicPath %>static/manifest.json">
+    <meta name="theme-color" content="#4DBA87">
+
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="duopolly">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/safari-pinned-tab.svg" color="#4DBA87">
+    
+    <!-- Add to home screen for Windows -->
+    <meta name="msapplication-TileImage" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <% for (var chunk of webpack.chunks) {
+        for (var file of chunk.files) {
+          if (file.match(/\.(js|css)$/)) { %>
+    <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
@@ -19,7 +48,11 @@
     </script>
   </head>
   <body>
+    <noscript>
+      This is your fallback content in case JavaScript fails to load.
+    </noscript>
     <div id="app"></div>
+
     <script>
       window.isGoogleMapsLoaded = false;
       function mapsCallback () {
@@ -28,6 +61,9 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCsV60UGTAkbdBHrE_jjZU_VYHSp8ioJJQ&callback=mapsCallback"></script>
     <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a24e93df01ff3ff"></script>
+
+    <!-- Todo: only include in production -->
+    <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
     <!-- built files will be auto injected -->
   </body>
 </html>
