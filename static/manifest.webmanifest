@@ -2,7 +2,7 @@
   "name": "duopolly",
   "short_name": "duopolly",
   "description": "An app for testing business websites for speed, mobile-friendliness, security and HTML5 compatibility. Find businesses around a location and test their websites en masse, or just test one website by URL.",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#067BC2",
