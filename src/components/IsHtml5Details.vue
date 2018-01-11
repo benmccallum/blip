@@ -19,7 +19,7 @@
     <p v-else-if="isHtml5.state === 'errored'" class="text-warning">
       Error getting test result.
     </p>
-    <p>
+    <p v-else>
       <template v-if="isHtml5.score">
         <h5>Congrats!</h5>
         <p>Your website uses the HTML5 doctype.</p>
