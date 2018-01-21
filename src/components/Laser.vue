@@ -58,7 +58,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col" v-on:click="onAffiliateClick">
+            <div class="col">
               <media :query="{ minWidth: 310, maxWidth: 901 }" @media-enter="reloadAds">
                 <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' 
                   data-type='banner' data-theme='faces' data-size='300x250'
@@ -128,6 +128,21 @@
       if (!this.$route.query.q) {
         this.$refs.url.focus();
       }
+
+      // Hacky way to get tracking of the affiliate banner which is in an iframe.
+      // Since we can't get click events on any parent element or from the iframe,
+      // we detect an unload event as the window unloads, and sniff for the active element.
+      // If the active element is an iframe and the src looks like what the affiliate one is, boom.
+      var that = this;
+      window.addEventListener('beforeunload', function (e) {
+        if (e && e.srcElement && e.srcElement.activeElement && e.srcElement.activeElement.attributes && e.srcElement.activeElement.attributes.src) {
+          let src = e.srcElement.activeElement.attributes.src.value;
+          if (src.indexOf('affiliate') >= 0 && src.indexOf('benmccallum') >= 0) {
+            // Pretty sure this is the affiliate banner iframe, track that click before they leave
+            that.$ga.event('Affiliate', 'click', that.query, 1);
+          }
+        }
+      });
     },
     methods: {
       reset () {
@@ -169,9 +184,6 @@
           var s = d.getElementsByTagName('script')[0];
           s.parentNode.insertBefore(po, s);
         })(document);
-      },
-      onAffiliateClick (event) {
-        this.$ga.event('Affiliate', 'click', this.query, 1);
       }
     }
   }

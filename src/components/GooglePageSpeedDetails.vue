@@ -8,7 +8,7 @@
         </span>
       </template>
     </h2>
-    <p><i>Provided by <a href="https://developers.google.com/speed/docs/insights/about">Google PageSpeed Insights</a></i></p>
+    <p><i>Provided by <a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></i></p>
     <div>
       <p>
         PageSpeed Insights measures the 

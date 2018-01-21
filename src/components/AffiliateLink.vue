@@ -11,7 +11,7 @@
   export default {
     computed: {
       website () {
-        return this.$store.data.place ? this.$store.data.place.website : null;
+        return this.$store.state.place ? this.$store.state.place.website : null;
       }
     },
     methods: {
