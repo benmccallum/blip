@@ -47,13 +47,7 @@
       </div>
       <template v-if="results != null">
         <p>To see the complete and detailed results, <a :href="detailsUrl" target="_blank" rel="noopener">go here</a>.</p>
-        <p>
-          For help understanding the above you should contact your web development partner 
-          or engage a talented freelancer at 
-          <a href="https://www.freelancer.com.au/affiliates/benmccallum" target="_blank" rel="noopener">
-            freelancer.com
-          </a>.
-        </p>
+        <affiliate-link />
       </template>
     </template>
   </div>
@@ -61,10 +55,14 @@
 
 <script>
   import { MozillaObservatoryMixin } from './mixins/MozillaObservatoryMixin';
+  import AffiliateLink from './AffiliateLink.vue';
 
   export default {
     name: 'MozillaObservatoryDetails',
     mixins: [ MozillaObservatoryMixin ],
+    components: {
+      'affiliate-link': AffiliateLink
+    },
     props: {
       place: Object
     },

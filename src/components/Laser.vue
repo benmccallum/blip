@@ -5,7 +5,8 @@
       <div class="col-12 col-md-8 col-xl-7">     
 
         <form id="form" ref="form" class="mb-5" novalidate v-show="!hasQuery" v-on:submit.prevent.stop="submit">
-          <input type="url" ref="url" class="form-control text-center mb-3" id="url" required pattern="(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,63}" placeholder="https://example.com" aria-label="Website URL">
+          <input type="url" ref="url" class="form-control text-center mb-3" id="url" 
+            required pattern="(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,63}" placeholder="https://example.com" aria-label="Website URL">
           <button type="submit" class="btn btn-primary btn-block">Test now</button>
         </form>
 
@@ -57,15 +58,21 @@
             </div>
           </div>
           <div class="row">
-            <div class="col">
+            <div class="col" v-on:click="onAffiliateClick">
               <media :query="{ minWidth: 310, maxWidth: 901 }" @media-enter="reloadAds">
-                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='300x250'></div>
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' 
+                  data-type='banner' data-theme='faces' data-size='300x250'
+                ></div>
               </media>
               <media :query="{ minWidth: 901, maxWidth: 1280 }" @media-enter="reloadAds">
-                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='468x60'></div>
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' 
+                  data-type='banner' data-theme='faces' data-size='468x60'
+                ></div>
               </media>
               <media :query="{ minWidth: 1281 }" @media-enter="reloadAds">
-                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='728x90'></div>
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' 
+                  data-type='banner' data-theme='faces' data-size='728x90'
+                ></div>
               </media>
             </div>
           </div>
@@ -162,6 +169,9 @@
           var s = d.getElementsByTagName('script')[0];
           s.parentNode.insertBefore(po, s);
         })(document);
+      },
+      onAffiliateClick (event) {
+        this.$ga.event('Affiliate', 'click', this.query, 1);
       }
     }
   }
