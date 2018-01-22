@@ -8,7 +8,7 @@
         </span>
       </template>
     </h2>
-    <p><i>Provided by <a href="https://developers.google.com/speed/docs/insights/about">Google PageSpeed Insights</a></i></p>
+    <p><i>Provided by <a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></i></p>
     <div>
       <p>
         PageSpeed Insights measures the 
@@ -42,13 +42,7 @@
             <!-- <span class="text-muted">{{result.desc}}</span> -->
           </li>
         </ul>
-        <p>
-          For help understanding the above you should contact your web development partner 
-          or engage a talented freelancer at 
-          <a href="https://www.freelancer.com.au/affiliates/benmccallum" target="_blank" rel="noopener">
-            freelancer.com
-          </a>.
-        </p>
+        <affiliate-link />
       </template>
       <p v-if="score != null">
         To see the complete and detailed results, <a :href="detailsUrl" target="_blank" rel="noopener">go here</a>.
@@ -59,10 +53,14 @@
 
 <script>
   import { GooglePageSpeedMixin } from './mixins/GooglePageSpeedMixin';
+  import AffiliateLink from './AffiliateLink.vue';
 
   export default {
     name: 'GooglePageSpeedDetails',
     extends: GooglePageSpeedMixin,
+    components: {
+      'affiliate-link': AffiliateLink
+    },
     props: {
       place: Object
     },

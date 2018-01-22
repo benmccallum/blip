@@ -8,12 +8,12 @@
         </span>
       </template>
     </h2>
-    <p><i>Provided by <a href="https://observatory.mozilla.org">Mozilla Observatory</a></i></p>
+    <p><i>Provided by <a href="https://observatory.mozilla.org" target="_blank" rel="noopener">Mozilla Observatory</a></i></p>
     <p>
       Observatory by Mozilla is a tool used to test the security of a website by identifying 
       gaps in configuration. Scores are out of 100, although you can receive more with bonuses, 
-      and give you a <a href="https://wiki.mozilla.org/Security/Scoring_and_other_levels#Scoring_levels">grade</a> between F and A+
-      and equivalent <a href="https://wiki.mozilla.org/Security/Standard_Levels#Standard_risk_levels_definition_and_nomenclature">risk indication</a>.
+      and give you a <a href="https://wiki.mozilla.org/Security/Scoring_and_other_levels#Scoring_levels" target="_blank" rel="noopener">grade</a> between F and A+
+      and equivalent <a href="https://wiki.mozilla.org/Security/Standard_Levels#Standard_risk_levels_definition_and_nomenclature" target="_blank" rel="noopener">risk indication</a>.
       Possible optimizations are provided in order of their score impact if implemented.
       <a href="https://observatory.mozilla.org/faq.html" target="_blank" rel="noopener">Read more...</a>
     </p>
@@ -47,13 +47,7 @@
       </div>
       <template v-if="results != null">
         <p>To see the complete and detailed results, <a :href="detailsUrl" target="_blank" rel="noopener">go here</a>.</p>
-        <p>
-          For help understanding the above you should contact your web development partner 
-          or engage a talented freelancer at 
-          <a href="https://www.freelancer.com.au/affiliates/benmccallum" target="_blank" rel="noopener">
-            freelancer.com
-          </a>.
-        </p>
+        <affiliate-link />
       </template>
     </template>
   </div>
@@ -61,10 +55,14 @@
 
 <script>
   import { MozillaObservatoryMixin } from './mixins/MozillaObservatoryMixin';
+  import AffiliateLink from './AffiliateLink.vue';
 
   export default {
     name: 'MozillaObservatoryDetails',
     mixins: [ MozillaObservatoryMixin ],
+    components: {
+      'affiliate-link': AffiliateLink
+    },
     props: {
       place: Object
     },

@@ -11,22 +11,22 @@
         <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
       </form>   
       <div class="text-muted" style="font-size:.75rem">
-        by <a href="https://github.com/benmccallum">Ben McCallum</a> w/ <a href="#credits" data-toggle="modal">credits</a>
+        by <a href="https://github.com/benmccallum" target="_blank" rel="noopener">Ben McCallum</a> w/ <a href="#credits" data-toggle="modal">credits</a>
       </div>
     </footer> 
     <bootstrap-modal :id="'credits'" :title="'Credits'" :label="'Credits modal'">
       <h6>Services</h6>
       <ul class="list-unstyled">
-        <li><a href="https://observatory.mozilla.org">Mozilla Observatory</a></li>
-        <li><a href="https://developers.google.com/speed/docs/insights/about">Google PageSpeed Insights</a></li>
-        <li><a href="https://developers.google.com/places/web-service/">Google Places API</a></li>
+        <li><a href="https://observatory.mozilla.org" target="_blank" rel="noopener">Mozilla Observatory</a></li>
+        <li><a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></li>
+        <li><a href="https://developers.google.com/places/web-service/" target="_blank" rel="noopener">Google Places API</a></li>
       </ul>
       <h6>Images</h6>
       <ul class="list-unstyled">
         <li>
-          <a href="https://thenounproject.com/term/radar/61238/">Radar</a> 
-          on home page by <a href="https://thenounproject.com/pantelis.gkavos/">Theo K.</a>
-          from <a href="http://thenounproject.com/">the Noun Project</a></li>
+          <a href="https://thenounproject.com/term/radar/61238/" target="_blank" rel="noopener">Radar</a> 
+          on home page by <a href="https://thenounproject.com/pantelis.gkavos/" target="_blank" rel="noopener">Theo K.</a>
+          from <a href="http://thenounproject.com/" target="_blank" rel="noopener">the Noun Project</a></li>
       </ul>
     </bootstrap-modal>
   </div>

@@ -5,7 +5,8 @@
       <div class="col-12 col-md-8 col-xl-7">     
 
         <form id="form" ref="form" class="mb-5" novalidate v-show="!hasQuery" v-on:submit.prevent.stop="submit">
-          <input type="url" ref="url" class="form-control text-center mb-3" id="url" required pattern="(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,63}" placeholder="https://example.com" aria-label="Website URL">
+          <input type="url" ref="url" class="form-control text-center mb-3" id="url" 
+            required pattern="(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,63}" placeholder="https://example.com" aria-label="Website URL">
           <button type="submit" class="btn btn-primary btn-block">Test now</button>
         </form>
 
@@ -59,13 +60,19 @@
           <div class="row">
             <div class="col">
               <media :query="{ minWidth: 310, maxWidth: 901 }" @media-enter="reloadAds">
-                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='300x250'></div>
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' 
+                  data-type='banner' data-theme='faces' data-size='300x250'
+                ></div>
               </media>
               <media :query="{ minWidth: 901, maxWidth: 1280 }" @media-enter="reloadAds">
-                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='468x60'></div>
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' 
+                  data-type='banner' data-theme='faces' data-size='468x60'
+                ></div>
               </media>
               <media :query="{ minWidth: 1281 }" @media-enter="reloadAds">
-                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' data-type='banner' data-theme='faces' data-size='728x90'></div>
+                <div class='fln-affiliate' data-username='benmccallum' data-style='' data-qts='//t.flnaffiliate.com/' 
+                  data-type='banner' data-theme='faces' data-size='728x90'
+                ></div>
               </media>
             </div>
           </div>
@@ -121,6 +128,21 @@
       if (!this.$route.query.q) {
         this.$refs.url.focus();
       }
+
+      // Hacky way to get tracking of the affiliate banner which is in an iframe.
+      // Since we can't get click events on any parent element or from the iframe,
+      // we detect an unload event as the window unloads, and sniff for the active element.
+      // If the active element is an iframe and the src looks like what the affiliate one is, boom.
+      var that = this;
+      window.addEventListener('beforeunload', function (e) {
+        if (e && e.srcElement && e.srcElement.activeElement && e.srcElement.activeElement.attributes && e.srcElement.activeElement.attributes.src) {
+          let src = e.srcElement.activeElement.attributes.src.value;
+          if (src.indexOf('affiliate') >= 0 && src.indexOf('benmccallum') >= 0) {
+            // Pretty sure this is the affiliate banner iframe, track that click before they leave
+            that.$ga.event('Affiliate', 'click', that.query, 1);
+          }
+        }
+      });
     },
     methods: {
       reset () {
