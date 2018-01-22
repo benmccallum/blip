@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: 'header',
+  name: 'my-header',
   props: {
     subtitle: String
   },
