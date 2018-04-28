@@ -1,6 +1,6 @@
 <template>
-  <button class="btn btn-primary btn-sm ml-md-2 mt-2 mt-md-0" type="button" v-on:click="exportCsv">
-    <i class="fa fa-floppy-o"></i> Export 
+  <button class="btn btn-primary btn-sm" type="button" v-on:click="exportCsv">
+    <i class="fa fa-floppy-o"></i> Export
   </button>
 </template>
 

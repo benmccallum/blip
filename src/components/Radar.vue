@@ -22,23 +22,33 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </p>
-            <form id="filters" class="mb-2">
-              <label for="sortBy">sorting by</label>
-              <select id="sortBy" v-model="query.sortBy" class="custom-select">
-                <option selected value="avg">average score</option>
-                <option value="isHtml5">is HTML5?</option>
-                <option value="security">security score</option>
-                <option value="desktopSpeed">desktop speed score</option>
-                <option value="mobileSpeed">mobile speed score</option>
-                <option value="mobileUsability">mobile usability score</option>
-              </select>
-              <label for="sortDirection"aria-label="sort direction">with</label>
-              <select id="sortDirection" v-model="query.sortDirection" class="custom-select">
-                <option value="asc" selected>worst first</option>
-                <option value="desc">best first</option>
-              </select>
-              <radar-export :sortedPlaces="sortedPlaces"></radar-export>
-            </form>            
+            <form id="filters" class="form-inline mb-2">
+              <div class="input-group input-group-sm mb-2 mb-md-0 mr-md-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">sort by</div>
+                </div>
+                <select id="sortBy" v-model="query.sortBy" class="custom-select custom-select-sm">
+                  <option selected value="avg">average score</option>
+                  <option value="isHtml5">is HTML5?</option>
+                  <option value="security">security score</option>
+                  <option value="desktopSpeed">desktop speed score</option>
+                  <option value="mobileSpeed">mobile speed score</option>
+                  <option value="mobileUsability">mobile usability score</option>
+                </select>
+              </div>
+              <div class="input-group input-group-sm mb-2 mb-md-0 mr-md-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">with</div>
+                </div>
+                <select id="sortDirection" v-model="query.sortDirection" class="custom-select custom-select-sm">
+                  <option value="asc" selected>worst first</option>
+                  <option value="desc">best first</option>
+                </select>
+              </div>
+              <div class="input-group input-group-sm mb-0 ml-auto">
+                <radar-export :sortedPlaces="sortedPlaces" />
+              </div>
+            </form>
           </div>
         </div>
 
@@ -65,15 +75,15 @@
             <div class="col">
               <h4 class="text-center">We're still working on these...</h4>
             </div>
-          </div>          
+          </div>
           <place v-for="place in unsortedPlaces" :key="place.id" :place="place"></place>
           <div class="row">
             <div class="col">
               <button type="button" class="btn btn-lg btn-primary mb-3 w-100"
-                :hidden="pagination == null || (!queue.length && !pagination.hasNextPage)" 
-                :disabled="!canLoadMore" 
+                :hidden="pagination == null || (!queue.length && !pagination.hasNextPage)"
+                :disabled="!canLoadMore"
                 v-on:click="onLoadMore">
-                Load more... 
+                Load more...
                 <span v-show="!canLoadMore">in {{canLoadMoreIn}}s</span>
               </button>
             </div>
@@ -107,8 +117,8 @@
     <bootstrap-modal :id="'legend'" :label="'Legend modal'" :title="'Legend'">
       Scores are out of 100. Click a score for complete details.
       <hr>
-      By default, results are sorted by a computed "average", 
-      the sum of the scores divided by the number of tests. 
+      By default, results are sorted by a computed "average",
+      the sum of the scores divided by the number of tests.
       Feel free to sort as you wish with the sort controls.
       <hr>
       <div class="d-flex flex-row">
@@ -339,14 +349,13 @@ export default {
 
 <style lang="scss" scoped>
   #filters {
-    font-size: .75rem;
-    opacity: .75;
+    opacity: .85;
+
+    .input-group-text {
+      font-size: 75%;
+    }
   }
 
-  .custom-select {
-    height: auto;
-  }
-  
   #places {
     margin-bottom: -3rem;
   }
@@ -382,7 +391,7 @@ export default {
       margin-top: .7rem;
       margin-bottom: .7rem;
     }
-        
+
     i {
       width: 1rem;
       text-align: center;

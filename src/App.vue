@@ -1,19 +1,14 @@
 <template>
   <div id="app">
     <!-- <vue-bootstrap-breakpoint-indicator></vue-bootstrap-breakpoint-indicator> -->
-    <router-view></router-view> 
+    <router-view></router-view>
     <footer class="text-center mt-4 mb-3">
-      <div class="addthis_inline_share_toolbox mb-2"></div>  
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="5YCRX6B3PYVDQ">
-        <input type="image" src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-        <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
-      </form>   
+      <div class="addthis_inline_share_toolbox mb-2"></div>
+      <btn-buy-me-a-coffee />
       <div class="text-muted" style="font-size:.75rem">
         by <a href="https://github.com/benmccallum" target="_blank" rel="noopener">Ben McCallum</a> w/ <a href="#credits" data-toggle="modal">credits</a>
       </div>
-    </footer> 
+    </footer>
     <bootstrap-modal :id="'credits'" :title="'Credits'" :label="'Credits modal'">
       <h6>Services</h6>
       <ul class="list-unstyled">
@@ -24,7 +19,7 @@
       <h6>Images</h6>
       <ul class="list-unstyled">
         <li>
-          <a href="https://thenounproject.com/term/radar/61238/" target="_blank" rel="noopener">Radar</a> 
+          <a href="https://thenounproject.com/term/radar/61238/" target="_blank" rel="noopener">Radar</a>
           on home page by <a href="https://thenounproject.com/pantelis.gkavos/" target="_blank" rel="noopener">Theo K.</a>
           from <a href="http://thenounproject.com/" target="_blank" rel="noopener">the Noun Project</a></li>
       </ul>
@@ -35,12 +30,14 @@
 <script>
   import VueBootstrapBreakpointIndicator from 'vue-bootstrap-breakpoint-indicator';
   import BootstrapModal from './components/BootstrapModal.vue';
+  import BtnBuyMeACoffee from './components/BtnBuyMeACoffee.vue';
 
   export default {
     name: 'app',
     components: {
       'vue-bootstrap-breakpoint-indicator': VueBootstrapBreakpointIndicator,
-      'bootstrap-modal': BootstrapModal
+      'bootstrap-modal': BootstrapModal,
+      'btn-buy-me-a-coffee': BtnBuyMeACoffee
     }
   };
 </script>
@@ -74,9 +71,9 @@
 
       // .nav-item.active & {
       //   color: #067BC2;
-      // } 
+      // }
     }
-    
+
     i {
       line-height: 1.5rem;
 
@@ -138,7 +135,7 @@
 
   .fade-enter-active {
     transition: opacity .5s;
-  } 
+  }
   .fade-leave-active {
     transition: opacity 1s;
   }
