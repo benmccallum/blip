@@ -1,6 +1,6 @@
 {
-  "name": "duopolly",
-  "short_name": "duopolly",
+  "name": "blip",
+  "short_name": "blip",
   "description": "An app for testing business websites for speed, mobile-friendliness, security and HTML5 compatibility. Find businesses around a location and test their websites en masse, or just test one website by URL.",
   "start_url": "/",
   "display": "standalone",
