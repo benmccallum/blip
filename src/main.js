@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios';
 import VueAnalytics from 'vue-analytics';
 
 import './assets/styles/app.scss';
+import './registerServiceWorker'
 require('bootstrap');
 
 // Plugin: analytics

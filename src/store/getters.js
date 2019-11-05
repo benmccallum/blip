@@ -1,10 +1,10 @@
 export const getters = {
-  unsortedPlaces: (state, _getters) => {
+  unsortedPlaces: (state) => {
     return state.places
       ? state.places.filter(place => place.avg == null)
       : [];
   },
-  getSortedPlaces: (state, _getters) => (sortKey, sortDirection) => {
+  getSortedPlaces: (state) => (sortKey, sortDirection) => {
     function getVal (place, key) {
       if (!place.website) return -999;
       if (place.isSiteDown) return -1;
