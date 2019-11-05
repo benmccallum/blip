@@ -20,7 +20,7 @@ const isHtml5Module = {
     }
   },
   actions: {
-    getHtml5Result ({ state, commit, rootState }, place) {
+    getHtml5Result ({ commit, rootState }, place) {
       // Only if not already "getting a result"
       if (place.isHtml5.state !== null) {
         return;

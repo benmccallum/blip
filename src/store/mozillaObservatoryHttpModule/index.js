@@ -14,7 +14,7 @@ const mozillaObservatoryHttpModule = {
     }
   },
   actions: {
-    getMozillaObservatoryHttpResult ({ state, commit, rootState }, { place, analyzeUrl }) {
+    getMozillaObservatoryHttpResult ({ commit, rootState }, { place, analyzeUrl }) {
       const maxPolls = 50;
       let polls = 0;
 
@@ -42,8 +42,8 @@ const mozillaObservatoryHttpModule = {
         }
       }
 
-      function poll (scanId, when) {
-        console.log('Polled: ' + polls.toString());
+      function poll (_scanId, when) {
+        //console.log('Polled: ' + polls.toString());
         if (polls > maxPolls) {
           processError(null);
           return;
@@ -56,7 +56,7 @@ const mozillaObservatoryHttpModule = {
             processScanObject(response.data);
           }).catch(function (thrown) {
             if (!axios.isCancel(thrown)) {
-              console.error('Request failed for Mozilla HTTP Observatory: GET /analyze.', thrown.message);
+              //console.error('Request failed for Mozilla HTTP Observatory: GET /analyze.', thrown.message);
               processError(thrown);
             }
           });
@@ -101,7 +101,7 @@ const mozillaObservatoryHttpModule = {
         }
       }).catch(function (thrown) {
         if (!axios.isCancel(thrown)) {
-          console.error('Request failed for Mozilla HTTP Observatory: POST /analyze.', thrown.message);
+          //console.error('Request failed for Mozilla HTTP Observatory: POST /analyze.', thrown.message);
           processError(thrown);
         }
       });

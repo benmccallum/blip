@@ -10,7 +10,7 @@ export const mutations = {
   addPlace (state, place) {
     var alreadyAdded = state.places ? state.places.some(p => p.id === place.id) : false;
     if (alreadyAdded) {
-      console.error('wtf why is this repeated!!!');
+      //console.error('wtf why is this repeated!!!');
       return;
     }
     state.places ? state.places.push(place) : (state.places = [place]);

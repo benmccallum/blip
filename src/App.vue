@@ -28,14 +28,14 @@
 </template>
 
 <script>
-  import VueBootstrapBreakpointIndicator from 'vue-bootstrap-breakpoint-indicator';
+  //import VueBootstrapBreakpointIndicator from 'vue-bootstrap-breakpoint-indicator';
   import BootstrapModal from './components/BootstrapModal.vue';
   import BtnBuyMeACoffee from './components/BtnBuyMeACoffee.vue';
 
   export default {
     name: 'app',
     components: {
-      'vue-bootstrap-breakpoint-indicator': VueBootstrapBreakpointIndicator,
+      //'vue-bootstrap-breakpoint-indicator': VueBootstrapBreakpointIndicator,
       'bootstrap-modal': BootstrapModal,
       'btn-buy-me-a-coffee': BtnBuyMeACoffee
     }

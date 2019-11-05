@@ -1,6 +1,7 @@
 <template>
   <div class="test-container d-flex flex-column justify-content-center text-center">
     <a :href="detailsUrl" target="_blank" rel="noopener" title="Click to learn more...">
+      <transition name="fade" mode="out-in">
         <div v-if="state === 'errored'" :key="state">
           <i class="fa fa-exclamation-triangle text-warning"></i>
           <span class="sr-only">Error</span>

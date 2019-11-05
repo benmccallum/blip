@@ -2,19 +2,19 @@ import axios from 'axios';
 
 const googlePageSpeedModule = {
   mutations: {
-    setGoogleLoading (state, payload) {
+    setGoogleLoading (_state, payload) {
       payload.place[payload.strategy.toLowerCase()].state = 'loading';
     },
-    setGoogleResult (state, payload) {
+    setGoogleResult (_state, payload) {
       payload.result.state = 'scored';
       payload.place[payload.strategy.toLowerCase()] = payload.result;
     },
-    setGoogleError (state, payload) {
+    setGoogleError (_state, payload) {
       payload.place[payload.strategy.toLowerCase()].state = 'errored';
     }
   },
   actions: {
-    getGooglePageSpeedResult ({ state, commit, rootState }, { place, strategy, type }) {
+    getGooglePageSpeedResult ({ commit, rootState }, { place, strategy, type }) {
       // TODO: Is there somewhere better to put these? In an imported file?
       function processResult (result) {
         var data = { };
@@ -111,7 +111,7 @@ const googlePageSpeedModule = {
         processResult(response.data);
       }).catch((thrown) => {
         if (!axios.isCancel(thrown)) {
-          console.error('Request failed for GooglePageSpeed result.', thrown.message);
+          //console.error('Request failed for GooglePageSpeed result.', thrown.message);
           processError(thrown);
         }
       });
