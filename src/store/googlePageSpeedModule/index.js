@@ -102,7 +102,7 @@ const googlePageSpeedModule = {
       commit('setGoogleLoading', { place: place, strategy: strategy });
 
       // Get a result
-      var url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?key=AIzaSyCsV60UGTAkbdBHrE_jjZU_VYHSp8ioJJQ&filter_third_party_resources=true' +
+      var url = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=AIzaSyCsV60UGTAkbdBHrE_jjZU_VYHSp8ioJJQ&filter_third_party_resources=true' +
         '&url=' + encodeURIComponent(place.website) + '&strategy=' + strategy;
 
       axios.get(url, {
@@ -111,7 +111,7 @@ const googlePageSpeedModule = {
         processResult(response.data);
       }).catch((thrown) => {
         if (!axios.isCancel(thrown)) {
-          //console.error('Request failed for GooglePageSpeed result.', thrown.message);
+          console.error('Request failed for GooglePageSpeed result.', thrown.message);
           processError(thrown);
         }
       });
