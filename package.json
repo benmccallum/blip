@@ -30,8 +30,8 @@
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
+    "node-sass": "^4.12.0",
     "popper.js": "^1.16.0",
-    "sass": "^1.23.3",
     "sass-loader": "^8.0.0",
     "vue-analytics": "^5.17.2",
     "vue-axios": "^2.1.5",
@@ -46,9 +46,11 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "@vue/standard"
     ],
-    "rules": {},
+    "rules": {
+      "semi": 0
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
