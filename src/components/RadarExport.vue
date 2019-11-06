@@ -19,7 +19,7 @@ export default {
     },
     buildCsvContent () {
       // Header
-      let csvContent = '"Name","Website","Address","Phone Number","Uses HTML5?","Security Score","Desktop Speed Score","Mobile Speed Score","Mobile Usability Score"\r\n';
+      let csvContent = '"Name","Website","Address","Phone Number","Uses HTML5?","Security Score","Desktop Score","Mobile Score"\r\n';
 
       // Data
       let x = (val, transform) => val == null ? 'Unknown' : transform || val;
@@ -30,8 +30,8 @@ export default {
           csvContent +=
             `,"${x(p.vicinity)}","${x(p.ph)}",` +
             `"${x(p.isHtml5.score, p.isHtml5.score ? 'Yes' : 'No')}",` +
-            `"${x(p.security.score)}","${x(p.desktop.speedScore)}",` +
-            `"${x(p.mobile.speedScore)}","${x(p.mobile.usabilityScore)}"`
+            `"${x(p.security.score)}","${x(p.desktop.score)}",` +
+            `"${x(p.mobile.score)}","${x(p.mobile.score)}"`
         }
         csvContent += '\r\n';
       });

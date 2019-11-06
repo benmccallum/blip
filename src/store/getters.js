@@ -12,9 +12,8 @@ export const getters = {
         case 'avg': return place.avg;
         case 'isHtml5': return place.isHtml5;
         case 'security': return place.security.score;
-        case 'desktopSpeed': return place.desktop.speedScore;
-        case 'mobileSpeed': return place.mobile.speedScore;
-        case 'mobileUsability': return place.mobile.usabilityScore;
+        case 'desktop': return place.desktop.score;
+        case 'mobile': return place.mobile.score;
         default: return null;
       }
     }

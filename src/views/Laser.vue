@@ -30,14 +30,11 @@
             <div class="col nav-item" data-toggle="tab" href="#security" role="tab">
               <mozilla-observatory :place="place"></mozilla-observatory>
             </div>
-            <div class="col nav-item" data-toggle="tab" href="#desktop-speed" role="tab">
-              <google-page-speed :place="place" :strategy="'Desktop'" :type="'SPEED'"></google-page-speed>
+            <div class="col nav-item" data-toggle="tab" href="#desktop" role="tab">
+              <google-page-speed :place="place" :strategy="'Desktop'"></google-page-speed>
             </div>
-            <div class="col nav-item" data-toggle="tab" href="#mobile-speed" role="tab">
-              <google-page-speed :place="place" :strategy="'Mobile'" :type="'SPEED'"></google-page-speed>
-            </div>
-            <div class="col nav-item" data-toggle="tab" href="#mobile-usability" role="tab">
-              <google-page-speed :place="place" :strategy="'Mobile'" :type="'USABILITY'"></google-page-speed>
+            <div class="col nav-item" data-toggle="tab" href="#mobile" role="tab">
+              <google-page-speed :place="place" :strategy="'Mobile'"></google-page-speed>
             </div>
           </nav>
           <div class="row tab-content">
@@ -47,14 +44,11 @@
             <div class="col tab-pane" id="security" role="tabpanel">
               <mozilla-observatory-details :place="place"></mozilla-observatory-details>
             </div>
-            <div class="col tab-pane" id="desktop-speed" role="tabpanel">
-              <google-page-speed-details :strategy="'Desktop'" :type="'SPEED'" :place="place"></google-page-speed-details>
+            <div class="col tab-pane" id="desktop" role="tabpanel">
+              <google-page-speed-details :strategy="'Desktop'" :place="place"></google-page-speed-details>
             </div>
-            <div class="col tab-pane" id="mobile-speed" role="tabpanel">
-              <google-page-speed-details :strategy="'Mobile'" :type="'SPEED'" :place="place"></google-page-speed-details>
-            </div>
-            <div class="col tab-pane" id="mobile-usability" role="tabpanel">
-              <google-page-speed-details :strategy="'Mobile'" :type="'USABILITY'" :place="place"></google-page-speed-details>
+            <div class="col tab-pane" id="mobile" role="tabpanel">
+              <google-page-speed-details :strategy="'Mobile'" :place="place"></google-page-speed-details>
             </div>
           </div>
           <div class="row">

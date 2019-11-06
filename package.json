@@ -49,7 +49,8 @@
       "@vue/standard"
     ],
     "rules": {
-      "semi": 0
+      "semi": 0,
+      "vue/script-indent": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"

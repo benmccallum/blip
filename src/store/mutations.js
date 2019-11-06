@@ -10,7 +10,7 @@ export const mutations = {
   addPlace (state, place) {
     var alreadyAdded = state.places ? state.places.some(p => p.id === place.id) : false;
     if (alreadyAdded) {
-      //console.error('wtf why is this repeated!!!');
+      console.error('wtf why is this repeated!!!');
       return;
     }
     state.places ? state.places.push(place) : (state.places = [place]);
@@ -21,7 +21,7 @@ export const mutations = {
   setPlace (state, place) {
     state.place = place;
   },
-  setSecurityTlsResult (state, payload) {
+  setSecurityTlsResult (_state, payload) {
     if (payload.error) {
       payload.place.security.state = 'errored';
     } else {
@@ -39,7 +39,7 @@ export const mutations = {
     // Re-assign a new one for next time
     state.cancelTokenSource = CancelToken.source();
   },
-  recalcAvg (state, place) {
+  recalcAvg (_state, place) {
     let sum = 0;
     let divisor = 0;
 
@@ -68,20 +68,18 @@ export const mutations = {
     }
 
     if (endStates.includes(place.desktop.state)) {
-      sum += place.desktop.speedScore || 0;
+      sum += place.desktop.score || 0;
       divisor++;
     }
 
     if (endStates.includes(place.mobile.state)) {
-      sum += place.mobile.speedScore || 0;
-      divisor++;
-      sum += place.mobile.usabilityScore || 0;
+      sum += place.mobile.score || 0;
       divisor++;
     }
 
     // If all tests 'ended/completed' then a place gets an avg and
     // can move into the filtered/completed results listing.
-    if (divisor === 5) {
+    if (divisor === 4) {
       place.avg = sum / divisor;
     }
   }

@@ -31,9 +31,8 @@
                   <option selected value="avg">average score</option>
                   <option value="isHtml5">is HTML5?</option>
                   <option value="security">security score</option>
-                  <option value="desktopSpeed">desktop speed score</option>
-                  <option value="mobileSpeed">mobile speed score</option>
-                  <option value="mobileUsability">mobile usability score</option>
+                  <option value="desktop">desktop score</option>
+                  <option value="mobile">mobile score</option>
                 </select>
               </div>
               <div class="input-group input-group-sm mb-2 mb-md-0 mr-md-2">
@@ -131,17 +130,11 @@
       </div>
       <div class="d-flex flex-row">
         <div class="pr-1"><i class="fa fa-desktop"></i></div>
-        <div>Desktop speed score, by <a :href="googlePageSpeedInsightsUrl">Google PageSpeed Insights</a></div>
+        <div>Desktop score, using <a :href="googlePageSpeedInsightsUrl">Google PageSpeed Insights</a></div>
       </div>
       <div class="d-flex flex-row">
         <div class="pr-1"><i class="fa fa-mobile"></i></div>
-        <div>Mobile speed score, by <a :href="googlePageSpeedInsightsUrl">Google PageSpeed Insights</a></div>
-      </div>
-      <div class="d-flex flex-row">
-        <div class="pr-1">
-          <img class="mobile-usability" src="../assets/images/mobile-usability-icon.svg" alt="Mobile usability icon">
-        </div>
-        <div>Mobile usability score, by <a :href="googlePageSpeedInsightsUrl">Google PageSpeed Insights</a></div>
+        <div>Mobile score, using <a :href="googlePageSpeedInsightsUrl">Google PageSpeed Insights</a></div>
       </div>
       <div class="d-flex flex-row">
         <div class="pr-1"><i class="fa fa-exclamation-triangle text-warning"></i></div>
@@ -152,199 +145,199 @@
 </template>
 
 <script>
-import Place from '../components/Place.vue';
-import Header from '../components/Header.vue';
-import RadarExport from '../components/RadarExport.vue';
-import BootstrapModal from '../components/BootstrapModal.vue';
-import { PlaceParserMixin } from '../components/mixins/PlaceParserMixin';
+  import Place from '../components/Place.vue';
+  import Header from '../components/Header.vue';
+  import RadarExport from '../components/RadarExport.vue';
+  import BootstrapModal from '../components/BootstrapModal.vue';
+  import { PlaceParserMixin } from '../components/mixins/PlaceParserMixin';
 
-// TODO: Scope in component
-var autocomplete = null;
-var placeChangedListener = null;
-var service = null;
+  // TODO: Scope in component
+  var autocomplete = null;
+  var placeChangedListener = null;
+  var service = null;
 
-export default {
-  name: 'radar',
-  mixins: [ PlaceParserMixin ],
-  components: {
-    'place': Place,
-    'my-header': Header,
-    'radar-export': RadarExport,
-    'bootstrap-modal': BootstrapModal
-  },
-  mounted () {
-    var that = this;
-
-    // while (!window.isGoogleMapsLoaded) { }
-    if (this.$route.query.lat && this.$route.query.lng) {
-      this.search({ lat: parseFloat(this.$route.query.lat), lng: parseFloat(this.$route.query.lng) }, 'that location');
-    } else {
-      // Init autocomplete
-      this.initAutocomplete();
-    }
-
-    // Every second, restore 1 call to Google Places
-    setInterval(function () {
-      if (that.canLoadMoreIn > 0) {
-        that.canLoadMoreIn--;
-      }
-    }, 1000);
-  },
-  data () {
-    return {
-      query: this.defaultQuery(),
-      status: 'form', // 'locating' or loading' or 'results' or 'no-results'
-      pagination: null,
-      canLoadMoreIn: 0,
-      queue: [],
-      canGeolocate: navigator.geolocation,
-      errorCode: null,
-      googlePageSpeedInsightsUrl: 'https://developers.google.com/speed/docs/insights/about',
-      mozillaObservatoryUrl: 'https://observatory.mozilla.org'
-    };
-  },
-  computed: {
-    unsortedPlaces () {
-      return this.$store.getters.unsortedPlaces;
+  export default {
+    name: 'radar',
+    mixins: [ PlaceParserMixin ],
+    components: {
+      'place': Place,
+      'my-header': Header,
+      'radar-export': RadarExport,
+      'bootstrap-modal': BootstrapModal
     },
-    sortedPlaces () {
-      return this.$store.getters.getSortedPlaces(this.query.sortBy, this.query.sortDirection);
-    },
-    canLoadMore () {
-      return this.canLoadMoreIn === 0;
-    }
-  },
-  methods: {
-    defaultQuery () {
-      return {
-        coord: null,
-        label: null,
-        sortBy: 'avg',
-        sortDirection: 'asc'
-      };
-    },
-    searchNearby () {
-      // Set status and try locate them
-      this.status = 'locating';
-      navigator.geolocation.getCurrentPosition(this.onGetCurrentPositionSuccess, this.onGetCurrentPositionError);
-    },
-    onGetCurrentPositionSuccess (position) {
-      this.query.coord = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
+    mounted () {
+      var that = this;
 
-      // weight autocomplete
-      //  var circle = new window.google.maps.Circle({
-      //   center: this.query.coord,
-      //   radius: position.coords.accuracy
-      // });
-      // autocomplete.setBounds(circle.getBounds());
-
-      this.search(this.query.coord, 'your current location');
-    },
-    onGetCurrentPositionError (positionError) {
-      this.status = 'no-location';
-      this.errorCode = positionError.code;
-      //console.warn('Could not locate user', positionError.code, positionError.message);
-    },
-    onPlaceChanged () {
-      var place = autocomplete.getPlace();
-      var coord = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
-      var label = place.formatted_address;
-
-      this.search(coord, label);
-    },
-    search (coord, label) {
-      // Change status,set query label and update URL
-      this.status = 'loading';
-      this.query.label = label;
-      this.$router.push({ query: { ...coord } });
-
-      // Setup service
-      try {
-        service = new window.google.maps.places.PlacesService(document.getElementById('map'));
-      } catch (e) {
-        //console.log('error making service...');
+      // while (!window.isGoogleMapsLoaded) { }
+      if (this.$route.query.lat && this.$route.query.lng) {
+        this.search({ lat: parseFloat(this.$route.query.lat), lng: parseFloat(this.$route.query.lng) }, 'that location');
+      } else {
+        // Init autocomplete
+        this.initAutocomplete();
       }
 
-      // Conduct search
-      service.nearbySearch({
-        location: coord,
-        radius: 500,
-        type: ['store']
-      }, this.nearbySearchCallback);
-    },
-    nearbySearchCallback (places, status, pagination) {
-      if (status === window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-        this.$store.commit('emptyPlaces');
-      } else if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        this.pagination = pagination;
-        for (var i = 0; i < places.length; i++) {
-          this.queue.push(places[i].place_id);
+      // Every second, restore 1 call to Google Places
+      setInterval(function () {
+        if (that.canLoadMoreIn > 0) {
+          that.canLoadMoreIn--;
         }
-        this.processQueue();
-      } else if (this.places.length) {
-        // Show error label saying we couldn't get any more results but leave original still intact.
-        // this.$store.commit('emptyPlaces');
-      } else {
-        // TODO: Show error with ability to try again
-        // this.$store.commit('emptyPlaces');
+      }, 1000);
+    },
+    data () {
+      return {
+        query: this.defaultQuery(),
+        status: 'form', // 'locating' or loading' or 'results' or 'no-results'
+        pagination: null,
+        canLoadMoreIn: 0,
+        queue: [],
+        canGeolocate: navigator.geolocation,
+        errorCode: null,
+        googlePageSpeedInsightsUrl: 'https://developers.google.com/speed/docs/insights/about',
+        mozillaObservatoryUrl: 'https://observatory.mozilla.org'
+      };
+    },
+    computed: {
+      unsortedPlaces () {
+        return this.$store.getters.unsortedPlaces;
+      },
+      sortedPlaces () {
+        return this.$store.getters.getSortedPlaces(this.query.sortBy, this.query.sortDirection);
+      },
+      canLoadMore () {
+        return this.canLoadMoreIn === 0;
       }
     },
-    processQueue () {
-      let i = 0;
-      while (this.queue.length && i < 10) {
-        this.canLoadMoreIn++;
-        i++;
-        service.getDetails({ placeId: this.queue.shift() }, this.getDetailsCallback);
-      }
-    },
-    getDetailsCallback (place, status) {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        this.status = 'results';
-        this.$store.commit('addPlace', this.parsePlace(place));
-      } else {
-        //console.error('Error getting details for place.', place, status);
-      }
-    },
-    onLoadMore () {
-      if (this.queue.length) {
-        this.processQueue();
-      } else {
-        this.pagination.nextPage();
-      }
-    },
-    reset () {
-      // Clear/reset UI, cancelling any in-progress ajax calls
-      this.initAutocomplete();
-      this.query = this.defaultQuery();
-      this.status = 'form';
-      this.$store.commit('clearPlaces');
-      this.$store.commit('resetCancelToken');
-      this.$router.push({ query: { } });
-    },
-    initAutocomplete () {
-      if (!window.google) {
-        //console.warn('Google Maps API wasn\'t loaded. Initing Autocomplete will be skipped.');
-        return;
-      }
+    methods: {
+      defaultQuery () {
+        return {
+          coord: null,
+          label: null,
+          sortBy: 'avg',
+          sortDirection: 'asc'
+        };
+      },
+      searchNearby () {
+        // Set status and try locate them
+        this.status = 'locating';
+        navigator.geolocation.getCurrentPosition(this.onGetCurrentPositionSuccess, this.onGetCurrentPositionError);
+      },
+      onGetCurrentPositionSuccess (position) {
+        this.query.coord = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
 
-      // Clear any existing value and listener
-      this.$refs.address.value = '';
-      if (placeChangedListener) {
-        window.google.maps.event.removeListener(placeChangedListener);
-      }
+        // weight autocomplete
+        //  var circle = new window.google.maps.Circle({
+        //   center: this.query.coord,
+        //   radius: position.coords.accuracy
+        // });
+        // autocomplete.setBounds(circle.getBounds());
 
-      // Init and store listener for gc later
-      autocomplete = new window.google.maps.places.Autocomplete(
-        this.$refs.address,
-        { types: ['geocode'] }
-      );
-      placeChangedListener = autocomplete.addListener('place_changed', this.onPlaceChanged);
+        this.search(this.query.coord, 'your current location');
+      },
+      onGetCurrentPositionError (positionError) {
+        this.status = 'no-location';
+        this.errorCode = positionError.code;
+        console.warn('Could not locate user', positionError.code, positionError.message);
+      },
+      onPlaceChanged () {
+        var place = autocomplete.getPlace();
+        var coord = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+        var label = place.formatted_address;
+
+        this.search(coord, label);
+      },
+      search (coord, label) {
+        // Change status,set query label and update URL
+        this.status = 'loading';
+        this.query.label = label;
+        this.$router.push({ query: { ...coord } });
+
+        // Setup service
+        try {
+          service = new window.google.maps.places.PlacesService(document.getElementById('map'));
+        } catch (e) {
+          console.log('error making service...');
+        }
+
+        // Conduct search
+        service.nearbySearch({
+          location: coord,
+          radius: 500,
+          type: ['store']
+        }, this.nearbySearchCallback);
+      },
+      nearbySearchCallback (places, status, pagination) {
+        if (status === window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+          this.$store.commit('emptyPlaces');
+        } else if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          this.pagination = pagination;
+          for (var i = 0; i < places.length; i++) {
+            this.queue.push(places[i].place_id);
+          }
+          this.processQueue();
+        } else if (this.places.length) {
+          // Show error label saying we couldn't get any more results but leave original still intact.
+          // this.$store.commit('emptyPlaces');
+        } else {
+          // TODO: Show error with ability to try again
+          // this.$store.commit('emptyPlaces');
+        }
+      },
+      processQueue () {
+        let i = 0;
+        while (this.queue.length && i < 10) {
+          this.canLoadMoreIn++;
+          i++;
+          service.getDetails({ placeId: this.queue.shift() }, this.getDetailsCallback);
+        }
+      },
+      getDetailsCallback (place, status) {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          this.status = 'results';
+          this.$store.commit('addPlace', this.parsePlace(place));
+        } else {
+          console.error('Error getting details for place.', place, status);
+        }
+      },
+      onLoadMore () {
+        if (this.queue.length) {
+          this.processQueue();
+        } else {
+          this.pagination.nextPage();
+        }
+      },
+      reset () {
+        // Clear/reset UI, cancelling any in-progress ajax calls
+        this.initAutocomplete();
+        this.query = this.defaultQuery();
+        this.status = 'form';
+        this.$store.commit('clearPlaces');
+        this.$store.commit('resetCancelToken');
+        this.$router.push({ query: { } });
+      },
+      initAutocomplete () {
+        if (!window.google) {
+          console.warn('Google Maps API wasn\'t loaded. Initing Autocomplete will be skipped.');
+          return;
+        }
+
+        // Clear any existing value and listener
+        this.$refs.address.value = '';
+        if (placeChangedListener) {
+          window.google.maps.event.removeListener(placeChangedListener);
+        }
+
+        // Init and store listener for gc later
+        autocomplete = new window.google.maps.places.Autocomplete(
+          this.$refs.address,
+          { types: ['geocode'] }
+        );
+        placeChangedListener = autocomplete.addListener('place_changed', this.onPlaceChanged);
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -411,12 +404,6 @@ export default {
       &.fa-mobile {
         font-size: 1.5rem;
       }
-    }
-    img.mobile-usability {
-      display: inline-block;
-      height: 1.3rem;
-      margin-top: -6px;
-      margin-left: -3px;
     }
   }
 

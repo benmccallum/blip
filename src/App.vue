@@ -112,10 +112,6 @@
     }
   }
 
-  img.mobile-usability {
-    height: 1.4rem;
-  }
-
   .score {
     .val {
       display: block;

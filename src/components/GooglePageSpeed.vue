@@ -9,15 +9,14 @@
         <div v-else-if="state === 'scored'" :key="state" class="score-container">
           <span class="score" :class="grade.class">
             <span class="val">{{ score }}</span>
-          </span> 
+          </span>
         </div>
         <div v-else :key="state">
           <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>
           <span class="sr-only">Loading...</span>
         </div>
       </transition>
-      <i v-if="type !== 'USABILITY'" class="fa" :class="classObject" aria-hidden="true"></i>
-      <img v-else class="mobile-usability" src="../assets/images/mobile-usability-icon.svg">
+      <i class="fa" :class="classObject" aria-hidden="true"></i>
     </a>
   </div>
 </template>
@@ -35,7 +34,7 @@
       }
     },
     created () {
-      this.getGooglePageSpeedResult({ place: this.place, strategy: this.strategy, type: this.type });
+      this.getGooglePageSpeedResult({ place: this.place, strategy: this.strategy });
     },
     methods: {
       ...mapActions([
@@ -46,5 +45,5 @@
 </script>
 
 <style lang="scss" scoped>
-  
+
 </style>
