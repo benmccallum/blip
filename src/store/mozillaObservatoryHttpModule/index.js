@@ -101,7 +101,7 @@ const mozillaObservatoryHttpModule = {
         }
       }).catch(function (thrown) {
         if (!axios.isCancel(thrown)) {
-          //console.error('Request failed for Mozilla HTTP Observatory: POST /analyze.', thrown.message);
+          // console.error('Request failed for Mozilla HTTP Observatory: POST /analyze.', thrown.message);
           processError(thrown);
         }
       });
