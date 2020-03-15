@@ -18,17 +18,17 @@
 </template>
 
 <script>
-export default {
-  name: 'my-header',
-  props: {
-    subtitle: String
-  },
-  computed: {
-    showNav () {
-      return this.$route.fullPath !== '/';
+  export default {
+    name: 'my-header',
+    props: {
+      subtitle: String
+    },
+    computed: {
+      showNav () {
+        return this.$route.fullPath !== '/';
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

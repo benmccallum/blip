@@ -57,21 +57,21 @@
 </template>
 
 <script>
-import GooglePageSpeed from './GooglePageSpeed.vue';
-import IsHtml5 from './IsHtml5.vue';
-import MozillaObservatory from './MozillaObservatory.vue';
+  import GooglePageSpeed from './GooglePageSpeed.vue';
+  import IsHtml5 from './IsHtml5.vue';
+  import MozillaObservatory from './MozillaObservatory.vue';
 
-export default {
-  name: 'Result',
-  components: {
-    'google-page-speed': GooglePageSpeed,
-    'is-html5': IsHtml5,
-    'mozilla-observatory': MozillaObservatory
-  },
-  props: {
-    place: Object
-  }
-};
+  export default {
+    name: 'Result',
+    components: {
+      'google-page-speed': GooglePageSpeed,
+      'is-html5': IsHtml5,
+      'mozilla-observatory': MozillaObservatory
+    },
+    props: {
+      place: Object
+    }
+  };
 </script>
 
 <style lang="scss" scoped>

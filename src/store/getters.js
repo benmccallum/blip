@@ -9,12 +9,12 @@ export const getters = {
       if (!place.website) return -999;
       if (place.isSiteDown) return -1;
       switch (key) {
-        case 'avg': return place.avg;
-        case 'isHtml5': return place.isHtml5;
-        case 'security': return place.security.score;
-        case 'desktop': return place.desktop.score;
-        case 'mobile': return place.mobile.score;
-        default: return null;
+      case 'avg': return place.avg;
+      case 'isHtml5': return place.isHtml5;
+      case 'security': return place.security.score;
+      case 'desktop': return place.desktop.score;
+      case 'mobile': return place.mobile.score;
+      default: return null;
       }
     }
 

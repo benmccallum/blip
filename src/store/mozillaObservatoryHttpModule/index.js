@@ -21,29 +21,29 @@ const mozillaObservatoryHttpModule = {
       // TODO: Is there a better place for these? Separate JS file?
       function processScanObject (scan) {
         switch (scan.state) {
-          case 'ABORTED':
-            processError(null);
-            break;
-          case 'FAILED':
-            processError(null);
-            break;
-          case 'FINISHED':
-            processResult(scan);
-            break;
-          case 'PENDING':
-            poll(scan.scan_id, 5000);
-            break;
-          case 'STARTING':
-            poll(scan.scan_id, 4000);
-            break;
-          case 'RUNNING':
-            poll(scan.scan_id, 2500);
-            break;
+        case 'ABORTED':
+          processError(null);
+          break;
+        case 'FAILED':
+          processError(null);
+          break;
+        case 'FINISHED':
+          processResult(scan);
+          break;
+        case 'PENDING':
+          poll(scan.scan_id, 5000);
+          break;
+        case 'STARTING':
+          poll(scan.scan_id, 4000);
+          break;
+        case 'RUNNING':
+          poll(scan.scan_id, 2500);
+          break;
         }
       }
 
       function poll (_scanId, when) {
-        //console.log('Polled: ' + polls.toString());
+        // console.log('Polled: ' + polls.toString());
         if (polls > maxPolls) {
           processError(null);
           return;
@@ -56,7 +56,7 @@ const mozillaObservatoryHttpModule = {
             processScanObject(response.data);
           }).catch(function (thrown) {
             if (!axios.isCancel(thrown)) {
-              //console.error('Request failed for Mozilla HTTP Observatory: GET /analyze.', thrown.message);
+              // console.error('Request failed for Mozilla HTTP Observatory: GET /analyze.', thrown.message);
               processError(thrown);
             }
           });

@@ -41,7 +41,7 @@
     "sass-loader": "^8.0.0",
     "vue-analytics": "^5.17.2",
     "vue-axios": "^2.1.5",
-    "vue-bootstrap-breakpoint-indicator": "^2.0.0-alpha.0",
+    "vue-bootstrap-breakpoint-indicator": "^2.0.0-alpha.2",
     "vue-media": "^1.1.1",
     "vue-template-compiler": "^2.6.10"
   },
@@ -56,8 +56,19 @@
     ],
     "rules": {
       "semi": 0,
-      "vue/script-indent": "off"
+      "indent": ["error", 2],
+      "vue/script-indent": ["error", 2, {
+        "baseIndent": 1
+      }]
     },
+    "overrides": [
+      {
+        "files": ["*.vue"],
+        "rules": {
+          "indent": "off"
+        }
+      }
+    ],
     "parserOptions": {
       "parser": "babel-eslint"
     }

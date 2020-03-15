@@ -158,9 +158,9 @@
 
   export default {
     name: 'radar',
-    mixins: [ PlaceParserMixin ],
+    mixins: [PlaceParserMixin],
     components: {
-      'place': Place,
+      place: Place,
       'my-header': Header,
       'radar-export': RadarExport,
       'bootstrap-modal': BootstrapModal

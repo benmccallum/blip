@@ -59,7 +59,7 @@
 
   export default {
     name: 'MozillaObservatoryDetails',
-    mixins: [ MozillaObservatoryMixin ],
+    mixins: [MozillaObservatoryMixin],
     components: {
       'affiliate-link': AffiliateLink
     },
@@ -82,7 +82,7 @@
           var key;
 
           for (key in this.results) {
-            if (this.results.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(this.results, key)) {
               (this.results[key].pass ? filtered.passed : filtered.failed).push(this.results[key]);
             }
           }
@@ -112,7 +112,7 @@
           that.results = response.data;
         }).catch(function (thrown) {
           if (!that.axios.isCancel(thrown)) {
-            //console.error('Request failed for MozillaObservatory:getScanResults.', thrown.message);
+            // console.error('Request failed for MozillaObservatory:getScanResults.', thrown.message);
           }
         });
       },

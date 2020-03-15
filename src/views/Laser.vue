@@ -89,7 +89,7 @@
 
   export default {
     name: 'laser',
-    mixins: [ PlaceParserMixin ],
+    mixins: [PlaceParserMixin],
     components: {
       'my-header': Header,
       'google-page-speed': GooglePageSpeed,
@@ -98,7 +98,7 @@
       'is-html5-details': IsHtml5Details,
       'mozilla-observatory': MozillaObservatory,
       'mozilla-observatory-details': MozillaObservatoryDetails,
-      'media': Media
+      media: Media
     },
     data () {
       return {
@@ -130,7 +130,7 @@
       var that = this;
       window.addEventListener('beforeunload', function (e) {
         if (e && e.srcElement && e.srcElement.activeElement && e.srcElement.activeElement.attributes && e.srcElement.activeElement.attributes.src) {
-          let src = e.srcElement.activeElement.attributes.src.value;
+          const src = e.srcElement.activeElement.attributes.src.value;
           if (src.indexOf('affiliate') >= 0 && src.indexOf('benmccallum') >= 0) {
             // Pretty sure this is the affiliate banner iframe, track that click before they leave
             that.$ga.event('Affiliate', 'click', that.query, 1);
@@ -150,7 +150,7 @@
       submit (event) {
         // Autocorrect to just a domain if it's a full URL
         const regex = new RegExp(this.$refs.url.getAttribute('pattern'));
-        let matches = regex.exec(this.$refs.url.value);
+        const matches = regex.exec(this.$refs.url.value);
         if (matches && matches.length) {
           this.$refs.url.value = matches[0];
         }

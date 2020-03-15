@@ -17,12 +17,12 @@
 </template>
 
 <script>
-export default {
-  name: 'bootstrap-modal',
-  props: {
-    id: String,
-    label: String,
-    title: String
+  export default {
+    name: 'bootstrap-modal',
+    props: {
+      id: String,
+      label: String,
+      title: String
+    }
   }
-}
 </script>
