@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <breakpoint-indicator></breakpoint-indicator>
+    <!-- <breakpoint-indicator></breakpoint-indicator> -->
     <router-view></router-view>
     <footer class="text-center mt-4 mb-3">
       <div class="addthis_inline_share_toolbox mb-2"></div>
@@ -28,14 +28,14 @@
 </template>
 
 <script>
-  import VueBootstrapBreakpointIndicator from 'vue-bootstrap-breakpoint-indicator';
+  // import VueBootstrapBreakpointIndicator from 'vue-bootstrap-breakpoint-indicator';
   import BootstrapModal from './components/BootstrapModal.vue';
   import BtnBuyMeACoffee from './components/BtnBuyMeACoffee.vue';
 
   export default {
     name: 'app',
     components: {
-      'breakpoint-indicator': VueBootstrapBreakpointIndicator,
+      // 'breakpoint-indicator': VueBootstrapBreakpointIndicator,
       'bootstrap-modal': BootstrapModal,
       'btn-buy-me-a-coffee': BtnBuyMeACoffee
     }
