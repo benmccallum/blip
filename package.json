@@ -41,7 +41,7 @@
     "sass-loader": "^8.0.0",
     "vue-analytics": "^5.17.2",
     "vue-axios": "^2.1.5",
-    "vue-bootstrap-breakpoint-indicator": "^1.0.1",
+    "vue-bootstrap-breakpoint-indicator": "^2.0.0-alpha.0",
     "vue-media": "^1.1.1",
     "vue-template-compiler": "^2.6.10"
   },
