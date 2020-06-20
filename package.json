@@ -1,6 +1,6 @@
 {
   "name": "blip",
-  "version": "0.2.0",
+  "version": "2.0.0",
   "private": true,
   "description": "An app for testing business websites for speed, mobile-friendliness, security and HTML5 compatibility. Find businesses around a location and test their websites en masse, or just test one website by URL.",
   "author": "benmccallum",
