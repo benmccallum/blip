@@ -53,12 +53,16 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 :: ----------
 
 :Deployment
-echo Handling deployment.
+echo Handling deployment. NPM version:
 call :ExecuteCmd npm --version
 
 :: 1. Install Yarn
 echo 1. Installing Yarn
 call :ExecuteCmd npm install yarn
+IF !ERRORLEVEL! NEQ 0 goto error
+echo Yarn version:
+call :ExecuteCmd yarn --version
+IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Install Yarn packages
 echo 2. Installing Yarn dependencies
