@@ -47,55 +47,79 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   :: Locally just running "kuduSync" would also work
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
+goto Deployment
+
+:: Utility Functions
+:: -----------------
+
+:SelectNodeVersion
+
+IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
+  :: The following are done only on Windows Azure Websites environment
+  call %KUDU_SELECT_NODE_VERSION_CMD% "%DEPLOYMENT_SOURCE%" "%DEPLOYMENT_TARGET%" "%DEPLOYMENT_TEMP%"
+  IF !ERRORLEVEL! NEQ 0 goto error
+
+  IF EXIST "%DEPLOYMENT_TEMP%\__nodeVersion.tmp" (
+    SET /p NODE_EXE=<"%DEPLOYMENT_TEMP%\__nodeVersion.tmp"
+    IF !ERRORLEVEL! NEQ 0 goto error
+  )
+
+  IF EXIST "%DEPLOYMENT_TEMP%\__npmVersion.tmp" (
+    SET /p NPM_JS_PATH=<"%DEPLOYMENT_TEMP%\__npmVersion.tmp"
+    IF !ERRORLEVEL! NEQ 0 goto error
+  )
+
+  IF NOT DEFINED NODE_EXE (
+    SET NODE_EXE=node
+  )
+
+  SET NPM_CMD="!NODE_EXE!" "!NPM_JS_PATH!"
+) ELSE (
+  SET NPM_CMD=npm
+  SET NODE_EXE=node
+)
+
+goto :EOF
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
 :: ----------
 
 :Deployment
-echo Handling deployment. NPM version:
-call :ExecuteCmd npm --version
+echo Handling deployment. 
+echo NPM version:
+call :ExecuteCmd !NPM_CMD! --version
 
-:: 1. Install Yarn
-echo 1. Installing Yarn
-call :ExecuteCmd npm install yarn --global
-IF !ERRORLEVEL! NEQ 0 goto error
-echo Yarn version:
-call :ExecuteCmd yarn --version
+:: 1. Installing dependencies
+echo 1. Installing dependencies
+call :ExecuteCmd !NPM_CMD! install --only=prod
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 2. Install Yarn packages
-echo 2. Installing Yarn dependencies
-call :ExecuteCmd yarn install --production
+:: 2. Build
+echo 2. Building app 
+call :ExecuteCmd !NPM_CMD! build
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 3. Build
-echo 3. Building app 
-call :ExecuteCmd yarn build
+:: 3. KuduSync files
+echo 3. Kudu syncing files to deployment target
+call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%"\dist -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 4. KuduSync files
-IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  echo 4. Kudu syncing files to deployment target
-  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%"\dist -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
-
-:: 5. Purge CDN cache of all caches files
+:: 4. Purge CDN cache of all caches files
 :: Requires an application to be setup in the Azure Active Directory on the same tenant, 
 :: with a client id and key/secret, and permissions to the Azure CDN Endpoint (CDN Endpoint Contributor)
 ::SET CLIENT_ID="from-app-settings"
 ::SET CLIENT_SECRET="from-app-settings"
 IF NOT DEFINED CLIENT_ID ( 
-  echo 5. Skipping Azure CDN cache purge. App Setting "CLIENT_ID" was not found. Potentially this is a local test deployment run.
+  echo 4. Skipping Azure CDN cache purge. App Setting "CLIENT_ID" was not found. Potentially this is a local test deployment run.
   goto end 
 )
 IF NOT DEFINED CLIENT_SECRET ( 
-  echo 5. Skipping Azure CDN cache purge. App Setting "CLIENT_SECRET" was not found. Potentially this is a local test deployment run.
+  echo 4. Skipping Azure CDN cache purge. App Setting "CLIENT_SECRET" was not found. Potentially this is a local test deployment run.
   goto end 
 )
 
-echo 6. Purging CDN of all cached files
+echo 5. Purging CDN of all cached files
 SET CURL_CMD="%DEPLOYMENT_SOURCE%\build\curl-7.55.1-win64-mingw\bin\curl.exe"
 SET JQ_CMD="%DEPLOYMENT_SOURCE%\build\jq\jq-win64.exe" -r
 SET ACCESS_TOKEN_TMP_FILE=access_token.tmp

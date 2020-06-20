@@ -56,14 +56,23 @@
     ],
     "rules": {
       "semi": 0,
-      "indent": ["error", 2],
-      "vue/script-indent": ["error", 2, {
-        "baseIndent": 1
-      }]
+      "indent": [
+        "error",
+        2
+      ],
+      "vue/script-indent": [
+        "error",
+        2,
+        {
+          "baseIndent": 1
+        }
+      ]
     },
     "overrides": [
       {
-        "files": ["*.vue"],
+        "files": [
+          "*.vue"
+        ],
         "rules": {
           "indent": "off"
         }
