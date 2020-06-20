@@ -1,0 +1,47 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Deploy to Azure
+
+on:
+  push:
+    branches:
+      - master
+    paths: 
+      - 'ui/*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+      
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - uses: actions/cache@v1
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: 'yarn install and build'
+      working-directory: ui
+      run: |
+        yarn install
+        yarn run build
+
+    - name: 'Azure Deploy'
+      uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - run: |
+        az storage blob upload-batch -s "./dist" -d \$web --account-name "blip-test"
+        
+    - run: |
+        az cdn endpoint purge -g "blip" -n "blip" --profile-name "blip" --no-wait --content-paths '/index.html' '/favicon.ico' '/manifest.*' '/*.js' 'robots.txt' '/css/*' '/fonts/*' '/img/*' '/js/*'
