@@ -14,36 +14,36 @@ const mozillaObservatoryHttpModule = {
     }
   },
   actions: {
-    getMozillaObservatoryHttpResult ({ state, commit, rootState }, { place, analyzeUrl }) {
+    getMozillaObservatoryHttpResult ({ commit, rootState }, { place, analyzeUrl }) {
       const maxPolls = 50;
       let polls = 0;
 
       // TODO: Is there a better place for these? Separate JS file?
       function processScanObject (scan) {
         switch (scan.state) {
-          case 'ABORTED':
-            processError(null);
-            break;
-          case 'FAILED':
-            processError(null);
-            break;
-          case 'FINISHED':
-            processResult(scan);
-            break;
-          case 'PENDING':
-            poll(scan.scan_id, 5000);
-            break;
-          case 'STARTING':
-            poll(scan.scan_id, 4000);
-            break;
-          case 'RUNNING':
-            poll(scan.scan_id, 2500);
-            break;
+        case 'ABORTED':
+          processError(null);
+          break;
+        case 'FAILED':
+          processError(null);
+          break;
+        case 'FINISHED':
+          processResult(scan);
+          break;
+        case 'PENDING':
+          poll(scan.scan_id, 5000);
+          break;
+        case 'STARTING':
+          poll(scan.scan_id, 4000);
+          break;
+        case 'RUNNING':
+          poll(scan.scan_id, 2500);
+          break;
         }
       }
 
-      function poll (scanId, when) {
-        console.log('Polled: ' + polls.toString());
+      function poll (_scanId, when) {
+        // console.log('Polled: ' + polls.toString());
         if (polls > maxPolls) {
           processError(null);
           return;
@@ -56,7 +56,7 @@ const mozillaObservatoryHttpModule = {
             processScanObject(response.data);
           }).catch(function (thrown) {
             if (!axios.isCancel(thrown)) {
-              console.error('Request failed for Mozilla HTTP Observatory: GET /analyze.', thrown.message);
+              // console.error('Request failed for Mozilla HTTP Observatory: GET /analyze.', thrown.message);
               processError(thrown);
             }
           });
@@ -101,7 +101,7 @@ const mozillaObservatoryHttpModule = {
         }
       }).catch(function (thrown) {
         if (!axios.isCancel(thrown)) {
-          console.error('Request failed for Mozilla HTTP Observatory: POST /analyze.', thrown.message);
+          // console.error('Request failed for Mozilla HTTP Observatory: POST /analyze.', thrown.message);
           processError(thrown);
         }
       });

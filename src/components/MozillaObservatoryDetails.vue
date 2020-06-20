@@ -10,8 +10,8 @@
     </h2>
     <p><i>Provided by <a href="https://observatory.mozilla.org" target="_blank" rel="noopener">Mozilla Observatory</a></i></p>
     <p>
-      Observatory by Mozilla is a tool used to test the security of a website by identifying 
-      gaps in configuration. Scores are out of 100, although you can receive more with bonuses, 
+      Observatory by Mozilla is a tool used to test the security of a website by identifying
+      gaps in configuration. Scores are out of 100, although you can receive more with bonuses,
       and give you a <a href="https://wiki.mozilla.org/Security/Scoring_and_other_levels#Scoring_levels" target="_blank" rel="noopener">grade</a> between F and A+
       and equivalent <a href="https://wiki.mozilla.org/Security/Standard_Levels#Standard_risk_levels_definition_and_nomenclature" target="_blank" rel="noopener">risk indication</a>.
       Possible optimizations are provided in order of their score impact if implemented.
@@ -24,7 +24,7 @@
       Error getting test results.
     </p>
     <template v-else>
-      <p
+      <p>
         <strong>Score:</strong> {{score}} / 100
         <br>
         <strong>Risk: <span :class="riskClass">{{risk}}</span></strong>
@@ -36,7 +36,7 @@
           <template v-else>
             <ul>
               <li v-for="test in filteredTests[key]" :key="test.name">
-                {{test.name}} 
+                {{test.name}}
                 <span :class="[test.score_modifier >= 0 ? 'green' : 'red']">
                   {{(test.score_modifier > 0 ? '+' : '') + test.score_modifier.toString()}}
                 </span>
@@ -59,7 +59,7 @@
 
   export default {
     name: 'MozillaObservatoryDetails',
-    mixins: [ MozillaObservatoryMixin ],
+    mixins: [MozillaObservatoryMixin],
     components: {
       'affiliate-link': AffiliateLink
     },
@@ -82,7 +82,7 @@
           var key;
 
           for (key in this.results) {
-            if (this.results.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(this.results, key)) {
               (this.results[key].pass ? filtered.passed : filtered.failed).push(this.results[key]);
             }
           }
@@ -112,7 +112,7 @@
           that.results = response.data;
         }).catch(function (thrown) {
           if (!that.axios.isCancel(thrown)) {
-            console.error('Request failed for MozillaObservatory:getScanResults.', thrown.message);
+            // console.error('Request failed for MozillaObservatory:getScanResults.', thrown.message);
           }
         });
       },

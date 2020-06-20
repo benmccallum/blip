@@ -26,14 +26,11 @@ export const PlaceParserMixin = {
         },
         desktop: {
           state: null,
-          speedScore: null,
-          filteredRules: null
+          score: null
         },
         mobile: {
           state: null,
-          speedScore: null,
-          usabilityScore: null,
-          filteredRules: null
+          score: null
         }
       };
     }

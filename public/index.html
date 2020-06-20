@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>blip</title>
+    <meta name="description" content="Test websites for speed, mobile-friendliness, security and the HTML5 doctype. Find businesses around a location and test their websites en masse, or just test one by URL.">
+    <meta name="author" content="Ben McCallum">
+    <meta name="copyright" content="Ben McCallum">
+
+    <meta property="og:title" content="blip">
+    <meta property="og:description" content="Test websites for speed, mobile-friendliness, security and the HTML5 doctype. Find businesses around a location and test their websites en masse, or just test one by URL.">
+    <meta property="og:image" content="https://blip.website/img/icons/facebook-og-image-1220x630.png">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= BASE_URL %>img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= BASE_URL %>img/icons/favicon-16x16.png">
+    <!--[if IE]><link rel="shortcut icon" href="<%= BASE_URL %>img/icons/favicon.ico"><![endif]-->
+
+    <!-- Add to home screen for Android and modern mobile browsers -->
+    <link rel="manifest" href="<%= BASE_URL %>manifest.webmanifest">
+    <meta name="theme-color" content="#067BC2">
+
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="blip">
+    <link rel="apple-touch-icon" href="<%= BASE_URL %>img/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="<%= BASE_URL %>img/icons/safari-pinned-tab.svg" color="#067BC2">
+
+    <!-- Add to home screen for Windows -->
+    <meta name="msapplication-TileImage" content="<%= BASE_URL %>img/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#067BC2">
+
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but blip doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+
+    <script>
+      window.isGoogleMapsLoaded = false;
+      function mapsCallback () {
+        window.isGoogleMapsLoaded = true;
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCsV60UGTAkbdBHrE_jjZU_VYHSp8ioJJQ&callback=mapsCallback"></script>
+    <script src="https://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a24e93df01ff3ff"></script>
+
+    <!-- built files will be auto injected -->
+  </body>
+</html>

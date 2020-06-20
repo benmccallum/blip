@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!-- <vue-bootstrap-breakpoint-indicator></vue-bootstrap-breakpoint-indicator> -->
+    <!-- <breakpoint-indicator></breakpoint-indicator> -->
     <router-view></router-view>
     <footer class="text-center mt-4 mb-3">
       <div class="addthis_inline_share_toolbox mb-2"></div>
@@ -13,7 +13,7 @@
       <h6>Services</h6>
       <ul class="list-unstyled">
         <li><a href="https://observatory.mozilla.org" target="_blank" rel="noopener">Mozilla Observatory</a></li>
-        <li><a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></li>
+        <li><a href="https://developers.google.com/speed/docs/insights/v5/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></li>
         <li><a href="https://developers.google.com/places/web-service/" target="_blank" rel="noopener">Google Places API</a></li>
       </ul>
       <h6>Images</h6>
@@ -28,19 +28,21 @@
 </template>
 
 <script>
-  import VueBootstrapBreakpointIndicator from 'vue-bootstrap-breakpoint-indicator';
+  // import VueBootstrapBreakpointIndicator from 'vue-bootstrap-breakpoint-indicator';
   import BootstrapModal from './components/BootstrapModal.vue';
   import BtnBuyMeACoffee from './components/BtnBuyMeACoffee.vue';
 
   export default {
     name: 'app',
     components: {
-      'vue-bootstrap-breakpoint-indicator': VueBootstrapBreakpointIndicator,
+      // 'breakpoint-indicator': VueBootstrapBreakpointIndicator,
       'bootstrap-modal': BootstrapModal,
       'btn-buy-me-a-coffee': BtnBuyMeACoffee
     }
   };
 </script>
+
+<style src="vue-bootstrap-breakpoint-indicator/dist/VueBootstrapBreakpointIndicator.css"></style>
 
 <style lang="scss">
   $border: 2px solid #ccc;
@@ -112,10 +114,6 @@
     }
   }
 
-  img.mobile-usability {
-    height: 1.4rem;
-  }
-
   .score {
     .val {
       display: block;
@@ -183,9 +181,9 @@
     color: #aa3939;
   }
 
-  .grade-i {  /* intermediate is a weird font that needs to be bigger */
-    // font-size: 102px;
-  }
+  // .grade-i {  /* intermediate is a weird font that needs to be bigger */
+  //   // font-size: 102px;
+  // }
 
   // Errors
   .fa-exclamation-triangle {

@@ -29,7 +29,7 @@
 
   export default {
     name: 'MozillaObservatory',
-    mixins: [ MozillaObservatoryMixin, MozillaObservatoryHttpMixin
+    mixins: [MozillaObservatoryMixin, MozillaObservatoryHttpMixin
       // , MozillaObservatoryTlsMixin
     ],
     props: {

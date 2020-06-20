@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import store from '../store';
 import Router from 'vue-router';
-import Home from '@/components/Home';
-import Laser from '@/components/Laser';
-import Radar from '@/components/Radar';
-import NotFound from '@/components/NotFound';
+import Home from '../views/Home.vue';
+import Laser from '../views/Laser.vue';
+import Radar from '../views/Radar.vue';
+import NotFound from '../views/NotFound.vue';
 
 Vue.use(Router);
 
@@ -36,7 +36,7 @@ var router = new Router({
 });
 
 // Events subscribed to
-router.afterEach(function (from, to) {
+router.afterEach(() => {
   // Reset global (per-page) cancel token used by a page's axios HTTP requests
   store.commit('resetCancelToken');
   // Refresh AddThis widgets

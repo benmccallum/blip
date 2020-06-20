@@ -20,7 +20,7 @@
         <!-- For debugging -->
         <!-- <p style="position:absolute;top:5px;right:5px;color:#ccc;opacity:.8;">{{Math.floor(place.avg)}}</p> -->
       </div>
-    </div>    
+    </div>
     <template v-if="place.isSiteDown">
       <div class="col-12 col-sm">
         <div class="score-container d-flex flex-column justify-content-center text-center">
@@ -38,13 +38,10 @@
             <mozilla-observatory :place="place" />
           </div>
           <div class="col">
-            <google-page-speed :strategy="'Desktop'" :type="'SPEED'" :place="place" />
+            <google-page-speed :strategy="'Desktop'" :place="place" />
           </div>
           <div class="col">
-            <google-page-speed :strategy="'Mobile'" :type="'SPEED'" :place="place" />
-          </div>
-          <div class="col">
-            <google-page-speed :strategy="'Mobile'" :type="'USABILITY'" :place="place" />
+            <google-page-speed :strategy="'Mobile'" :place="place" />
           </div>
         </div>
       </div>
@@ -60,26 +57,26 @@
 </template>
 
 <script>
-import GooglePageSpeed from './GooglePageSpeed.vue';
-import IsHtml5 from './IsHtml5.vue';
-import MozillaObservatory from './MozillaObservatory.vue';
+  import GooglePageSpeed from './GooglePageSpeed.vue';
+  import IsHtml5 from './IsHtml5.vue';
+  import MozillaObservatory from './MozillaObservatory.vue';
 
-export default {
-  name: 'Result',
-  components: {
-    'google-page-speed': GooglePageSpeed,
-    'is-html5': IsHtml5,
-    'mozilla-observatory': MozillaObservatory
-  },
-  props: {
-    place: Object
-  }
-};
+  export default {
+    name: 'Result',
+    components: {
+      'google-page-speed': GooglePageSpeed,
+      'is-html5': IsHtml5,
+      'mozilla-observatory': MozillaObservatory
+    },
+    props: {
+      place: Object
+    }
+  };
 </script>
 
 <style lang="scss" scoped>
   .place-row .row > .col {
-    margin: 0; 
+    margin: 0;
     padding: 0 3px;
   }
 </style>
