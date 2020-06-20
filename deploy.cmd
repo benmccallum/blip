@@ -87,6 +87,9 @@ goto :EOF
 
 :Deployment
 echo Handling deployment. 
+
+:: 0. Select node version
+call :SelectNodeVersion
 echo NPM version:
 call :ExecuteCmd !NPM_CMD! --version
 
