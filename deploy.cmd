@@ -57,7 +57,7 @@ echo Handling deployment.
 
 :: 1. Install Yarn
 echo 1. Installing Yarn
-call :ExecuteCmd !NPM_CMD! install yarn -g
+call :ExecuteCmd npm install yarn -g
 
 :: 2. Install Yarn packages
 echo 2. Building app
