@@ -21,4 +21,4 @@ yarn build
 
 ## Roadmap
 
-- Include a web accessibility test. Find a free one and use it, or host [AATT by paypal](https://github.com/paypal/AATT) somewhere and use that...
+- Include a web accessibility test. Find a free one and use it, or perhaps use [AATT by paypal](https://github.com/paypal/AATT).
