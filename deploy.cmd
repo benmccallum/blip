@@ -47,39 +47,6 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   :: Locally just running "kuduSync" would also work
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
-goto Deployment
-
-:: Utility Functions
-:: -----------------
-
-:SelectNodeVersion
-
-IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
-  :: The following are done only on Windows Azure Websites environment
-  call %KUDU_SELECT_NODE_VERSION_CMD% "%DEPLOYMENT_SOURCE%" "%DEPLOYMENT_TARGET%" "%DEPLOYMENT_TEMP%"
-  IF !ERRORLEVEL! NEQ 0 goto error
-
-  IF EXIST "%DEPLOYMENT_TEMP%\__nodeVersion.tmp" (
-    SET /p NODE_EXE=<"%DEPLOYMENT_TEMP%\__nodeVersion.tmp"
-    IF !ERRORLEVEL! NEQ 0 goto error
-  )
-
-  IF EXIST "%DEPLOYMENT_TEMP%\__npmVersion.tmp" (
-    SET /p NPM_JS_PATH=<"%DEPLOYMENT_TEMP%\__npmVersion.tmp"
-    IF !ERRORLEVEL! NEQ 0 goto error
-  )
-
-  IF NOT DEFINED NODE_EXE (
-    SET NODE_EXE=node
-  )
-
-  SET NPM_CMD="!NODE_EXE!" "!NPM_JS_PATH!"
-) ELSE (
-  SET NPM_CMD=npm
-  SET NODE_EXE=node
-)
-
-goto :EOF
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
@@ -87,11 +54,11 @@ goto :EOF
 
 :Deployment
 echo Handling deployment.
-call :SelectNodeVersion
+call :ExecuteCmd npm --version
 
 :: 1. Install Yarn
 echo 1. Installing Yarn
-call :ExecuteCmd !NPM_CMD! install yarn -g
+call :ExecuteCmd npm install yarn
 
 :: 2. Install Yarn packages
 echo 2. Installing Yarn dependencies
