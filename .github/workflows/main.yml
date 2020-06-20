@@ -7,8 +7,6 @@ on:
   push:
     branches:
       - master
-    paths: 
-      - 'ui/*'
 
 jobs:
   build-and-deploy:
@@ -41,7 +39,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     - run: |
-        az storage blob upload-batch -s "./dist" -d \$web --account-name "blip-test"
+        az storage blob upload-batch -s "./dist" -d \$web --account-name "blipstore"
         
     - run: |
         az cdn endpoint purge -g "blip" -n "blip" --profile-name "blip" --no-wait --content-paths '/index.html' '/favicon.ico' '/manifest.*' '/*.js' 'robots.txt' '/css/*' '/fonts/*' '/img/*' '/js/*'
