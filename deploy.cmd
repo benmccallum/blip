@@ -100,7 +100,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build
 echo 2. Building app 
-call :ExecuteCmd !NPM_CMD! build
+call :ExecuteCmd !NPM_CMD! run build
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. KuduSync files
