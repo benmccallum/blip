@@ -55,38 +55,46 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 :Deployment
 echo Handling deployment.
 
-:: 1. Install npm dependencies for app and build
-echo 1. Installing npm packages for app and build in %~dp0% 
-call :ExecuteCmd npm install
+:: 1. Install Yarn
+echo 1. Installing Yarn
+call :ExecuteCmd !NPM_CMD! install yarn -g
+
+:: 2. Install Yarn packages
+echo 2. Building app
+IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
+  pushd "%DEPLOYMENT_TARGET%"
+  call :ExecuteCmd yarn install --production
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
+:: 3. Build
+echo 3. Building app 
+call :ExecuteCmd yarn build
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 2. Build
-echo 2. Building app 
-call :ExecuteCmd npm run build
-IF !ERRORLEVEL! NEQ 0 goto error
-
-:: 3. KuduSync files
+:: 4. KuduSync files
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  echo 3. Kudu syncing files to deployment target
+  echo 4. Kudu syncing files to deployment target
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%"\dist -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
-:: 4. Purge CDN cache of all caches files
+:: 5. Purge CDN cache of all caches files
 :: Requires an application to be setup in the Azure Active Directory on the same tenant, 
 :: with a client id and key/secret, and permissions to the Azure CDN Endpoint (CDN Endpoint Contributor)
 ::SET CLIENT_ID="from-app-settings"
 ::SET CLIENT_SECRET="from-app-settings"
 IF NOT DEFINED CLIENT_ID ( 
-  echo 4. Skipping Azure CDN cache purge. App Setting "CLIENT_ID" was not found. Potentially this is a local test deployment run.
+  echo 5. Skipping Azure CDN cache purge. App Setting "CLIENT_ID" was not found. Potentially this is a local test deployment run.
   goto end 
 )
 IF NOT DEFINED CLIENT_SECRET ( 
-  echo 4. Skipping Azure CDN cache purge. App Setting "CLIENT_SECRET" was not found. Potentially this is a local test deployment run.
+  echo 5. Skipping Azure CDN cache purge. App Setting "CLIENT_SECRET" was not found. Potentially this is a local test deployment run.
   goto end 
 )
 
-echo 4. Purging CDN of all cached files
+echo 6. Purging CDN of all cached files
 SET CURL_CMD="%DEPLOYMENT_SOURCE%\build\curl-7.55.1-win64-mingw\bin\curl.exe"
 SET JQ_CMD="%DEPLOYMENT_SOURCE%\build\jq\jq-win64.exe" -r
 SET ACCESS_TOKEN_TMP_FILE=access_token.tmp
