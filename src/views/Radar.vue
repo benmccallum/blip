@@ -192,7 +192,7 @@
         queue: [],
         canGeolocate: navigator.geolocation,
         errorCode: null,
-        googlePageSpeedInsightsUrl: 'https://developers.google.com/speed/docs/insights/about',
+        googlePageSpeedInsightsUrl: 'https://developers.google.com/speed/docs/insights/v5/about',
         mozillaObservatoryUrl: 'https://observatory.mozilla.org'
       };
     },

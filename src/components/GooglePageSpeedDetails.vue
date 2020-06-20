@@ -8,13 +8,13 @@
         </span>
       </template>
     </h2>
-    <p><i>Provided by <a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></i></p>
+    <p><i>Provided by <a href="https://developers.google.com/speed/docs/insights/v5/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></i></p>
     <div>
       <p>
         PageSpeed Insights analyses a page with a wide array of audits under a number of categories. Each category gets a score out of 100 according to
-        <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank" rel="noopener"> their scoring guide</a>.
+        <a href="https://web.dev/performance-scoring/" target="_blank" rel="noopener"> their scoring guide</a>.
         blip averages these to form an overall score. To learn more about PageSpeed Insights
-        <a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">go here...</a>
+        <a href="https://developers.google.com/speed/docs/insights/v5/about" target="_blank" rel="noopener">go here...</a>
       </p>
       <p v-if="state === 'loading'">
         <i class="fa fa-spinner fa-pulse fa-3x fa-fw mx-auto"></i>

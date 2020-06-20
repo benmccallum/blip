@@ -13,7 +13,7 @@
       <h6>Services</h6>
       <ul class="list-unstyled">
         <li><a href="https://observatory.mozilla.org" target="_blank" rel="noopener">Mozilla Observatory</a></li>
-        <li><a href="https://developers.google.com/speed/docs/insights/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></li>
+        <li><a href="https://developers.google.com/speed/docs/insights/v5/about" target="_blank" rel="noopener">Google PageSpeed Insights</a></li>
         <li><a href="https://developers.google.com/places/web-service/" target="_blank" rel="noopener">Google Places API</a></li>
       </ul>
       <h6>Images</h6>

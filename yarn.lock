@@ -9073,12 +9073,10 @@ vue-axios@^2.1.5:
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.5.tgz#1af4bf1218ed71309c76afb38d0f683e312c24a7"
   integrity sha512-th5xVbInVoyIoe+qY+9GCflEVezxAvztD4xpFF39SRQYqpoKD2qkmX8yv08jJG9a2SgNOCjirjJGSwg/wTrbmA==
 
-vue-bootstrap-breakpoint-indicator@^2.0.0-alpha.2:
-  version "2.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/vue-bootstrap-breakpoint-indicator/-/vue-bootstrap-breakpoint-indicator-2.0.0-alpha.2.tgz#8691b65b18d6ae22299e715a8dfef3eac93a6174"
-  integrity sha512-xL6hWqq7yLIIJhwDjkDvzUPow/sZsrHy/0fHGBStGr+G0iv4HHsgp57uvol6FoOX5keyNOK38eTTkJ4yzRBvtQ==
-  dependencies:
-    vue "^2.6.11"
+vue-bootstrap-breakpoint-indicator@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vue-bootstrap-breakpoint-indicator/-/vue-bootstrap-breakpoint-indicator-2.0.2.tgz#8d33c3eee170f75bcff8ab5f0df6166645dc39f7"
+  integrity sha512-GtxV7xgaQGZQC53GaktbS3IMh++Hup+DNr7DbloW6MYgPb3D7wvOhoXNHmW3MZ1Oc1vcnelSk92boW9n94283w==
 
 vue-eslint-parser@^7.0.0:
   version "7.0.0"
@@ -9145,11 +9143,6 @@ vue@^2.6.10:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
-
-vue@^2.6.11:
-  version "2.6.11"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
-  integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
 
 vuex@^3.0.1:
   version "3.1.1"
