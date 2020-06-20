@@ -58,7 +58,7 @@ call :ExecuteCmd npm --version
 
 :: 1. Install Yarn
 echo 1. Installing Yarn
-call :ExecuteCmd npm install yarn
+call :ExecuteCmd npm install yarn --global
 IF !ERRORLEVEL! NEQ 0 goto error
 echo Yarn version:
 call :ExecuteCmd yarn --version
@@ -66,12 +66,8 @@ IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Install Yarn packages
 echo 2. Installing Yarn dependencies
-IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
-  pushd "%DEPLOYMENT_TARGET%"
-  call :ExecuteCmd yarn install --production
-  IF !ERRORLEVEL! NEQ 0 goto error
-  popd
-)
+call :ExecuteCmd yarn install --production
+IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. Build
 echo 3. Building app 
