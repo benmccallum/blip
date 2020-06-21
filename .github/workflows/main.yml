@@ -28,10 +28,9 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: 'yarn install and build'
-      working-directory: ui
       run: |
         yarn install
-        yarn run build
+        yarn build
 
     - name: 'Azure Deploy'
       uses: Azure/login@v1
