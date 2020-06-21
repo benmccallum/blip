@@ -41,4 +41,4 @@ jobs:
         az storage blob upload-batch -s "./dist" -d \$web --account-name "blipstore"
         
     - run: |
-        az cdn endpoint purge -g "blip" -n "blip" --profile-name "blip" --no-wait --content-paths '/index.html' '/favicon.ico' '/manifest.*' '/*.js' 'robots.txt' '/css/*' '/fonts/*' '/img/*' '/js/*'
+        az cdn endpoint purge -g "blip" -n "blip" --profile-name "blip" --no-wait --content-paths '/*'
